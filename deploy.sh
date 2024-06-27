@@ -1,34 +1,42 @@
 #!/bin/bash
 
+# Navegar até o diretório de destino
 cd /home/juvhost1/sport-reserve.juvhost.com
+
+# Remover todos os arquivos e pastas, exceto .htaccess
 rm -rf /home/juvhost1/sport-reserve.juvhost.com/*
+
+# Remover o arquivo .htaccess existente
 rm -f /home/juvhost1/sport-reserve.juvhost.com/.htaccess
 
-
+# Baixar o novo código
 wget https://github.com/Jadiael1/front-sport-reserve/archive/refs/heads/main.zip
 
-
+# Descompactar o novo código
 unzip ./main.zip -d /home/juvhost1/sport-reserve.juvhost.com
 
+# Remover o arquivo zip
 rm -f /home/juvhost1/sport-reserve.juvhost.com/main.zip
 
+# Mover os arquivos para o diretório de destino
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/* /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.editorconfig /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.eslintrc.json /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.gitignore /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.prettierrc /home/juvhost1/sport-reserve.juvhost.com/
 
+# Remover a pasta descompactada
 rm -rf /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main
 
+# Instalar as dependências e criar o build
 /usr/bin/npm install
-
 /usr/bin/npm run build
 
-find . -mindepth 1 -path /home/juvhost1/sport-reserve.juvhost.com/dist -prune -o -exec rm -rf {} +
+# find . -mindepth 1 -path /home/juvhost1/sport-reserve.juvhost.com/dist -prune -o -exec rm -rf {} +
 
-mv /home/juvhost1/sport-reserve.juvhost.com/dist/* /home/juvhost1/sport-reserve.juvhost.com/
+# mv /home/juvhost1/sport-reserve.juvhost.com/dist/* /home/juvhost1/sport-reserve.juvhost.com/
 
-rm -rf /home/juvhost1/sport-reserve.juvhost.com/dist
+# rm -rf /home/juvhost1/sport-reserve.juvhost.com/dist
 
 
 HTACCESS_CONTENT='<IfModule mod_rewrite.c>
