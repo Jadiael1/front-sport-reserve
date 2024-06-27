@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd /home/juvhost1/sport-reserve.juvhost.com
+rm -rf /home/juvhost1/sport-reserve.juvhost.com/*
+rm -f /home/juvhost1/sport-reserve.juvhost.com/.htaccess
+
 
 wget https://github.com/Jadiael1/front-sport-reserve/archive/refs/heads/main.zip
 
