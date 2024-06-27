@@ -15,7 +15,7 @@ const routesSite: IRoutes[] = [
 		component: FieldDetails,
 		visibleInDisplay: true,
 		displayName: 'Home',
-		protected: false,
+		protected: true,
 	},
 ];
 

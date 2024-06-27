@@ -6,26 +6,25 @@ interface ProtectedRouteProps {
 	path: string;
 }
 
-export const ProtectedRoute = ({ children, path }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const { user, isLoading, token } = useAuth();
+
+	// se o usuario não fez login, e o loading terminou.
 	if (!user && !isLoading) {
 		return <Navigate to='/signin' />;
 	}
 
-	if (
-		user &&
-		!isLoading &&
-		!user.isEmailVerified &&
-		path.includes('/dashboard') &&
-		path !== '/dashboard/resend-activation-link'
-	) {
-		return <Navigate to='/dashboard/resend-activation-link' />;
+	// se usuario tiver logado, e o loading tiver terminado, porem não ativou seu cadastro
+	if (user && !isLoading && !user?.email_verified_at) {
+		return <Navigate to='/activate-account' />;
 	}
 
+	// se chegou aqui é porque usuario fez login, e aqui verifica se loading terminou
 	if (!isLoading) {
 		return <>{children}</>;
 	}
 
+	// verifica se está carregando e se não usuario não fez logi, e se não tem token
 	if (isLoading && !user && !token) {
 		return <div>Loading...</div>;
 	}

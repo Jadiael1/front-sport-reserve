@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IApiResponse } from './interfaces/IFields';
+import { IApiResponse, IField } from './interfaces/IFields';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
 
 const HomePage = () => {
@@ -14,7 +14,7 @@ const HomePage = () => {
 			.catch(err => console.error(err));
 	}, []);
 
-	const handleRentClick = (field: any) => {
+	const handleRentClick = (field: IField) => {
 		navigate(`/field/${field.id}`, { state: { field } });
 	};
 
