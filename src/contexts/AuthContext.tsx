@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 						method: 'GET',
 						headers: {
 							Authorization: `Bearer ${token}`,
+							Accept: 'application/json',
 						},
 					});
 					const data: LoadUser = await request.json();
@@ -84,6 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					Accept: 'application/json',
 				},
 				body: JSON.stringify({ email, password }),
 			});
@@ -106,6 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${token}`,
+				Accept: 'application/json',
 			},
 		})
 			.then(resp => resp.json())
