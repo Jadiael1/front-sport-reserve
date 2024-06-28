@@ -32,11 +32,11 @@ rm -rf /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main
 /usr/bin/npm install
 /usr/bin/npm run build
 
-# find . -mindepth 1 -path /home/juvhost1/sport-reserve.juvhost.com/dist -prune -o -exec rm -rf {} +
+find . -mindepth 1 -path /home/juvhost1/sport-reserve.juvhost.com/dist -prune -o -exec rm -rf {} +
 
-# mv /home/juvhost1/sport-reserve.juvhost.com/dist/* /home/juvhost1/sport-reserve.juvhost.com/
+mv /home/juvhost1/sport-reserve.juvhost.com/dist/* /home/juvhost1/sport-reserve.juvhost.com/
 
-# rm -rf /home/juvhost1/sport-reserve.juvhost.com/dist
+rm -rf /home/juvhost1/sport-reserve.juvhost.com/dist
 
 
 HTACCESS_CONTENT='<IfModule mod_rewrite.c>
