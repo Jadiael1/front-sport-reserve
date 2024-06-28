@@ -32,13 +32,16 @@ rm -rf /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main
 /usr/bin/npm install
 /usr/bin/npm run build
 
-find . -mindepth 1 -path /home/juvhost1/sport-reserve.juvhost.com/dist -prune -o -exec rm -rf {} +
+# Limpar o diretório, exceto o dist
+find . -mindepth 1 -path ./dist -prune -o -exec rm -rf {} +
 
+# Mover os arquivos do dist para o diretório de destino
 mv /home/juvhost1/sport-reserve.juvhost.com/dist/* /home/juvhost1/sport-reserve.juvhost.com/
 
+# Remover o diretório dist
 rm -rf /home/juvhost1/sport-reserve.juvhost.com/dist
 
-
+# Criar o arquivo .htaccess
 HTACCESS_CONTENT='<IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
