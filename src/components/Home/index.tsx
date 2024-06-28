@@ -56,7 +56,7 @@ const HomePage = () => {
 								</div>
 							))}
 						</div>
-					:	<div className='text-center text-gray-600'>Lamentamos, ainda não temos nenhum campo disponível</div>}
+					:	<div className='text-center text-gray-600'>Lamentamos, ainda não temos nenhum campo disponível.</div>}
 				</div>
 			:	<div className='text-center text-gray-600'>Loading...</div>}
 		</div>
