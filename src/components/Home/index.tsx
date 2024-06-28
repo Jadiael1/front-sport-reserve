@@ -8,7 +8,12 @@ const HomePage = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		fetch(`https://api-sport-reserve.juvhost.com/api/v1/fields`)
+		fetch(`https://api-sport-reserve.juvhost.com/api/v1/fields`, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+			},
+		})
 			.then(resp => resp.json())
 			.then(resp => setResponseFields(resp))
 			.catch(err => console.error(err));
