@@ -15,7 +15,6 @@ const SignInPage = () => {
 		}
 	}, []);
 
-
 	const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setError(null);
