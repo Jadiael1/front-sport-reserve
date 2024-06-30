@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const HomePage = () => {
 	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
 	const navigate = useNavigate();
-
+	const { user, logout, isLoading } = useAuth();
 	useEffect(() => {
 		fetch(`https://api-sport-reserve.juvhost.com/api/v1/fields`, {
 			method: 'GET',
@@ -23,8 +24,41 @@ const HomePage = () => {
 		navigate(`/field/${field.id}`, { state: { field } });
 	};
 
+	const handleGoReservationList = () => {
+		navigate(`/reservations`);
+	};
+
+	const handleGoSignIn = () => {
+		navigate(`/signin`);
+	};
+
 	return (
 		<div className='container mx-auto p-4'>
+			{!isLoading && user ?
+				<div>
+					<button
+						className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
+						onClick={handleGoReservationList}
+					>
+						Ver minhas reservas
+					</button>
+					<button
+						className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300'
+						onClick={logout}
+					>
+						Logout
+					</button>
+				</div>
+			:	<div>
+					<button
+						className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
+						onClick={handleGoSignIn}
+					>
+						Entrar
+					</button>
+				</div>
+			}
+
 			<div className='text-center mb-8'>
 				<h1 className='text-3xl font-bold mb-2'>Locação de Quadras Esportivas</h1>
 				<p className='text-lg text-gray-600'>Alugue nossas quadras esportivas com facilidade e conveniência</p>
