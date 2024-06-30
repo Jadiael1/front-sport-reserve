@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign, FaClock } from 'react-icons/fa';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,13 +9,12 @@ const FieldDetails = () => {
 	const { field } = location.state;
 	const [startTime, setStartTime] = useState('');
 	const [endTime, setEndTime] = useState('');
-	const { token } = useAuth();
+	const { token, logout } = useAuth();
 	const [error, setError] = useState<{ message: string; errors?: { [key: string]: string[] } } | null>(null);
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
+	const navigate = useNavigate();
 
 	const handleReservation = () => {
-		const startTimeTreated = new Date(startTime).toISOString().replace('T', ' ').slice(0, 19);
-		const endTimeTreated = new Date(endTime).toISOString().replace('T', ' ').slice(0, 19);
 		fetch('https://api-sport-reserve.juvhost.com/api/v1/reservations', {
 			method: 'POST',
 			headers: {
@@ -25,8 +24,8 @@ const FieldDetails = () => {
 			},
 			body: JSON.stringify({
 				field_id: field.id,
-				start_time: startTimeTreated,
-				end_time: endTimeTreated,
+				start_time: startTime,
+				end_time: endTime,
 			}),
 		})
 			.then(resp => resp.json())
@@ -42,6 +41,9 @@ const FieldDetails = () => {
 				alert('Erro ao realizar a reserva. Tente novamente.');
 			});
 	};
+	const handleGoHome = () => {
+		navigate('/');
+	};
 
 	return (
 		<div className='container mx-auto p-4'>
@@ -50,7 +52,7 @@ const FieldDetails = () => {
 					message={success.message}
 					onClose={() => setError(null)}
 					type='success'
-					redirectTo='/'
+					redirectTo='/reservations'
 				/>
 			)}
 			{error && (
@@ -61,6 +63,20 @@ const FieldDetails = () => {
 					type='error'
 				/>
 			)}
+			<div>
+				<button
+					className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
+					onClick={handleGoHome}
+				>
+					Ir para Página Inicial
+				</button>
+				<button
+					className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300'
+					onClick={logout}
+				>
+					Logout
+				</button>
+			</div>
 			<div className='bg-white p-6 rounded-lg shadow-md'>
 				<h1 className='text-3xl font-bold mb-4'>{field.name}</h1>
 				<div className='text-gray-700 mb-2 flex items-center'>
