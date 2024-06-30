@@ -112,10 +112,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			},
 		})
 			.then(resp => resp.json())
-			.then(() => {
-				setUser(null);
-				setToken(null);
-				localStorage.removeItem('token');
+			.then(data => {
+				if (data.status === 'success') {
+					setUser(null);
+					setToken(null);
+					localStorage.removeItem('token');
+				} else {
+					setUser(null);
+					setToken(null);
+					localStorage.removeItem('token');
+				}
 			})
 			.catch(() => {
 				setUser(null);
