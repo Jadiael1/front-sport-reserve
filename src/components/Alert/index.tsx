@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 type AlertProps = {
 	message: string;
-	errors?: { [key: string]: string[] };
+	errors?: { [key: string]: string[] } | null | string;
 	onClose: () => void;
 	type: 'success' | 'error';
 	redirectTo?: string;
@@ -40,7 +40,7 @@ const Alert: React.FC<AlertProps> = ({ message, errors, onClose, type, redirectT
 					Click here to proceed
 				</span>
 			)}
-			{type === 'error' && errors && (
+			{type === 'error' && errors && typeof errors !== 'string' && (
 				<ul className='mt-2'>
 					{Object.keys(errors).map(key => (
 						<React.Fragment key={key}>
