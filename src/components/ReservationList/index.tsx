@@ -21,7 +21,7 @@ interface Reservation {
 	end_time: string;
 	created_at: string;
 	updated_at: string;
-	status: 'pending'|'paid';
+	status: string;
 	field: Field;
 }
 
