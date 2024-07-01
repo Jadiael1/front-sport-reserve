@@ -21,6 +21,7 @@ interface Reservation {
 	end_time: string;
 	created_at: string;
 	updated_at: string;
+	status: 'pending'|'paid';
 	field: Field;
 }
 
@@ -230,6 +231,9 @@ const ReservationList = () => {
 										</p>
 										<p className='text-gray-700 mb-1'>
 											<strong>Tipo:</strong> {reservation.field.type}
+										</p>
+										<p className='text-gray-700 mb-1'>
+											<strong>Status:</strong> {reservation.status}
 										</p>
 										<p className='text-gray-700 mb-1'>
 											<strong>Taxa por Hora:</strong> {reservation.field.hourly_rate}
