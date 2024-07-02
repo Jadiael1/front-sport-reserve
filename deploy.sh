@@ -24,6 +24,7 @@ mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.editorconf
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.eslintrc.json /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.gitignore /home/juvhost1/sport-reserve.juvhost.com/
 mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.prettierrc /home/juvhost1/sport-reserve.juvhost.com/
+mv /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main/.env /home/juvhost1/sport-reserve.juvhost.com/
 
 # Remover a pasta descompactada
 rm -rf /home/juvhost1/sport-reserve.juvhost.com/front-sport-reserve-main
