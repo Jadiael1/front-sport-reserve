@@ -58,9 +58,10 @@ const ReservationList = () => {
 		end_time: '',
 	});
 	const navigate = useNavigate();
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
-		fetch('https://api-sport-reserve.juvhost.com/api/v1/reservations', {
+		fetch(`${baseURL}/reservations`, {
 			method: 'GET',
 			headers: {
 				Accept: 'application/json',
@@ -88,7 +89,7 @@ const ReservationList = () => {
 	const handleDelete = (id: number) => {
 		const confirmDelete = window.confirm('Você tem certeza que deseja excluir esta reserva?');
 		if (confirmDelete) {
-			fetch(`https://api-sport-reserve.juvhost.com/api/v1/reservations/${id}`, {
+			fetch(`${baseURL}/reservations/${id}`, {
 				method: 'DELETE',
 				headers: {
 					Accept: 'application/json',
@@ -123,7 +124,7 @@ const ReservationList = () => {
 	};
 
 	const handleUpdate = (id: number) => {
-		fetch(`https://api-sport-reserve.juvhost.com/api/v1/reservations/${id}`, {
+		fetch(`${baseURL}/reservations/${id}`, {
 			method: 'PATCH',
 			headers: {
 				Accept: 'application/json',

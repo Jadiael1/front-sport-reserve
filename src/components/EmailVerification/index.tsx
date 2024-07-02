@@ -7,6 +7,7 @@ const EmailVerification = () => {
 	const [message, setMessage] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	const { user } = useAuth();
 
@@ -28,16 +29,13 @@ const EmailVerification = () => {
 			setTimeout(() => navigate('/'), 3000);
 		} else {
 			try {
-				const response = await fetch(
-					`https://api-sport-reserve.juvhost.com/api/v1/auth/email/verify/${id}?expires=${expires}&signature=${signature}`,
-					{
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-							Accept: 'application/json',
-						},
+				const response = await fetch(`${baseURL}/auth/email/verify/${id}?expires=${expires}&signature=${signature}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
 					},
-				);
+				});
 				const data = await response.json();
 
 				if (response.status === 200 && data.status === 'success') {

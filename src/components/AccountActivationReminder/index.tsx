@@ -8,7 +8,7 @@ const AccountActivationReminder = () => {
 	const [error, setError] = useState<string | null>(null);
 	const { user } = useAuth();
 	const navigate = useNavigate();
-
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	useEffect(() => {
 		if (user?.email_verified_at) {
 			setMessage('Email já foi verificado! Você será redirecionado em breve.');
@@ -21,7 +21,7 @@ const AccountActivationReminder = () => {
 		setError(null);
 
 		try {
-			const response = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/email/resend', {
+			const response = await fetch(`${baseURL}/auth/email/resend`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

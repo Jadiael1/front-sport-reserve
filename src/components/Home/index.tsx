@@ -5,11 +5,12 @@ import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 
 const HomePage = () => {
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
 	const navigate = useNavigate();
 	const { user, logout, isLoading } = useAuth();
 	useEffect(() => {
-		fetch(`https://api-sport-reserve.juvhost.com/api/v1/fields`, {
+		fetch(`${baseURL}/fields`, {
 			method: 'GET',
 			headers: {
 				Accept: 'application/json',

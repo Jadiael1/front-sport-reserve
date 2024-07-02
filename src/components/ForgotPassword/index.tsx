@@ -7,6 +7,7 @@ const ForgotPasswordPage = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	const handleForgotPassword = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -15,7 +16,7 @@ const ForgotPasswordPage = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/password/email', {
+			const response = await fetch(`${baseURL}/auth/password/email`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

@@ -13,9 +13,10 @@ const FieldDetails = () => {
 	const [error, setError] = useState<{ message: string; errors?: { [key: string]: string[] } } | null>(null);
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
 	const navigate = useNavigate();
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	const handleReservation = () => {
-		fetch('https://api-sport-reserve.juvhost.com/api/v1/reservations', {
+		fetch(`${baseURL}/reservations`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

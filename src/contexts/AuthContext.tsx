@@ -51,12 +51,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<UserType | null>(null);
 	const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
 	const [isLoading, setIsLoading] = useState(true);
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
 		const loadUser = async () => {
 			if (token) {
 				try {
-					const request = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/user', {
+					const request = await fetch(`${baseURL}/auth/user`, {
 						method: 'GET',
 						headers: {
 							Authorization: `Bearer ${token}`,
@@ -81,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	const login = async (email: string, password: string) => {
 		try {
-			const request = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/signin', {
+			const request = await fetch(`${baseURL}/auth/signin`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const logout = () => {
-		fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/signout', {
+		fetch(`${baseURL}/auth/signout`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

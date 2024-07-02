@@ -14,6 +14,7 @@ const RegisterPage = () => {
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
 	const { login, user, isLoading } = useAuth();
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
 		if (user && !isLoading) {
@@ -31,7 +32,7 @@ const RegisterPage = () => {
 		setError(null);
 
 		try {
-			const response = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/signup', {
+			const response = await fetch(`${baseURL}/auth/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

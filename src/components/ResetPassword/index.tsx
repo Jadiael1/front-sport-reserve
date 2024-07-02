@@ -12,6 +12,7 @@ const ResetPasswordPage = () => {
 	const queryParams = new URLSearchParams(location.search);
 	const token = queryParams.get('token');
 	const email = queryParams.get('email');
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	const handleResetPassword = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -26,7 +27,7 @@ const ResetPasswordPage = () => {
 		}
 
 		try {
-			const response = await fetch('https://api-sport-reserve.juvhost.com/api/v1/auth/password/reset', {
+			const response = await fetch(`${baseURL}/auth/password/reset`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
