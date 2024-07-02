@@ -57,6 +57,8 @@ const ReservationList = () => {
 		start_time: '',
 		end_time: '',
 	});
+	const [paymentLink, setPaymentLink] = useState<{ id: number; url: string } | null>(null);
+	const [loadingPayment, setLoadingPayment] = useState<number | null>(null);
 	const navigate = useNavigate();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -147,6 +149,35 @@ const ReservationList = () => {
 			.catch(error => {
 				console.error('Error:', error);
 				setError({ message: 'Erro ao atualizar a reserva. Tente novamente mais tarde.' });
+			});
+	};
+
+	const handlePayment = (id: number) => {
+		setLoadingPayment(id);
+
+		fetch(`${baseURL}/payments/reservations/${id}/pay`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`,
+				'X-CSRF-TOKEN': '', // Adicione o valor real do CSRF token se necessário
+			},
+		})
+			.then(resp => resp.json())
+			.then(data => {
+				setLoadingPayment(null);
+
+				if (data.status === 'success' && data.data.url) {
+					setPaymentLink({ id, url: data.data.url });
+					setSuccess({ message: 'Link de pagamento gerado com sucesso.' });
+				} else {
+					setError({ message: data.message, errors: data.errors });
+				}
+			})
+			.catch(error => {
+				setLoadingPayment(null);
+				console.error('Error:', error);
+				setError({ message: 'Erro ao iniciar o pagamento. Tente novamente mais tarde.' });
 			});
 	};
 
@@ -248,6 +279,29 @@ const ReservationList = () => {
 										<p className='text-gray-700'>
 											<strong>Reservado em:</strong> {reservation.created_at}
 										</p>
+										{reservation.status === 'pending' && (
+											<>
+												{paymentLink && paymentLink.id === reservation.id && (
+													<p className='mt-2'>
+														<a
+															href={paymentLink.url}
+															target='_blank'
+															rel='noopener noreferrer'
+															className='underline text-blue-500'
+														>
+															Clique aqui para pagar
+														</a>
+													</p>
+												)}
+												<button
+													className={`mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300 ${loadingPayment === reservation.id ? 'opacity-50 cursor-not-allowed' : ''} ${paymentLink !== null ? 'opacity-50 cursor-not-allowed' : ''} `}
+													onClick={() => handlePayment(reservation.id)}
+													disabled={loadingPayment === reservation.id || paymentLink !== null}
+												>
+													{loadingPayment === reservation.id ? 'Processando...' : 'Efetuar Pagamento'}
+												</button>
+											</>
+										)}
 										<button
 											className='mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300'
 											onClick={() => handleEdit(reservation.id)}
