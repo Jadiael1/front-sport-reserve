@@ -279,7 +279,7 @@ const ReservationList = () => {
 										<p className='text-gray-700'>
 											<strong>Reservado em:</strong> {reservation.created_at}
 										</p>
-										{reservation.status === 'pending' && (
+										{reservation.status === 'WAITING' && (
 											<>
 												{paymentLink && paymentLink.id === reservation.id && (
 													<p className='mt-2'>
