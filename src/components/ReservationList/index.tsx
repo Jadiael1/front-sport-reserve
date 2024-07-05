@@ -73,7 +73,10 @@ const ReservationList = () => {
 			.then(resp => resp.json())
 			.then((data: ApiResponse) => {
 				if (data.status === 'success') {
-					setReservations(data.data.data);
+					const sortedReservations = data.data.data.sort(
+						(a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+					);
+					setReservations(sortedReservations);
 				} else {
 					setError({ message: data.message, errors: data.errors });
 				}
