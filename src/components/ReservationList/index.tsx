@@ -85,7 +85,7 @@ const ReservationList = () => {
 				console.error('Error:', error);
 				setError({ message: 'Erro ao buscar as reservas. Tente novamente mais tarde.' });
 			});
-	}, [token]);
+	}, [baseURL, token]);
 
 	const handleGoHome = () => {
 		navigate('/');
