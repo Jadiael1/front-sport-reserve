@@ -45,6 +45,10 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} "rm -rf ${{ secrets.VPS_APP_DIR }}/node_modules; find ${{ secrets.VPS_APP_DIR }} -mindepth 1 -not -name 'dist' -not -path '${{ secrets.VPS_APP_DIR }}/dist/*' -exec rm -rf {} +"
 
+    - name: Create File ENVS
+      run: |
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} "echo -e '#!/bin/bash\n cd ${{ secrets.VPS_APP_DIR }}\n' > ${{ secrets.VPS_APP_DIR }}/install_dependencies.sh"
+
     - name: Move all from the dist folder to the current directory
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} "mv ${{ secrets.VPS_APP_DIR }}/dist/* ${{ secrets.VPS_APP_DIR }}/"
