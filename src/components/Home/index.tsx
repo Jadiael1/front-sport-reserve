@@ -9,7 +9,6 @@ import { IoMdFootball } from 'react-icons/io';
 const HomePage = () => {
 	const { user, logout, isLoading } = useAuth();
 	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
-	const [loading, setLoading] = useState(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
 	useEffect(() => {
