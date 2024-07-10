@@ -13,6 +13,17 @@ export default {
 			screens: {
 				xs: '275px',
 			},
+			colors: {
+				primary: '#1E90FF', // Dodger Blue
+				secondary: '#FF4500', // Orange Red
+				accent: '#32CD32', // Lime Green
+				background: '#F0F8FF', // Alice Blue
+				text: '#333333', // Dark Gray
+				muted: '#666666', // Gray
+			},
+			fontFamily: {
+				sans: ['Poppins', 'sans-serif'],
+			},
 		},
 	},
 	plugins: [],
