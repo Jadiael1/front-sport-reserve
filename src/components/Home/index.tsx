@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import { CiLogin } from 'react-icons/ci';
+import { IoMdFootball } from 'react-icons/io';
 
 const HomePage = () => {
-	const baseURL = import.meta.env.VITE_API_BASE_URL;
-	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
-	const navigate = useNavigate();
 	const { user, logout, isLoading } = useAuth();
+	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
+	const [loading, setLoading] = useState(false);
+	const baseURL = import.meta.env.VITE_API_BASE_URL;
+	const navigate = useNavigate();
 	useEffect(() => {
 		fetch(`${baseURL}/fields`, {
 			method: 'GET',
@@ -34,7 +37,7 @@ const HomePage = () => {
 	};
 
 	return (
-		<div className='container mx-auto p-4'>
+		<div className='mx-auto p-4 w-full bg-background h-lvh'>
 			{!isLoading && user ?
 				<div>
 					<button
@@ -50,42 +53,51 @@ const HomePage = () => {
 						Logout
 					</button>
 				</div>
-			:	<div>
+			:	<div className='flex justify-end mb-4'>
 					<button
-						className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
+						className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 mr-16 mt-3'
 						onClick={handleGoSignIn}
 					>
+						<CiLogin />
 						Entrar
 					</button>
 				</div>
 			}
 
 			<div className='text-center mb-8'>
-				<h1 className='text-3xl font-bold mb-2'>Locação de Quadras Esportivas</h1>
-				<p className='text-lg text-gray-600'>Alugue nossas quadras esportivas com facilidade e conveniência</p>
+				<div className='flex items-center justify-center gap-5 w-full'>
+					<h1 className='text-3xl font-bold mb-2'>
+						<span className='text-primary text-5xl'>SportReserve </span>
+					</h1>
+					<span className='text-5xl animate-spin'>
+						<IoMdFootball />
+					</span>
+				</div>
+				<p className='text-lg text-text mt-5'>Alugue nossas quadras esportivas com facilidade.</p>
+				{/* <p>Aluguel de Quadras Esportivas</p> */}
 			</div>
 
 			{responseFields ?
-				<div>
+				<div className='flex items-center justify-evenly '>
 					{responseFields.data.data.length ?
-						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-6 w-3/4 mt-12'>
 							{responseFields.data.data.map(field => (
 								<div
 									key={field.id}
-									className='bg-white p-6 rounded-lg shadow-md'
+									className='bg-white p-6 rounded-lg shadow-md max-w-xs md:max-w-md lg:max-w-lg '
 								>
-									<h3 className='text-xl font-semibold mb-2'>{field.name}</h3>
+									<h3 className='text-xl font-semibold mb-2 text-center'>{field.name}</h3>
 									<div className='text-gray-700 mb-2 flex items-center'>
-										<FaMapMarkerAlt className='mr-2' />
-										<span>{field.location}</span>
+										<FaMapMarkerAlt className='mr-2 text-red-500 ' />
+										<p>{field.location}</p>
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
 										<FaFutbol className='mr-2' />
 										<span>{field.type}</span>
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
-										<FaDollarSign className='mr-2' />
-										<span>{field.hourly_rate}</span>
+										<FaDollarSign className='mr-2 text-green-400' />
+										<span>R$ {field.hourly_rate}</span>
 									</div>
 									<button
 										className='mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
@@ -98,7 +110,10 @@ const HomePage = () => {
 						</div>
 					:	<div className='text-center text-gray-600'>Lamentamos, ainda não temos nenhum campo disponível.</div>}
 				</div>
-			:	<div className='text-center text-gray-600'>Loading...</div>}
+			:	<div className='flex items-center justify-center '>
+					<div className='animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900'></div>
+				</div>
+			}
 		</div>
 	);
 };
