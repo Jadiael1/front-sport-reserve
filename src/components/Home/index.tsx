@@ -74,7 +74,6 @@ const HomePage = () => {
 					</span>
 				</div>
 				<p className='text-lg text-text mt-5'>Alugue nossas quadras esportivas com facilidade.</p>
-				{/* <p>Aluguel de Quadras Esportivas</p> */}
 			</div>
 
 			{responseFields ?
@@ -97,7 +96,7 @@ const HomePage = () => {
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
 										<FaDollarSign className='mr-2 text-green-400' />
-										<span>R$ {field.hourly_rate}</span>
+										<span>R$ {parseFloat(field.hourly_rate).toFixed(2).replace('.', ',')}</span>
 									</div>
 									<button
 										className='mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
