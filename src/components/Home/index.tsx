@@ -95,7 +95,7 @@ const HomePage = () => {
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
 										<FaDollarSign className='mr-2 text-green-400' />
-										<span>R$ {parseFloat(field.hourly_rate).toFixed(2).replace('.', ',')}</span>
+										<span>R$ {field.hourly_rate}</span>
 									</div>
 									<button
 										className='mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
