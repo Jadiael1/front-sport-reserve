@@ -141,7 +141,7 @@ const SignInPage = () => {
 							onClick={() => navigate('/signup')}
 						>
 							<p className='text-gray-500'>
-								Não tem uma conta? <span className='text-red-500 font-bold'>Registre-se</span>
+								Não tem uma conta? <span className='text-blue-700 font-bold'>Registre-se</span>
 							</p>
 						</button>
 					</div>
