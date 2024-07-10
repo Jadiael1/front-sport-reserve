@@ -63,7 +63,7 @@ const ReservationList = () => {
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
-		fetch(`${baseURL}/reservations`, {
+		fetch(`${baseURL}/reservations?sort_by=created_at&sort_order=desc`, {
 			method: 'GET',
 			headers: {
 				Accept: 'application/json',
@@ -82,7 +82,7 @@ const ReservationList = () => {
 				console.error('Error:', error);
 				setError({ message: 'Erro ao buscar as reservas. Tente novamente mais tarde.' });
 			});
-	}, [token]);
+	}, [baseURL, token]);
 
 	const handleGoHome = () => {
 		navigate('/');
@@ -279,7 +279,7 @@ const ReservationList = () => {
 										<p className='text-gray-700'>
 											<strong>Reservado em:</strong> {reservation.created_at}
 										</p>
-										{reservation.status === 'pending' && (
+										{reservation.status === 'WAITING' && (
 											<>
 												{paymentLink && paymentLink.id === reservation.id && (
 													<p className='mt-2'>
