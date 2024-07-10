@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
