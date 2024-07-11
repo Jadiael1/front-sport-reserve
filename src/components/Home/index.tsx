@@ -48,19 +48,18 @@ const HomePage = () => {
 					>
 						<IoMdMenu className='text-3xl' />
 					</button>
-					{/* Menu visível em telas menores */}
+
 					{menuOpen && (
-						// Div do menu responsivo
 						<div className='absolute right-0 h-1/4 top-9 mt-8  bg-white w-full  md:max-w-md lg:max-w-lg shadow-md rounded-md py-2 z-50 '>
 							<button
-								className='block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 bg-slate-300 font-bold'
+								className='block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 font-bold'
 								onClick={handleGoReservationList}
 							>
 								<FaRegListAlt className='text-base' />
 								Ver minhas reservas
 							</button>
 							<button
-								className=' mt-1 px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 bg-white bg-slate-300 font-bold'
+								className=' mt-1 px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 bg-white  font-bold'
 								onClick={logout}
 							>
 								<IoIosLogOut className='text-base' />
@@ -68,7 +67,7 @@ const HomePage = () => {
 							</button>
 						</div>
 					)}
-					{/* Botões para telas maiores */}
+
 					<div className='hidden md:flex items-center gap-5'>
 						<button
 							className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2 flex items-center gap-3'
@@ -91,7 +90,7 @@ const HomePage = () => {
 						className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
 						onClick={handleGoSignIn}
 					>
-						<CiLogin className='text-2xl'/>
+						<CiLogin className='text-2xl' />
 						Entrar
 					</button>
 				</div>
