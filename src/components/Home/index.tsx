@@ -41,7 +41,7 @@ const HomePage = () => {
 	return (
 		<section className='mx-auto p-4 w-full bg-background min-h-screen'>
 			{!isLoading && user ?
-				<div className='flex items-center justify-evenly my-2 md:mx-0 border-b-2 pb-3'>
+				<div className='flex items-center justify-evenly my-2 md:mx-3 border-b-2 pb-3'>
 					<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
 						<h1 className='text-primary text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
 						<span className='text-4xl sm:text-5xl md:text-6xl animate-spin-slow'>
@@ -92,13 +92,21 @@ const HomePage = () => {
 					</div>
 				</div>
 			:	<div className='flex justify-end mb-4 mt-5 md:mt-5'>
-					<button
-						className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
-						onClick={handleGoSignIn}
-					>
-						<CiLogin className='text-2xl' />
-						Entrar
-					</button>
+					<div className='flex items-center justify-evenly w-full border-b pb-3'>
+						<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
+							<h1 className='text-primary text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
+							<span className='text-4xl sm:text-5xl md:text-6xl animate-spin-slow'>
+								<IoMdFootball />
+							</span>
+						</div>
+						<button
+							className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
+							onClick={handleGoSignIn}
+						>
+							<CiLogin className='text-2xl' />
+							Entrar
+						</button>
+					</div>
 				</div>
 			}
 
