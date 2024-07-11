@@ -183,6 +183,11 @@ const RegisterPage = () => {
 							Telefone
 						</label>
 					</div>
+					{error && !error.includes('e-mail') && !error.includes('senhas') && (
+						<div className='text-red-500 text-sm mt-1'>
+							<CiWarning /> {error}
+						</div>
+					)}
 					<button
 						type='submit'
 						className='w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50'
@@ -190,11 +195,13 @@ const RegisterPage = () => {
 					>
 						{loading ? 'Carregando...' : 'Registrar'}
 					</button>
-					{error && !error.includes('e-mail') && !error.includes('senhas') && (
-						<div className='text-red-500 text-sm mt-1'>
-							<CiWarning /> {error}
-						</div>
-					)}
+					<button
+						type='button'
+						className='w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 mt-4 font-semibold'
+						onClick={() => navigate('/signin')}
+					>
+						Voltar
+					</button>
 				</form>
 			</div>
 		</section>
