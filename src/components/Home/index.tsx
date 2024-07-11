@@ -41,7 +41,13 @@ const HomePage = () => {
 	return (
 		<section className='mx-auto p-4 w-full bg-background min-h-screen'>
 			{!isLoading && user ?
-				<div className='flex items-center justify-end my-5 md:mx-10'>
+				<div className='flex items-center justify-evenly my-2 md:mx-0 border-b-2 pb-3'>
+					<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
+						<h1 className='text-primary text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
+						<span className='text-4xl sm:text-5xl md:text-6xl animate-spin-slow'>
+							<IoMdFootball />
+						</span>
+					</div>
 					<button
 						className='block md:hidden bg-gray-200 px-3 py-2 rounded bg-transparent'
 						onClick={() => setMenuOpen(!menuOpen)}
@@ -50,9 +56,9 @@ const HomePage = () => {
 					</button>
 
 					{menuOpen && (
-						<div className='absolute right-0 h-1/4 top-9 mt-8  bg-white w-full  md:max-w-md lg:max-w-lg shadow-md rounded-md py-2 z-50 '>
+						<div className='absolute right-0 h-1/4 top-9 mt-10  bg-white w-full  md:max-w-md lg:max-w-lg shadow-md rounded-md py-2 z-50 '>
 							<button
-								className='block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 font-bold'
+								className=' px-2 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 font-bold'
 								onClick={handleGoReservationList}
 							>
 								<FaRegListAlt className='text-base' />
@@ -97,15 +103,9 @@ const HomePage = () => {
 			}
 
 			<div className='text-center mb-8'>
-				<div className='flex items-center justify-center gap-5 w-full'>
-					<h1 className='text-3xl font-bold mb-2'>
-						<span className='text-primary text-5xl'>SportReserve </span>
-					</h1>
-					<span className='text-5xl animate-spin'>
-						<IoMdFootball />
-					</span>
-				</div>
-				<p className='text-lg text-text mt-5'>Alugue nossas quadras esportivas com facilidade.</p>
+				<h3 className='text-dark text-2xl sm:text-2xl md:text-3xl font-bold mt-5'>
+					Alugue nossas quadras esportivas com facilidade.
+				</h3>
 			</div>
 
 			{/* Conteúdo dos campos */}
