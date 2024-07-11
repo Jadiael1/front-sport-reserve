@@ -13,16 +13,6 @@ const RegisterPage = () => {
 		cpf: '',
 		phone: '',
 	});
-
-	// erros
-	const [errors, setErrors] = useState({
-		name: '',
-		email: '',
-		password: '',
-		password_confirmation: '',
-		cpf: '',
-		phone: '',
-	});
 	const [error, setError] = useState<string | null>(null);
 	const { login, user, isLoading } = useAuth();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -32,14 +22,13 @@ const RegisterPage = () => {
 		if (user && !isLoading) {
 			navigate('/');
 		}
-	}, []);
+	}, [user, isLoading, navigate]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData({ ...formData, [name]: value });
 	};
 
-	// Validações
 	const isValidEmail = (email: string) => {
 		return /\S+@\S+\.\S+/.test(email);
 	};
@@ -53,7 +42,7 @@ const RegisterPage = () => {
 		setError(null);
 		setLoading(true);
 
-		// Validar o email e senha
+		// Validate email and password
 		if (!isValidEmail(formData.email)) {
 			setError('Por favor, insira um e-mail válido');
 			setLoading(false);
@@ -65,7 +54,6 @@ const RegisterPage = () => {
 			setLoading(false);
 			return;
 		}
-		// 	----
 
 		try {
 			const response = await fetch(`${baseURL}/auth/signup`, {
@@ -114,7 +102,6 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Nome
 						</label>
-						{errors.name && <div className='text-red-500 text-sm mt-1'>{errors.name}</div>}
 					</div>
 					<div className='relative mb-6'>
 						<input
@@ -129,9 +116,9 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Email
 						</label>
-						{errors.email && (
+						{error && error.includes('e-mail') && (
 							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {errors.email}
+								<CiWarning /> {error}
 							</div>
 						)}
 					</div>
@@ -148,11 +135,6 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Senha
 						</label>
-						{errors.password && (
-							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {errors.password}
-							</div>
-						)}
 					</div>
 					<div className='relative mb-6'>
 						<input
@@ -167,9 +149,9 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Confirme a Senha
 						</label>
-						{errors.password_confirmation && (
+						{error && error.includes('senhas') && (
 							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {errors.password_confirmation}
+								<CiWarning /> {error}
 							</div>
 						)}
 					</div>
@@ -186,11 +168,6 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							CPF
 						</label>
-						{errors.cpf && (
-							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {errors.cpf}
-							</div>
-						)}
 					</div>
 					<div className='relative mb-6'>
 						<input
@@ -205,27 +182,19 @@ const RegisterPage = () => {
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Telefone
 						</label>
-						{errors.phone && (
-							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {errors.phone}
-							</div>
-						)}
 					</div>
-					{error && <p className='text-red-500 text-sm mt-2 text-center mb-3'>{error}</p>}
 					<button
 						type='submit'
+						className='w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50'
 						disabled={loading}
-						className='w-full px-3 py-3 rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:bg-blue-700'
 					>
-						{loading ? 'Registrando...' : 'Registrar'}
+						{loading ? 'Carregando...' : 'Registrar'}
 					</button>
-					<button
-						type='button'
-						className='w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 mt-4 font-semibold'
-						onClick={() => navigate('/signin')}
-					>
-						Voltar
-					</button>
+					{error && !error.includes('e-mail') && !error.includes('senhas') && (
+						<div className='text-red-500 text-sm mt-1'>
+							<CiWarning /> {error}
+						</div>
+					)}
 				</form>
 			</div>
 		</section>
