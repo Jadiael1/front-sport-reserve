@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ForgotPasswordPage = () => {
@@ -38,40 +38,46 @@ const ForgotPasswordPage = () => {
 	};
 
 	return (
-		<div className='container mx-auto p-4'>
-			<h1 className='text-3xl font-bold mb-4'>Esqueceu a Senha</h1>
-			{message && <div className='text-green-500 mb-4'>{message}</div>}
-			{error && <div className='text-red-500 mb-4'>{error}</div>}
-			<form onSubmit={handleForgotPassword}>
-				<div className='mb-4'>
-					<label className='block text-gray-700 mb-2'>Email:</label>
-					<input
-						type='email'
-						name='email'
-						className='w-full p-2 border rounded'
-						required
-						value={email}
-						onChange={e => setEmail(e.target.value)}
-						disabled={isLoading}
-					/>
-				</div>
-				<button
-					type='submit'
-					className='w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-					disabled={isLoading}
-				>
-					{isLoading ? 'Enviando...' : 'Enviar E-mail de Redefinição'}
-				</button>
-				<button
-					type='button'
-					className='w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300 mt-4'
-					onClick={() => navigate('/signin')}
-					disabled={isLoading}
-				>
-					Voltar
-				</button>
-			</form>
-		</div>
+		<section className='flex flex-col items-center justify-center w-full min-h-screen bg-slate-200'>
+			<div className='container mx-auto p-6 max-w-lg h-[300px] bg-white border rounded-xl'>
+				<h1 className='text-3xl font-bold mb-4 text-center text-blue-700'>Redefina sua senha</h1>
+				{message && <div className='text-green-500 mb-4'>{message}</div>}
+				{error && <div className='text-red-500 mb-4'>{error}</div>}
+				<form onSubmit={handleForgotPassword}>
+					<div className='relative mb-4 w-3/4 mx-auto'>
+						<input
+							type='email'
+							name='email'
+							className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+							required
+							value={email}
+							onChange={e => setEmail(e.target.value)}
+							disabled={isLoading}
+						/>
+						<label className='absolute text-sm text-dark-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1'>
+							E-mail
+						</label>
+					</div>
+					<div className='flex flex-col items-center '>
+						<button
+							type='submit'
+							className='1/2 mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+							disabled={isLoading}
+						>
+							{isLoading ? 'Enviando...' : 'Enviar E-mail de Redefinição'}
+						</button>
+						<button
+							type='button'
+							className='w-1/2 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300 mt-4'
+							onClick={() => navigate('/signin')}
+							disabled={isLoading}
+						>
+							Voltar
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	);
 };
 
