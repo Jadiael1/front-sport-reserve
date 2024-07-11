@@ -63,7 +63,7 @@ const HomePage = () => {
 								onClick={logout}
 							>
 								<IoIosLogOut className='text-base' />
-								Logout
+								Sair
 							</button>
 						</div>
 					)}
