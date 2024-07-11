@@ -91,7 +91,7 @@ const HomePage = () => {
 						className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
 						onClick={handleGoSignIn}
 					>
-						<CiLogin />
+						<CiLogin className='text-2xl'/>
 						Entrar
 					</button>
 				</div>
