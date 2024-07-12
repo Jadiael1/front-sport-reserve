@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Alert from '../Alert';
 import { useNavigate } from 'react-router-dom';
+import { IoMdHome, IoIosLogOut } from 'react-icons/io';
+import { MdHourglassEmpty, MdCheckCircle, MdCancel, MdInfo } from 'react-icons/md';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface Field {
 	id: number;
@@ -181,8 +185,25 @@ const ReservationList = () => {
 			});
 	};
 
+	const getStatusDetails = (status: string) => {
+		switch (status) {
+			case 'PAID':
+				return { displayName: 'Pago', color: '#28a745', icon: 'check-circle' };
+			case 'WAITING':
+				return {
+					displayName: 'Pendente',
+					color: '#ffc107',
+					icon: 'hourglass-empty',
+				};
+			case 'CANCELED':
+				return { displayName: 'Cancelado', color: '#dc3545', icon: 'cancel' };
+			default:
+				return { displayName: status, color: '#000', icon: 'info' };
+		}
+	};
+
 	return (
-		<div className='container mx-auto p-4'>
+		<section className='container mx-auto p-4'>
 			{error && (
 				<Alert
 					message={error.message}
@@ -198,130 +219,150 @@ const ReservationList = () => {
 				/>
 			)}
 			<div className='bg-white p-6 rounded-lg shadow-md'>
-				<div className='flex justify-between items-center mb-4'>
-					<h1 className='text-3xl font-bold'>Minhas Reservas</h1>
-					<div>
+				<div className='flex justify-evenly items-center flex-wrap mb-8 '>
+					<h1 className='text-2xl font-bold text-center sm:text-2xl lg:text-3xl md:text-4xl'>Minhas Reservas</h1>
+					<div className='flex flex-wrap gap-3'>
 						<button
-							className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
+							className='flex items-center gap-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2'
 							onClick={handleGoHome}
 						>
-							Ir para Página Inicial
+							<IoMdHome className='text-1xl' />
+							Inicio
 						</button>
 						<button
-							className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300'
+							className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center gap-3'
 							onClick={logout}
 						>
-							Logout
+							<IoIosLogOut className='text-base color-white text-lg' />
+							Sair
 						</button>
 					</div>
 				</div>
 				{reservations.length === 0 ?
 					<p className='text-gray-700'>Nenhuma reserva encontrada.</p>
-				:	<div className='grid gap-4'>
-						{reservations.map((reservation: Reservation) => (
-							<div
-								key={reservation.id}
-								className='p-4 border rounded'
-							>
-								{editMode === reservation.id ?
-									<div>
-										<div className='mt-4'>
-											<label className='block text-gray-700 mb-2'>Hora de Início:</label>
-											<input
-												type='datetime-local'
-												className='w-full p-2 border rounded'
-												value={editData.start_time}
-												onChange={e => setEditData({ ...editData, start_time: e.target.value })}
-											/>
+				:	<div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+						{reservations.map((reservation: Reservation) => {
+							const statusDetails = getStatusDetails(reservation.status);
+							return (
+								<div
+									key={reservation.id}
+									className='p-4 border rounded shadow-md bg-gray-50'
+								>
+									{editMode === reservation.id ?
+										<div>
+											<div className='mt-4'>
+												<label className='block text-gray-700 mb-2'>Hora de Início</label>
+												<input
+													type='datetime-local'
+													className='w-full p-2 border rounded'
+													value={editData.start_time}
+													onChange={e => setEditData({ ...editData, start_time: e.target.value })}
+												/>
+											</div>
+											<div className='mt-4'>
+												<label className='block text-gray-700 mb-2'>Hora de Término</label>
+												<input
+													type='datetime-local'
+													className='w-full p-2 border rounded'
+													value={editData.end_time}
+													onChange={e => setEditData({ ...editData, end_time: e.target.value })}
+												/>
+											</div>
+											<button
+												className='mt-4 w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300'
+												onClick={() => handleUpdate(reservation.id)}
+											>
+												Atualizar
+											</button>
+											<button
+												className='mt-2 w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300'
+												onClick={() => setEditMode(null)}
+											>
+												Cancelar
+											</button>
 										</div>
-										<div className='mt-4'>
-											<label className='block text-gray-700 mb-2'>Hora de Término:</label>
-											<input
-												type='datetime-local'
-												className='w-full p-2 border rounded'
-												value={editData.end_time}
-												onChange={e => setEditData({ ...editData, end_time: e.target.value })}
-											/>
-										</div>
-										<button
-											className='mt-4 w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300'
-											onClick={() => handleUpdate(reservation.id)}
-										>
-											Atualizar
-										</button>
-										<button
-											className='mt-2 w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300'
-											onClick={() => setEditMode(null)}
-										>
-											Cancelar
-										</button>
-									</div>
-								:	<div>
-										<h2 className='text-xl font-bold mb-2'>{reservation.field.name}</h2>
-										<p className='text-gray-700 mb-1'>
-											<strong>Local:</strong> {reservation.field.location}
-										</p>
-										<p className='text-gray-700 mb-1'>
-											<strong>Tipo:</strong> {reservation.field.type}
-										</p>
-										<p className='text-gray-700 mb-1'>
-											<strong>Status:</strong> {reservation.status}
-										</p>
-										<p className='text-gray-700 mb-1'>
-											<strong>Taxa por Hora:</strong> {reservation.field.hourly_rate}
-										</p>
-										<p className='text-gray-700 mb-1'>
-											<strong>Início:</strong> {reservation.start_time}
-										</p>
-										<p className='text-gray-700 mb-1'>
-											<strong>Término:</strong> {reservation.end_time}
-										</p>
-										<p className='text-gray-700'>
-											<strong>Reservado em:</strong> {reservation.created_at}
-										</p>
-										{reservation.status === 'WAITING' && (
-											<>
-												{paymentLink && paymentLink.id === reservation.id && (
-													<p className='mt-2'>
-														<a
-															href={paymentLink.url}
-															target='_blank'
-															rel='noopener noreferrer'
-															className='underline text-blue-500'
-														>
-															Clique aqui para pagar
-														</a>
-													</p>
-												)}
-												<button
-													className={`mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300 ${loadingPayment === reservation.id ? 'opacity-50 cursor-not-allowed' : ''} ${paymentLink !== null ? 'opacity-50 cursor-not-allowed' : ''} `}
-													onClick={() => handlePayment(reservation.id)}
-													disabled={loadingPayment === reservation.id || paymentLink !== null}
+									:	<div>
+											<h2 className='text-xl font-bold mb-2 text-center mb-3'>{reservation.field.name}</h2>
+											<h3 className='text-gray-700 mb-1'>
+												<span className='font-bold'>Local: </span>
+												{reservation.field.location}
+											</h3>
+											<h3 className='text-gray-700 mb-1'>
+												<span className='font-bold'>Tipo -</span> {reservation.field.type}
+											</h3>
+											<h3 className='flex items-center gap-3 text-gray-700 font-bold'>
+												<p>Situação -</p>{' '}
+												<span
+													className='flex'
+													style={{ color: statusDetails.color }}
 												>
-													{loadingPayment === reservation.id ? 'Processando...' : 'Efetuar Pagamento'}
-												</button>
-											</>
-										)}
-										<button
-											className='mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300'
-											onClick={() => handleEdit(reservation.id)}
-										>
-											Editar
-										</button>
-										<button
-											className='mt-2 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300'
-											onClick={() => handleDelete(reservation.id)}
-										>
-											Excluir
-										</button>
-									</div>
-								}
-							</div>
-						))}
+													{statusDetails.icon === 'check-circle' && <MdCheckCircle size={20} />}
+													{statusDetails.icon === 'hourglass-empty' && <MdHourglassEmpty size={20} />}
+													{statusDetails.icon === 'cancel' && <MdCancel size={20} />}
+													{statusDetails.icon === 'info' && <MdInfo size={20} />}
+													{statusDetails.displayName}
+												</span>
+											</h3>
+											<h3 className='text-gray-700 mb-1 flex items-center gap-1'>
+												<p className='font-bold'>Valor por Hora - </p> R$ {reservation.field.hourly_rate}
+											</h3>
+											<h3 className='text-gray-700 mb-1 flex items-center gap-1'>
+												<p className='font-bold'>Início - </p>
+												{format(new Date(reservation.start_time), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+											</h3>
+											<h3 className='text-gray-700 mb-1'>
+												<span className='font-bold'>Término - </span>
+												{format(new Date(reservation.end_time), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+											</h3>
+											<h3 className='text-gray-700'>
+												<span className='font-bold'>Reservado em - </span>
+												{format(new Date(reservation.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+											</h3>
+											{reservation.status === 'WAITING' && (
+												<>
+													{paymentLink && paymentLink.id === reservation.id && (
+														<p className='mt-2'>
+															<a
+																href={paymentLink.url}
+																target='_blank'
+																rel='noopener noreferrer'
+																className='underline text-blue-500'
+															>
+																Clique aqui para pagar
+															</a>
+														</p>
+													)}
+													<button
+														className={`mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300 ${loadingPayment === reservation.id ? 'opacity-50 cursor-not-allowed' : ''} ${paymentLink !== null ? 'opacity-50 cursor-not-allowed' : ''} `}
+														onClick={() => handlePayment(reservation.id)}
+														disabled={loadingPayment === reservation.id || paymentLink !== null}
+													>
+														{loadingPayment === reservation.id ? 'Processando...' : 'Efetuar Pagamento'}
+													</button>
+												</>
+											)}
+											<button
+												className='mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+												onClick={() => handleEdit(reservation.id)}
+											>
+												Editar
+											</button>
+
+											<button
+												className='mt-2 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300'
+												onClick={() => handleDelete(reservation.id)}
+											>
+												Excluir
+											</button>
+										</div>
+									}
+								</div>
+							);
+						})}
 					</div>
 				}
 			</div>
-		</div>
+		</section>
 	);
 };
 
