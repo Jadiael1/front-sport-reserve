@@ -43,7 +43,7 @@ const HomePage = () => {
 			{!isLoading && user ?
 				<div className='flex items-center justify-evenly my-2 md:mx-3 border-b-2 pb-3'>
 					<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
-						<h1 className='text-primary text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
+						<h1 className='text-blue-700 text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
 						<span className='text-4xl sm:text-5xl md:text-6xl animate-spin-slow'>
 							<IoMdFootball />
 						</span>
@@ -94,7 +94,7 @@ const HomePage = () => {
 			:	<div className='flex justify-end mb-4 mt-5 md:mt-5'>
 					<div className='flex items-center justify-evenly w-full border-b pb-3'>
 						<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
-							<h1 className='text-primary text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
+							<h1 className='text-blue-700 text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
 							<span className='text-4xl sm:text-5xl md:text-6xl animate-spin-slow'>
 								<IoMdFootball />
 							</span>
@@ -114,6 +114,7 @@ const HomePage = () => {
 				<h3 className='text-dark text-2xl sm:text-2xl md:text-3xl font-bold mt-5'>
 					Alugue nossas quadras esportivas com facilidade.
 				</h3>
+				<p className='mt-5'>Escolha uma das nossas quadras </p>
 			</div>
 
 			{/* Conteúdo dos campos */}
