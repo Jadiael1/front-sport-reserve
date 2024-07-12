@@ -83,7 +83,7 @@ const RegisterPage = () => {
 	return (
 		<section className='flex items-center justify-center min-h-screen bg-slate-200'>
 			<div className='container mx-auto p-6 max-w-lg'>
-				<h1 className='text-3xl font-bold mb-6 text-center'>SportReserve</h1>
+				<h1 className='text-3xl text-blue-700 font-bold mb-6 text-center'>SportReserve</h1>
 				<p className='text-lg text-gray-700 mb-8 text-center'>Crie sua conta para começar a reservar!</p>
 				<form
 					onSubmit={handleRegister}
