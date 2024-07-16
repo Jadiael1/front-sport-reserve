@@ -2,6 +2,8 @@ import Home from '../components/Home/index';
 import FieldDetails from '../components/FieldDetails/index';
 import IRoutes from './IRoutes';
 import ReservationList from '../components/ReservationList';
+import FieldForm from '../components/FieldStore';
+import FieldUpdate from '../components/FieldUpdate';
 
 const routesSite: IRoutes[] = [
 	{
@@ -23,6 +25,20 @@ const routesSite: IRoutes[] = [
 		component: ReservationList,
 		visibleInDisplay: true,
 		displayName: 'Reservations',
+		protected: true,
+	},
+	{
+		path: '/fields/new',
+		component: FieldForm,
+		visibleInDisplay: true,
+		displayName: 'Novo Campo',
+		protected: true,
+	},
+	{
+		path: '/fields/edit/:id',
+		component: FieldUpdate,
+		visibleInDisplay: false,
+		displayName: 'Editar Campo',
 		protected: true,
 	},
 ];
