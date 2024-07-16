@@ -30,6 +30,10 @@ const HomePage = () => {
 		navigate(`/field/${field.id}`, { state: { field } });
 	};
 
+	const handleEditClick = (field: IField) => {
+		navigate(`/fields/edit/${field.id}`, { state: { field } });
+	};
+
 	const handleGoReservationList = () => {
 		navigate(`/reservations`);
 	};
@@ -48,6 +52,14 @@ const HomePage = () => {
 							<IoMdFootball />
 						</span>
 					</div>
+					{user?.is_admin && (
+						<button
+							className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+							onClick={() => navigate('/fields/new')}
+						>
+							Criar novo campo
+						</button>
+					)}
 					<button
 						className='block md:hidden bg-gray-200 px-3 py-2 rounded bg-transparent'
 						onClick={() => setMenuOpen(!menuOpen)}
@@ -86,7 +98,7 @@ const HomePage = () => {
 							className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center gap-3'
 							onClick={logout}
 						>
-							<IoIosLogOut className='text-base color-white text-lg' />
+							<IoIosLogOut className='text-base color-white' />
 							Sair
 						</button>
 					</div>
@@ -128,6 +140,18 @@ const HomePage = () => {
 									className='bg-white p-6 rounded-lg shadow-md max-w-xs md:max-w-md lg:max-w-lg'
 								>
 									<h3 className='text-xl font-semibold mb-2 text-center'>{field.name}</h3>
+									{field.images && field.images.length > 0 && (
+										<div className='flex overflow-x-scroll'>
+											{field.images.map(image => (
+												<img
+													key={image.id}
+													src={`${baseURL}/${image.path}`.replace('api/v1/', 'public/storage/')}
+													alt={field.name}
+													className='w-32 h-32 object-cover mr-2 rounded'
+												/>
+											))}
+										</div>
+									)}
 									<div className='text-gray-700 mb-2 flex items-center'>
 										<FaMapMarkerAlt className='mr-2 text-red-500' />
 										<p>{field.location}</p>
@@ -140,16 +164,37 @@ const HomePage = () => {
 										<FaDollarSign className='mr-2 text-green-400' />
 										<span>R$ {field.hourly_rate}</span>
 									</div>
-									<button
-										className='mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-										onClick={() => handleRentClick(field)}
-									>
-										Alugar
-									</button>
+									<div className='flex justify-between mt-4'>
+										<button
+											className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+											onClick={() => handleRentClick(field)}
+										>
+											Alugar
+										</button>
+										{user?.is_admin && (
+											<button
+												className='bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300'
+												onClick={() => handleEditClick(field)}
+											>
+												Editar
+											</button>
+										)}
+									</div>
 								</div>
 							))}
 						</div>
-					:	<div className='text-center text-gray-600'>Lamentamos, ainda não temos nenhum campo disponível.</div>}
+					:	<div className='text-center text-gray-600'>
+							<p>Lamentamos, ainda não temos nenhum campo disponível.</p>
+							{user?.is_admin && (
+								<button
+									className='mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+									onClick={() => navigate('/fields/new')}
+								>
+									Criar novo campo
+								</button>
+							)}
+						</div>
+					}
 				</div>
 			:	<div className='flex items-center justify-center'>
 					<div className='animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900'></div>

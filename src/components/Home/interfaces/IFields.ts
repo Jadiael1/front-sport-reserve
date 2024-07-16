@@ -1,3 +1,11 @@
+export interface IImage {
+	id: number;
+	field_id: number;
+	path: string;
+	created_at: string;
+	updated_at: string;
+}
+
 export interface IPaginationLink {
 	url: string | null;
 	label: string;
@@ -13,6 +21,7 @@ export interface IField {
 	hourly_rate: number;
 	created_at?: string;
 	updated_at?: string;
+	images: IImage[];
 }
 
 // Interface para os dados de paginação
