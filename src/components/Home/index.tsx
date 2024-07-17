@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
-import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import { Carousel } from 'antd';
+import { Navbar } from '../NavBar/NavBar';
+import ModalImage from 'react-modal-image';
 import { CiLogin } from 'react-icons/ci';
-import { IoMdFootball, IoMdMenu, IoIosLogOut } from 'react-icons/io';
-import { FaRegListAlt } from 'react-icons/fa';
+import { IoMdFootball } from 'react-icons/io';
+import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
+import { FaXmark, FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 const HomePage = () => {
-	const { user, logout, isLoading } = useAuth();
+	const { user, isLoading } = useAuth();
 	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
-	const [menuOpen, setMenuOpen] = useState(false);
+	const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+	const [currentFieldImages, setCurrentFieldImages] = useState<string[]>([]);
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
 
@@ -34,12 +39,28 @@ const HomePage = () => {
 		navigate(`/fields/edit/${field.id}`, { state: { field } });
 	};
 
-	const handleGoReservationList = () => {
-		navigate(`/reservations`);
-	};
-
 	const handleGoSignIn = () => {
 		navigate(`/signin`);
+	};
+
+	const openModal = (images: string[], index: number) => {
+		setCurrentFieldImages(images);
+		setSelectedImageIndex(index);
+		setIsModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setCurrentFieldImages([]);
+		setSelectedImageIndex(0);
+		setIsModalOpen(false);
+	};
+	// Para passar a imagem do modal
+	const nextImage = () => {
+		setSelectedImageIndex(prevIndex => (prevIndex === currentFieldImages.length - 1 ? 0 : prevIndex + 1));
+	};
+	// Para voltar a imagem do modal
+	const prevImage = () => {
+		setSelectedImageIndex(prevIndex => (prevIndex === 0 ? currentFieldImages.length - 1 : prevIndex - 1));
 	};
 
 	return (
@@ -52,56 +73,7 @@ const HomePage = () => {
 							<IoMdFootball />
 						</span>
 					</div>
-					{user?.is_admin && (
-						<button
-							className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-							onClick={() => navigate('/fields/new')}
-						>
-							Criar novo campo
-						</button>
-					)}
-					<button
-						className='block md:hidden bg-gray-200 px-3 py-2 rounded bg-transparent'
-						onClick={() => setMenuOpen(!menuOpen)}
-					>
-						<IoMdMenu className='text-3xl' />
-					</button>
-
-					{menuOpen && (
-						<div className='absolute right-0 h-1/4 top-9 mt-10  bg-white w-full  md:max-w-md lg:max-w-lg shadow-md rounded-md py-2 z-50 '>
-							<button
-								className=' px-2 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 font-bold'
-								onClick={handleGoReservationList}
-							>
-								<FaRegListAlt className='text-base' />
-								Ver minhas reservas
-							</button>
-							<button
-								className=' mt-1 px-4 py-2 text-gray-800 hover:bg-gray-200 w-full flex items-center gap-3 bg-white  font-bold'
-								onClick={logout}
-							>
-								<IoIosLogOut className='text-base' />
-								Sair
-							</button>
-						</div>
-					)}
-
-					<div className='hidden md:flex items-center gap-5'>
-						<button
-							className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mr-2 flex items-center gap-3'
-							onClick={handleGoReservationList}
-						>
-							<FaRegListAlt className='text-base' />
-							Ver minhas reservas
-						</button>
-						<button
-							className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center gap-3'
-							onClick={logout}
-						>
-							<IoIosLogOut className='text-base color-white' />
-							Sair
-						</button>
-					</div>
+					<Navbar />
 				</div>
 			:	<div className='flex justify-end mb-4 mt-5 md:mt-5'>
 					<div className='flex items-center justify-evenly w-full border-b pb-3'>
@@ -112,7 +84,7 @@ const HomePage = () => {
 							</span>
 						</div>
 						<button
-							className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
+							className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16'
 							onClick={handleGoSignIn}
 						>
 							<CiLogin className='text-2xl' />
@@ -140,66 +112,123 @@ const HomePage = () => {
 									className='bg-white p-6 rounded-lg shadow-md max-w-xs md:max-w-md lg:max-w-lg'
 								>
 									<h3 className='text-xl font-semibold mb-2 text-center'>{field.name}</h3>
-									{field.images && field.images.length > 0 && (
-										<div className='flex overflow-x-scroll'>
-											{field.images.map(image => (
-												<img
-													key={image.id}
-													src={`${baseURL}/${image.path}`.replace('api/v1/', 'public/storage/')}
-													alt={field.name}
-													className='w-32 h-32 object-cover mr-2 rounded'
-												/>
-											))}
+
+									<div className='text-gray-700 mb-2 flex items-center mt-3'>
+										<div className='flex items-center gap-1'>
+											<FaMapMarkerAlt className='mr-2 text-red-500' />
+											<h3 className='font-bold'>Localização: </h3>
+											<p>{field.location}</p>
 										</div>
-									)}
-									<div className='text-gray-700 mb-2 flex items-center'>
-										<FaMapMarkerAlt className='mr-2 text-red-500' />
-										<p>{field.location}</p>
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
-										<FaFutbol className='mr-2' />
-										<span>{field.type}</span>
+										<div className='flex items-center gap-1'>
+											<FaFutbol className='mr-2' />
+											<h3 className='font-bold'>Modalidade:</h3>
+											<span>{field.type}</span>
+										</div>
 									</div>
 									<div className='text-gray-700 mb-2 flex items-center'>
-										<FaDollarSign className='mr-2 text-green-400' />
-										<span>R$ {field.hourly_rate}</span>
+										<div className='flex items-center gap-1'>
+											<FaDollarSign className='mr-2 text-green-400' />
+											<h3 className='font-bold'>Valor da hora: </h3>
+											<span>R$ {field.hourly_rate}</span>
+										</div>
 									</div>
-									<div className='flex justify-between mt-4'>
-										<button
-											className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-											onClick={() => handleRentClick(field)}
+									<div className='h-48'>
+										<Carousel
+											autoplay
+											arrows={true}
+											className='h-full'
 										>
-											Alugar
-										</button>
+											{field.images && field.images.length > 0 ?
+												field.images.map((image, index) => (
+													<div
+														key={image.id}
+														className='h-full'
+														onClick={() =>
+															openModal(
+																field.images.map(img => `${baseURL}/${img.path}`.replace('api/v1/', 'public/')),
+																index,
+															)
+														}
+													>
+														<img
+															src={`${baseURL}/${image.path}`.replace('api/v1/', 'public')}
+															alt={field.name}
+															className='h-full w-full object-cover rounded-lg max-h-48 cursor-pointer'
+														/>
+													</div>
+												))
+											:	<div className='h-full flex items-center justify-center'>
+													<h3>Sem imagens</h3>
+												</div>
+											}
+										</Carousel>
+									</div>
+
+									<div className='flex items-center '>
 										{user?.is_admin && (
 											<button
-												className='bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300'
+												className='bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300 mt-3 mr-3 w-full'
 												onClick={() => handleEditClick(field)}
 											>
 												Editar
 											</button>
 										)}
+										<button
+											className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mt-3 w-full'
+											onClick={() => handleRentClick(field)}
+										>
+											Alugar
+										</button>
 									</div>
 								</div>
 							))}
 						</div>
-					:	<div className='text-center text-gray-600'>
-							<p>Lamentamos, ainda não temos nenhum campo disponível.</p>
-							{user?.is_admin && (
-								<button
-									className='mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-									onClick={() => navigate('/fields/new')}
-								>
-									Criar novo campo
-								</button>
-							)}
+					:	<div className='flex justify-center'>
+							<h2>Nenhuma arena disponível no momento.</h2>
 						</div>
 					}
 				</div>
-			:	<div className='flex items-center justify-center'>
-					<div className='animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900'></div>
+			:	<div className='flex justify-center items-center'>
+					<h2>Carregando arenas...</h2>
 				</div>
 			}
+
+			{/* Modal de Imagem */}
+			{isModalOpen && (
+				<div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75'>
+					<div className='max-w-screen-lg max-h-screen w-full p-4 relative '>
+						<ModalImage
+							small={currentFieldImages[selectedImageIndex]}
+							large={currentFieldImages[selectedImageIndex]}
+							alt='Imagem'
+							onClose={closeModal}
+							hideZoom={true}
+							hideDownload={true}
+							className='object-contain mx-auto max-w-full'
+						/>
+						<button
+							className='absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
+							onClick={prevImage}
+						>
+							<FaChevronLeft />
+						</button>
+						<button
+							className='absolute top-1/2 right-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
+							onClick={nextImage}
+						>
+							<FaChevronRight />
+						</button>
+						<button
+							className='absolute top-4 right-4 bg-white text-black p-2 rounded-full'
+							onClick={closeModal}
+						>
+							<FaXmark />
+						</button>
+					</div>
+				</div>
+			)}
 		</section>
 	);
 };
