@@ -145,7 +145,7 @@ const HomePage = () => {
 											{field.images.map(image => (
 												<img
 													key={image.id}
-													src={`${baseURL}/${image.path}`.replace('api/v1/', 'public/storage/')}
+													src={`${baseURL}/${image.path}`.replace('api/v1/', 'public')}
 													alt={field.name}
 													className='w-32 h-32 object-cover mr-2 rounded'
 												/>

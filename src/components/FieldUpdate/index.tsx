@@ -134,7 +134,7 @@ const FieldUpdateForm = () => {
 						className='flex flex-col items-center'
 					>
 						<img
-							src={`${baseURL}/${image.path}`.replace('api/v1/', 'public/storage/')}
+							src={`${baseURL}/${image.path}`.replace('api/v1/', 'public')}
 							alt={`Field ${field.name}`}
 							className='w-32 h-32 object-cover mb-2 rounded'
 						/>
