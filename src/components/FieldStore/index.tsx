@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { FaUpload, FaArrowLeft } from 'react-icons/fa'; // Importando ícones do React Icons
-
+import { FaUpload, FaArrowLeft } from 'react-icons/fa';
 const FieldForm = () => {
 	const { token } = useAuth();
 	const [name, setName] = useState('');
@@ -81,7 +80,7 @@ const FieldForm = () => {
 							htmlFor='location'
 							className='absolute text-sm text-dark-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1'
 						>
-							Localização:
+							Localização
 						</label>
 						<input
 							id='location'

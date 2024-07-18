@@ -54,17 +54,17 @@ const HomePage = () => {
 		setSelectedImageIndex(0);
 		setIsModalOpen(false);
 	};
-	// Para passar a imagem do modal
+
 	const nextImage = () => {
 		setSelectedImageIndex(prevIndex => (prevIndex === currentFieldImages.length - 1 ? 0 : prevIndex + 1));
 	};
-	// Para voltar a imagem do modal
+
 	const prevImage = () => {
 		setSelectedImageIndex(prevIndex => (prevIndex === 0 ? currentFieldImages.length - 1 : prevIndex - 1));
 	};
 
 	return (
-		<section className='mx-auto p-4 w-full bg-background min-h-screen'>
+		<section className='mx-auto p-2 sm:p-3 md:p-4 lg:p- w-full bg-background min-h-screen'>
 			{!isLoading && user ?
 				<div className='flex items-center justify-evenly my-2 md:mx-3 border-b-2 pb-3'>
 					<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
@@ -75,7 +75,7 @@ const HomePage = () => {
 					</div>
 					<Navbar />
 				</div>
-			:	<div className='flex justify-end mb-4 mt-5 md:mt-5'>
+			:	<div className='flex justify-end mb-4 mt-5 md:mt-5 '>
 					<div className='flex items-center justify-evenly w-full border-b pb-3'>
 						<div className='flex items-center justify-center gap-5 w-full sm:w-3/4 md:w-1/2 lg:w-1/3'>
 							<h1 className='text-blue-700 text-3xl sm:text-4xl md:text-5xl font-bold'>SportReserve</h1>
@@ -83,13 +83,15 @@ const HomePage = () => {
 								<IoMdFootball />
 							</span>
 						</div>
-						<button
-							className='flex items-center gap-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16'
-							onClick={handleGoSignIn}
-						>
-							<CiLogin className='text-2xl' />
-							Entrar
-						</button>
+						<div className=''>
+							<button
+								className='flex items-center justify-center gap-1 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-300 md:mr-16 '
+								onClick={handleGoSignIn}
+							>
+								<CiLogin className='text-2xl' />
+								Entrar
+							</button>
+						</div>
 					</div>
 				</div>
 			}
@@ -186,7 +188,7 @@ const HomePage = () => {
 							))}
 						</div>
 					:	<div className='flex justify-center'>
-							<h2>Nenhuma arena disponível no momento.</h2>
+							<h2>Nenhumaarenadisponível no momento.</h2>
 						</div>
 					}
 				</div>
@@ -198,7 +200,7 @@ const HomePage = () => {
 			{/* Modal de Imagem */}
 			{isModalOpen && (
 				<div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75'>
-					<div className='max-w-screen-lg max-h-screen w-full p-4 relative '>
+					<div className='max-w-screen-lg max-h-screen w-full p-4 relative border-red-500'>
 						<ModalImage
 							small={currentFieldImages[selectedImageIndex]}
 							large={currentFieldImages[selectedImageIndex]}
@@ -206,7 +208,7 @@ const HomePage = () => {
 							onClose={closeModal}
 							hideZoom={true}
 							hideDownload={true}
-							className='object-contain mx-auto max-w-full'
+							className='object-contain mx-auto max-w-full max-h-full'
 						/>
 						<button
 							className='absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
