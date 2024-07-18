@@ -2,7 +2,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { IoMdMenu, IoIosLogOut } from 'react-icons/io';
-import { FaRegListAlt } from 'react-icons/fa';
 import { useState } from 'react';
 
 export const Navbar = () => {
@@ -47,7 +46,6 @@ export const Navbar = () => {
 						className='px-2 py-2 text-gray-800 hover:bg-gray-200 w-full gap-3 font-bold'
 						onClick={handleGoReservationList}
 					>
-						{/* <FaRegListAlt className='text-base' /> */}
 						Ver minhas reservas
 					</button>
 
@@ -77,7 +75,6 @@ export const Navbar = () => {
 					className='text-dark py-2 px-4 font-bold rounded transition duration-300 flex items-center gap-3 hover:opacity-60'
 					onClick={handleGoReservationList}
 				>
-					{/* <FaRegListAlt className='text-base' /> */}
 					Ver minhas reservas
 				</button>
 
