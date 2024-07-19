@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
-import { Carousel, Modal } from 'antd'; // Importando Modal do antd
+import { Carousel, Modal } from 'antd';
 import { Navbar } from '../NavBar/NavBar';
 import ModalImage from 'react-modal-image';
 import { CiLogin } from 'react-icons/ci';
@@ -17,8 +17,8 @@ const HomePage = () => {
 	const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 	const [currentFieldImages, setCurrentFieldImages] = useState<string[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	const [selectedField, setSelectedField] = useState<IField | null>(null); // Estado para o campo selecionado
-	const [isFieldDetailsModalVisible, setIsFieldDetailsModalVisible] = useState<boolean>(false); // Modal para detalhes do campo
+	const [selectedField, setSelectedField] = useState<IField | null>(null);
+	const [isFieldDetailsModalVisible, setIsFieldDetailsModalVisible] = useState<boolean>(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
 
@@ -35,8 +35,8 @@ const HomePage = () => {
 	}, []);
 
 	const handleRentClick = (field: IField) => {
-		setSelectedField(field); // Define o campo selecionado
-		setIsFieldDetailsModalVisible(true); // Abre o modal de detalhes do campo
+		setSelectedField(field);
+		setIsFieldDetailsModalVisible(true);
 	};
 
 	const handleEditClick = (field: IField) => {
@@ -232,7 +232,7 @@ const HomePage = () => {
 				</div>
 			)}
 
-			{/* Modal de Detalhes do Campo */}
+			{/* Modal para reserva */}
 			<Modal
 				title='Agende seu horário'
 				open={isFieldDetailsModalVisible}
