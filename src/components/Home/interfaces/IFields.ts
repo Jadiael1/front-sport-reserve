@@ -48,3 +48,7 @@ export interface IApiResponse {
 	data: IPaginationData;
 	errors: any | null;
 }
+
+export interface FieldDetailsProps {
+	field: IField;
+}

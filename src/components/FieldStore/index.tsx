@@ -55,7 +55,7 @@ const FieldForm = () => {
 	return (
 		<section className='w-full bg-gray-100 min-h-screen flex justify-center items-center'>
 			<div className='max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg'>
-				<h1 className='text-3xl font-bold mb-4 text-center'>Insira uma nova arena</h1>
+				<h1 className='text-3xl font-bold  text-center py-8'>Insira uma nova arena</h1>
 				{message && <div className='text-green-500 mb-4'>{message}</div>}
 				{error && <div className='text-red-500 mb-4'>{error}</div>}
 				<form onSubmit={handleSubmit}>
@@ -123,15 +123,16 @@ const FieldForm = () => {
 							onChange={e => setHourlyRate(e.target.value)}
 						/>
 					</div>
-					<div className='mb-4 flex justify-center'>
+					<div className='mb-4 flex flex-col items-center justify-center gap-3'>
 						<label
 							htmlFor='file-upload'
-							className='flex items-center cursor-pointer'
+							className='flex items-center cursor-pointer mt-3'
 						>
 							<div className='flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300'>
 								<FaUpload className='mr-2' />
 								Escolher imagens
 							</div>
+
 							<input
 								id='file-upload'
 								name='file-upload'
@@ -141,6 +142,9 @@ const FieldForm = () => {
 								onChange={e => setImages(e.target.files)}
 							/>
 						</label>
+						<p className='font-bold mb-2'>
+							OBS: <span className='font-normal'>Máximo 5 imagens</span>
+						</p>
 						{images && images.length > 0 && (
 							<span className='text-gray-500 text-sm ml-2'>{images.length} imagem(ns) selecionada(s)</span>
 						)}
