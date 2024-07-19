@@ -103,15 +103,19 @@ const FieldUpdateForm = () => {
 						},
 					});
 
+					console.log('Resposta do delete:', response);
+
 					if (response.ok) {
 						message.success('Imagem excluída com sucesso.');
-						setImages(images.filter(image => image.id !== imageId));
+						setImages(prevImages => prevImages.filter(image => image.id !== imageId));
 					} else {
 						const data = await response.json();
+						console.error('Erro ao excluir imagem:', data);
 						setError(data.message || 'Falha ao excluir a imagem.');
 						message.error(data.message || 'Falha ao excluir a imagem.');
 					}
 				} catch (error) {
+					console.error('Erro na requisição:', error);
 					setError('Falha ao excluir a imagem.');
 					message.error('Falha ao excluir a imagem.');
 				} finally {
