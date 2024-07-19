@@ -171,7 +171,7 @@ const HomePage = () => {
 									<div className='flex items-center '>
 										{user?.is_admin && (
 											<button
-												className='bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300 mt-3 mr-3 w-full'
+												className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 mt-3 mr-3 w-full'
 												onClick={() => handleEditClick(field)}
 											>
 												Editar
@@ -202,12 +202,9 @@ const HomePage = () => {
 				<div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75'>
 					<div className='max-w-screen-lg max-h-screen w-full p-4 relative border-red-500'>
 						<ModalImage
-							className='object-contain mx-auto max-w-full max-h-full'
 							small={currentFieldImages[selectedImageIndex]}
 							large={currentFieldImages[selectedImageIndex]}
-							alt='Imagem do campo'
-
-							// onClose={closeModal}
+							alt={`Imagem ${selectedImageIndex + 1}`}
 						/>
 						<button
 							className='absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'

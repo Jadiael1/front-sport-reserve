@@ -1,17 +1,24 @@
+import React from 'react';
 import ModalImage from 'react-modal-image';
+import { IImage } from '../Home/interfaces/IFields';
 
-export const GalleryModal = ({ images }) => {
+interface GalleryModalProps {
+	images: IImage[];
+}
+
+const GalleryModal: React.FC<GalleryModalProps> = ({ images }) => {
 	return (
 		<div>
-			{images.map((image, index) => (
+			{images.map((image: IImage) => (
 				<ModalImage
-					key={index}
-					small={image} // URL da imagem pequena (opcional, pode ser a mesma da large)
-					large={image} // URL da imagem grande (obrigatório)
-					alt={`Imagem ${index + 1}`} // Texto alternativo da imagem
-					hideDownload // Oculta o botão de download (opcional)
+					key={image.id}
+					small={image.path}
+					large={image.path}
+					alt={`Image ${image.id}`}
 				/>
 			))}
 		</div>
 	);
 };
+
+export default GalleryModal;
