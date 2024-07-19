@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import backgroundImage from '../../assets/img/campo.jpg';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 	const { login, user, isLoading } = useAuth();
 
@@ -46,7 +48,7 @@ const SignInPage = () => {
 
 				<form
 					onSubmit={handleSignIn}
-					className='mx-4 md:mx-auto '
+					className='mx-4 md:mx-auto'
 				>
 					<div className='relative mb-6'>
 						<input
@@ -65,7 +67,7 @@ const SignInPage = () => {
 
 					<div className='relative mb-6'>
 						<input
-							type='password'
+							type={showPassword ? 'text' : 'password'}
 							name='password'
 							placeholder=' '
 							className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
@@ -76,7 +78,17 @@ const SignInPage = () => {
 						<label className='absolute text-sm text-dark-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1'>
 							Senha
 						</label>
+						<button
+							type='button'
+							className='absolute inset-y-0 right-0 flex items-center pr-3'
+							onClick={() => setShowPassword(!showPassword)}
+						>
+							{showPassword ?
+								<FaEyeSlash className='text-gray-500' />
+							:	<FaEye className='text-gray-500' />}
+						</button>
 					</div>
+
 					{error && <div className='text-red-500 mb-4'>{error}</div>}
 					<div className='flex items-center justify-center'>
 						<button
@@ -89,7 +101,7 @@ const SignInPage = () => {
 									<div className='flex items-center justify-center'>
 										<svg
 											aria-hidden='true'
-											className=' w-8 h-8 text-white animate-spin dark:text-white fill-blue-600'
+											className='w-8 h-8 text-white animate-spin dark:text-white fill-blue-600'
 											viewBox='0 0 100 101'
 											fill='none'
 											xmlns='http://www.w3.org/2000/svg'
@@ -108,7 +120,7 @@ const SignInPage = () => {
 							:	'Entrar'}
 						</button>
 					</div>
-					<div className='flex justify-end mt-3 '>
+					<div className='flex justify-end mt-3'>
 						<button
 							type='button'
 							className='hover:underline text-sm'
@@ -120,22 +132,10 @@ const SignInPage = () => {
 					<div className='flex items-center justify-center'>
 						<button
 							type='button'
-							className='w-full bg-gray-500 text-white py-3 px-4 rounded-lg hover:bg-gray-600 transition duration-300 mt-4'
-							onClick={() => navigate('/')}
+							className='w-full bg-gray-300 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-400 transition duration-300'
+							onClick={() => navigate('/register')}
 						>
-							Voltar
-						</button>
-					</div>
-
-					<div className='flex justify-center mt-4'>
-						<button
-							type='button'
-							className='text-blue-500 hover:underline'
-							onClick={() => navigate('/signup')}
-						>
-							<p className='text-gray-500'>
-								Não tem uma conta? <span className='text-blue-700 font-bold'>Registre-se</span>
-							</p>
+							Registrar-se
 						</button>
 					</div>
 				</form>

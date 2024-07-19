@@ -202,13 +202,12 @@ const HomePage = () => {
 				<div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75'>
 					<div className='max-w-screen-lg max-h-screen w-full p-4 relative border-red-500'>
 						<ModalImage
+							className='object-contain mx-auto max-w-full max-h-full'
 							small={currentFieldImages[selectedImageIndex]}
 							large={currentFieldImages[selectedImageIndex]}
-							alt='Imagem'
-							onClose={closeModal}
-							hideZoom={true}
-							hideDownload={true}
-							className='object-contain mx-auto max-w-full max-h-full'
+							alt='Imagem do campo'
+
+							// onClose={closeModal}
 						/>
 						<button
 							className='absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
