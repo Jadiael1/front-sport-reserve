@@ -35,6 +35,9 @@ const HomePage = () => {
 	}, []);
 
 	const handleRentClick = (field: IField) => {
+		if (!user) {
+			navigate(`/field/${field.id}`, { state: { field } });
+		}
 		setSelectedField(field);
 		setIsFieldDetailsModalVisible(true);
 	};
@@ -234,7 +237,7 @@ const HomePage = () => {
 
 			{/* Modal para reserva */}
 			<Modal
-				title='Agende seu horário'
+				title='Reserve seu horário'
 				open={isFieldDetailsModalVisible}
 				onCancel={() => setIsFieldDetailsModalVisible(false)}
 				footer={null}

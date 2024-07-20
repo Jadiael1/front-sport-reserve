@@ -130,13 +130,23 @@ const SignInPage = () => {
 						</button>
 					</div>
 					<div className='flex items-center justify-center'>
-						<button
+						{/* <button
 							type='button'
 							className='w-full bg-gray-300 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-400 transition duration-300'
 							onClick={() => navigate('/register')}
 						>
 							Registrar-se
-						</button>
+						</button> */}
+						<p>
+							Não tem uma conta?{' '}
+							<a
+								href=''
+								className='text-blue-600 font-bold underline'
+								onClick={() => navigate('/signup')}
+							>
+								Registre-se
+							</a>
+						</p>
 					</div>
 				</form>
 			</div>

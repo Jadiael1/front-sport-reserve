@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaUpload, FaArrowLeft } from 'react-icons/fa';
+
+
 const FieldForm = () => {
 	const { token } = useAuth();
 	const [name, setName] = useState('');
@@ -142,6 +144,7 @@ const FieldForm = () => {
 								onChange={e => setImages(e.target.files)}
 							/>
 						</label>
+
 						<p className='font-bold mb-2'>
 							OBS: <span className='font-normal'>Máximo 5 imagens</span>
 						</p>

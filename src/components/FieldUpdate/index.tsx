@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { FaTrash } from 'react-icons/fa';
 import { Modal, message } from 'antd';
 import { FaArrowLeft } from 'react-icons/fa';
+import { LuImagePlus } from 'react-icons/lu';
 const FieldUpdateForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -95,15 +96,18 @@ const FieldUpdateForm = () => {
 			onOk: async () => {
 				setLoading(true);
 				try {
-					const response = await fetch(`${baseURL}/fields/${field.id}/images/${imageId}`, {
-						method: 'DELETE',
+					const formData = new FormData();
+					formData.append('_method', 'PATCH');
+					formData.append('image_ids[]', imageId.toString());
+
+					const response = await fetch(`${baseURL}/fields/${field.id}`, {
+						method: 'POST',
 						headers: {
 							Authorization: `Bearer ${token}`,
 							Accept: 'application/json',
 						},
+						body: formData,
 					});
-
-					console.log('Resposta do delete:', response);
 
 					if (response.ok) {
 						message.success('Imagem excluída com sucesso.');
@@ -128,6 +132,40 @@ const FieldUpdateForm = () => {
 	const handleImageChange = (imageId: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files[0]) {
 			handleUpdateImage(imageId, event.target.files[0]);
+		}
+	};
+
+	const handleStoreImage = async (newImage: FileList | null) => {
+		setError(null);
+		setLoading(true);
+		const formData = new FormData();
+		formData.append('_method', 'PATCH');
+		if (newImage) {
+			for (let index = 0; index < newImage.length; index++) {
+				formData.append('images[]', newImage[index]);
+			}
+		}
+
+		try {
+			const response = await fetch(`${baseURL}/fields/${field.id}`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+				body: formData,
+			});
+			const data = await response.json();
+			if (response.ok) {
+				message.success('Image updated successfully.');
+				setImages(data.data.images);
+			} else {
+				setError(data.message || 'Falha ao atualizar a imagem');
+			}
+		} catch (error) {
+			setError('Falha ao atualizar a imagem');
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -190,9 +228,25 @@ const FieldUpdateForm = () => {
 
 				<h3 className='text-xl font-semibold mb-2 text-center my-2'>Imagens da arena</h3>
 
-				<p className='font-bold mb-2'>
-					OBS: <span className='font-normal'>Máximo 5 imagens</span>
-				</p>
+				<div className='flex items-center justify-between p-3 flex-wrap'>
+					<p className='font-bold mb-2'>
+						OBS: <span className='font-normal'>Máximo 5 imagens</span>
+					</p>
+
+					<input
+						type='file'
+						id={`file-input-new`}
+						className='hidden'
+						onChange={evt => handleStoreImage(evt.target.files)}
+					/>
+					<label
+						htmlFor={`file-input-new`}
+						className='bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300 flex items-center gap-1 rounded-lg'
+					>
+						<LuImagePlus />
+						Adicionar imagem
+					</label>
+				</div>
 				{images.length === 0 ?
 					<p className='text-gray-500'>Nenhuma imagem dispónivel</p>
 				:	<div className='flex flex-wrap gap-4 scroll-auto '>
