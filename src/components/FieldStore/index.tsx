@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaUpload, FaArrowLeft } from 'react-icons/fa';
 
-
 const FieldForm = () => {
 	const { token } = useAuth();
 	const [name, setName] = useState('');

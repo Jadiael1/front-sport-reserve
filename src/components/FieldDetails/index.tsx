@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Alert from '../Alert';
 import { DatePicker } from 'antd';
+import { FieldDetailsProps } from '../Home/interfaces/IFields';
 
 const FieldDetails = ({ field }: FieldDetailsProps) => {
 	const { token } = useAuth();
