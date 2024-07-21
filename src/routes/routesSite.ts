@@ -1,5 +1,5 @@
 import Home from '../components/Home/index';
-import FieldDetails from '../components/FieldDetails/index';
+// import FieldDetails from '../components/FieldDetails/index';
 import IRoutes from './IRoutes';
 import ReservationList from '../components/ReservationList';
 import FieldForm from '../components/FieldStore';
@@ -13,13 +13,13 @@ const routesSite: IRoutes[] = [
 		displayName: 'Home',
 		protected: false,
 	},
-	{
-		path: '/field/:id',
-		component: FieldDetails,
-		visibleInDisplay: true,
-		displayName: 'Home',
-		protected: true,
-	},
+	// {
+	// 	path: '/field/:id',
+	// 	component: FieldDetails,
+	// 	visibleInDisplay: true,
+	// 	displayName: 'Home',
+	// 	protected: true,
+	// },
 	{
 		path: '/reservations',
 		component: ReservationList,
