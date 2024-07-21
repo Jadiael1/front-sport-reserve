@@ -50,5 +50,11 @@ export interface IApiResponse {
 }
 
 export interface FieldDetailsProps {
-	field: IField;
+	field: {
+		id: string;
+		name: string;
+		location: string;
+		type: string;
+		hourly_rate: number;
+	};
 }
