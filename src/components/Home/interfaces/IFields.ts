@@ -48,13 +48,3 @@ export interface IApiResponse {
 	data: IPaginationData;
 	errors: any | null;
 }
-
-export interface FieldDetailsProps {
-	field: {
-		id: string;
-		name: string;
-		location: string;
-		type: string;
-		hourly_rate: number;
-	};
-}
