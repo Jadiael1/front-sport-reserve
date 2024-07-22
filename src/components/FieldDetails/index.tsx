@@ -34,8 +34,8 @@ const FieldDetails = ({ field }: FieldDetailsProps) => {
 			},
 			body: JSON.stringify({
 				field_id: field.id,
-				start_time: startTime.toISOString(),
-				end_time: endTime.toISOString(),
+				start_time: startTime.format('YYYY-MM-DDTHH:mm'),
+				end_time: endTime.format('YYYY-MM-DDTHH:mm'),
 			}),
 		})
 			.then(resp => resp.json())
