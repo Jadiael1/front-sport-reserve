@@ -36,7 +36,8 @@ const HomePage = () => {
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
-			navigate(`/field/${field.id}`, { state: { field } });
+			// navigate(`/field/${field.id}`, { state: { field } });
+			navigate('/signin');
 		}
 		setSelectedField(field);
 		setIsFieldDetailsModalVisible(true);
