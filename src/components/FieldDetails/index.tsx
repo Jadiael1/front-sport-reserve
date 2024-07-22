@@ -37,7 +37,6 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 					setLoading(false);
 					if (data.status === 'success') {
 						setField(data.data);
-						setSuccess({ message: data.message });
 					} else {
 						setField(null);
 						setError({ message: data.message, errors: data.errors });
