@@ -4,11 +4,11 @@ import { IApiResponse, IField } from './interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
 import { Carousel, Modal } from 'antd';
 import { Navbar } from '../NavBar/NavBar';
-import ModalImage from 'react-modal-image';
+import { Lightbox } from 'react-modal-image';
 import { CiLogin } from 'react-icons/ci';
 import { IoMdFootball } from 'react-icons/io';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
-import { FaXmark, FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import FieldDetails from '../FieldDetails/index';
 
 const HomePage = () => {
@@ -36,8 +36,7 @@ const HomePage = () => {
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
-			// navigate(`/field/${field.id}`, { state: { field } });
-			navigate('/signin');
+			navigate(`/field/${field.id}`, { state: { field } });
 		}
 		setSelectedField(field);
 		setIsFieldDetailsModalVisible(true);
@@ -147,7 +146,7 @@ const HomePage = () => {
 									<div className='h-48'>
 										<Carousel
 											autoplay
-											arrows={true}
+											arrows={field.images.length > 1}
 											className='h-full'
 										>
 											{field.images && field.images.length > 0 ?
@@ -207,33 +206,30 @@ const HomePage = () => {
 
 			{/* Modal de Imagem */}
 			{isModalOpen && (
-				<div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75'>
-					<div className='max-w-screen-lg max-h-screen w-full p-4 relative border-red-500'>
-						<ModalImage
-							small={currentFieldImages[selectedImageIndex]}
-							large={currentFieldImages[selectedImageIndex]}
-							alt={`Imagem ${selectedImageIndex + 1}`}
-						/>
-						<button
-							className='absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
-							onClick={prevImage}
-						>
-							<FaChevronLeft />
-						</button>
-						<button
-							className='absolute top-1/2 right-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full'
-							onClick={nextImage}
-						>
-							<FaChevronRight />
-						</button>
-						<button
-							className='absolute top-4 right-4 bg-white text-black p-2 rounded-full'
-							onClick={closeModal}
-						>
-							<FaXmark />
-						</button>
-					</div>
-				</div>
+				<>
+					<Lightbox
+						medium={currentFieldImages[selectedImageIndex]}
+						large={currentFieldImages[selectedImageIndex]}
+						hideZoom={true}
+						hideDownload={true}
+						alt={`Imagem ${selectedImageIndex + 1}`}
+						onClose={closeModal}
+					/>
+					<button
+						className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full ${currentFieldImages.length > 1 ? '' : 'hidden'}`}
+						onClick={prevImage}
+						style={{ zIndex: 5000 }}
+					>
+						<FaChevronLeft />
+					</button>
+					<button
+						className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full ${currentFieldImages.length > 1 ? '' : 'hidden'}`}
+						onClick={nextImage}
+						style={{ zIndex: 5000 }}
+					>
+						<FaChevronRight />
+					</button>
+				</>
 			)}
 
 			{/* Modal para reserva */}
