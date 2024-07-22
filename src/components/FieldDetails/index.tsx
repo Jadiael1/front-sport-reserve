@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import Alert from '../Alert';
 import { DatePicker } from 'antd';
 import { IField } from '../Home/interfaces/IFields';
-import moment from 'moment';
+import { Moment } from 'moment';
 
 interface FieldDetailsProps {
 	field: IField;
@@ -12,8 +12,8 @@ interface FieldDetailsProps {
 
 const FieldDetails = ({ field }: FieldDetailsProps) => {
 	const { token } = useAuth();
-	const [startTime, setStartTime] = useState<moment.Moment | null>(null);
-	const [endTime, setEndTime] = useState<moment.Moment | null>(null);
+	const [startTime, setStartTime] = useState<Moment | null>(null);
+	const [endTime, setEndTime] = useState<Moment | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<{ message: string; errors?: { [key: string]: string[] } } | null>(null);
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
