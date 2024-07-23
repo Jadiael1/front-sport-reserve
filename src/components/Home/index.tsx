@@ -4,23 +4,29 @@ import { IApiResponse, IField } from './interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
 import { Carousel, Modal } from 'antd';
 import { Navbar } from '../NavBar/NavBar';
-import { Lightbox } from 'react-modal-image';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
 import { CiLogin } from 'react-icons/ci';
 import { IoMdFootball } from 'react-icons/io';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import FieldDetails from '../FieldDetails/index';
 
 const HomePage = () => {
 	const { user, isLoading } = useAuth();
 	const [responseFields, setResponseFields] = useState<IApiResponse | null>(null);
-	const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-	const [currentFieldImages, setCurrentFieldImages] = useState<string[]>([]);
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [selectedField, setSelectedField] = useState<IField | null>(null);
 	const [isFieldDetailsModalVisible, setIsFieldDetailsModalVisible] = useState<boolean>(false);
+	const [intrinsicSize, setIntrinsicSize] = useState<{ [key: string]: { width: number; height: number } }>({});
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
+	const galleryID = 'my-gallery';
+	const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>, imagePath: string) => {
+		const { naturalWidth, naturalHeight } = event.currentTarget;
+		setIntrinsicSize(prevSizes => ({
+			...prevSizes,
+			[imagePath]: { width: naturalWidth, height: naturalHeight },
+		}));
+	};
 
 	useEffect(() => {
 		fetch(`${baseURL}/fields`, {
@@ -32,7 +38,38 @@ const HomePage = () => {
 			.then(resp => resp.json())
 			.then(resp => setResponseFields(resp))
 			.catch(err => console.error(err));
-	}, []);
+
+		// PhotoSwipeLightbox
+		const lightbox = new PhotoSwipeLightbox({
+			gallery: `#${galleryID}`,
+			children: 'a',
+			pswpModule: () => import('photoswipe'),
+			zoom: true,
+			spacing: 0.1,
+			bgOpacity: 0.8,
+			allowPanToNext: false,
+			loop: false,
+			wheelToZoom: true,
+			padding: { top: 20, bottom: 40, left: 100, right: 100 },
+			indexIndicatorSep: ' / ',
+			closeTitle: 'Fechar a caixa de diálogo',
+			zoomTitle: 'Amplie a foto',
+			arrowPrevTitle: 'Ir para a foto anterior',
+			arrowNextTitle: 'Vá para a próxima foto',
+			errorMsg: 'A foto não pode ser carregada',
+			initialZoomLevel: 'fill',
+			secondaryZoomLevel: 1,
+			showHideAnimationType: 'zoom',
+			showAnimationDuration: 2,
+			counter: true,
+		});
+
+		lightbox.init();
+
+		return () => {
+			lightbox.destroy();
+		};
+	}, [baseURL, galleryID]);
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
@@ -48,26 +85,6 @@ const HomePage = () => {
 
 	const handleGoSignIn = () => {
 		navigate(`/signin`);
-	};
-
-	const openModal = (images: string[], index: number) => {
-		setCurrentFieldImages(images);
-		setSelectedImageIndex(index);
-		setIsModalOpen(true);
-	};
-
-	const closeModal = () => {
-		setCurrentFieldImages([]);
-		setSelectedImageIndex(0);
-		setIsModalOpen(false);
-	};
-
-	const nextImage = () => {
-		setSelectedImageIndex(prevIndex => (prevIndex === currentFieldImages.length - 1 ? 0 : prevIndex + 1));
-	};
-
-	const prevImage = () => {
-		setSelectedImageIndex(prevIndex => (prevIndex === 0 ? currentFieldImages.length - 1 : prevIndex - 1));
 	};
 
 	return (
@@ -147,26 +164,25 @@ const HomePage = () => {
 										<Carousel
 											autoplay
 											arrows={field.images.length > 1}
-											className='h-full'
+											className='pswp-gallery h-full'
+											id={galleryID}
 										>
 											{field.images && field.images.length > 0 ?
 												field.images.map((image, index) => (
-													<div
-														key={image.id}
-														className='h-full'
-														onClick={() =>
-															openModal(
-																field.images.map(img => `${baseURL}/${img.path}`.replace('api/v1/', 'public/')),
-																index,
-															)
-														}
+													<a
+														href={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
+														data-pswp-width={intrinsicSize[image.path]?.width || 0}
+														data-pswp-height={intrinsicSize[image.path]?.height || 0}
+														key={`${galleryID}-${index}`}
+														target='_blank'
+														rel='noreferrer'
 													>
 														<img
-															src={`${baseURL}/${image.path}`.replace('api/v1/', 'public')}
+															src={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
 															alt={field.name}
-															className='h-full w-full object-cover rounded-lg max-h-48 cursor-pointer'
+															onLoad={e => handleImageLoad(e, image.path)}
 														/>
-													</div>
+													</a>
 												))
 											:	<div className='h-full flex items-center justify-center'>
 													<h3>Sem imagens</h3>
@@ -203,34 +219,6 @@ const HomePage = () => {
 					<h2>Carregando arenas...</h2>
 				</div>
 			}
-
-			{/* Modal de Imagem */}
-			{isModalOpen && (
-				<>
-					<Lightbox
-						medium={currentFieldImages[selectedImageIndex]}
-						large={currentFieldImages[selectedImageIndex]}
-						hideZoom={true}
-						hideDownload={true}
-						alt={`Imagem ${selectedImageIndex + 1}`}
-						onClose={closeModal}
-					/>
-					<button
-						className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full ${currentFieldImages.length > 1 ? '' : 'hidden'}`}
-						onClick={prevImage}
-						style={{ zIndex: 5000 }}
-					>
-						<FaChevronLeft />
-					</button>
-					<button
-						className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-white text-black p-2 rounded-full ${currentFieldImages.length > 1 ? '' : 'hidden'}`}
-						onClick={nextImage}
-						style={{ zIndex: 5000 }}
-					>
-						<FaChevronRight />
-					</button>
-				</>
-			)}
 
 			{/* Modal para reserva */}
 			<Modal
