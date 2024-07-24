@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IField } from '../Home/interfaces/IFields';
+import { IField } from '../../interfaces/IField';
 import { useAuth } from '../../hooks/useAuth';
 import { FaTrash } from 'react-icons/fa';
 import { messageManager } from '../../components/common/Message/messageInstance';

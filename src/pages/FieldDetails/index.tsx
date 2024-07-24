@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import Alert from '../../components/common/Alert';
 import DatePicker from '../../components/common/DatePicker';
-import { IField } from '../Home/interfaces/IFields';
+import { IField } from '../../interfaces/IField';
 import { useParams } from 'react-router-dom';
 
 interface FieldDetailsProps {
