@@ -4,8 +4,6 @@ import Alert from '../Alert';
 import { useNavigate } from 'react-router-dom';
 import { IoMdHome, IoIosLogOut } from 'react-icons/io';
 import { MdHourglassEmpty, MdCheckCircle, MdCancel, MdInfo } from 'react-icons/md';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 interface Field {
 	id: number;
@@ -202,6 +200,16 @@ const ReservationList = () => {
 		}
 	};
 
+	function format(date: Date): string {
+		const padTo2Digits = (num: number) => num.toString().padStart(2, '0');
+		const day = padTo2Digits(date.getDate());
+		const month = padTo2Digits(date.getMonth() + 1);
+		const year = date.getFullYear();
+		const hours = padTo2Digits(date.getHours());
+		const minutes = padTo2Digits(date.getMinutes());
+		return `${day}/${month}/${year} ${hours}:${minutes}`;
+	}
+
 	return (
 		<section className='container mx-auto p-4'>
 			{error && (
@@ -308,15 +316,15 @@ const ReservationList = () => {
 											</h3>
 											<h3 className='text-gray-700 mb-1 flex items-center gap-1'>
 												<p className='font-bold'>Início - </p>
-												{format(new Date(reservation.start_time), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+												{format(new Date(reservation.start_time))}
 											</h3>
 											<h3 className='text-gray-700 mb-1'>
 												<span className='font-bold'>Término - </span>
-												{format(new Date(reservation.end_time), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+												{format(new Date(reservation.end_time))}
 											</h3>
 											<h3 className='text-gray-700'>
 												<span className='font-bold'>Reservado em - </span>
-												{format(new Date(reservation.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+												{format(new Date(reservation.created_at))}
 											</h3>
 											{reservation.status === 'WAITING' && (
 												<>
