@@ -153,9 +153,9 @@ const FieldUpdateForm = () => {
 		const formData = new FormData();
 		formData.append('_method', 'PATCH');
 		if (newImage) {
-			for (let index = 0; index < newImage.length; index++) {
-				formData.append('images[]', newImage[index]);
-			}
+			Array.from(newImage).forEach(image => {
+				formData.append('images[]', image);
+			});
 		}
 
 		try {
