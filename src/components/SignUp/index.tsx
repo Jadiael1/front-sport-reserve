@@ -112,6 +112,7 @@ const RegisterPage = () => {
 							required
 							value={formData.email}
 							onChange={handleChange}
+							autoComplete='username'
 						/>
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Email
@@ -131,6 +132,7 @@ const RegisterPage = () => {
 							required
 							value={formData.password}
 							onChange={handleChange}
+							autoComplete='new-password'
 						/>
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Senha
@@ -145,6 +147,7 @@ const RegisterPage = () => {
 							required
 							value={formData.password_confirmation}
 							onChange={handleChange}
+							autoComplete='new-password'
 						/>
 						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
 							Confirme a Senha
