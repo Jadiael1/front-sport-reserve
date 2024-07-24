@@ -1,10 +1,10 @@
 import IRoutes from './IRoutes';
-import Signup from '../components/auth/SignUp/index';
-import SignIn from '../components/auth/SignIn/index';
-import AccountActivationReminder from '../components/auth/AccountActivationReminder/index';
-import EmailVerification from '../components/auth/EmailVerification/index';
-import ForgotPasswordPage from '../components/auth/ForgotPassword';
-import ResetPasswordPage from '../components/auth/ResetPassword';
+import Signup from '../pages/auth/SignUp/index';
+import SignIn from '../pages/auth/SignIn/index';
+import AccountActivationReminder from '../pages/auth/AccountActivationReminder/index';
+import EmailVerification from '../pages/auth/EmailVerification/index';
+import ForgotPasswordPage from '../pages/auth/ForgotPassword';
+import ResetPasswordPage from '../pages/auth/ResetPassword';
 
 const routesAuth: IRoutes[] = [
 	{
