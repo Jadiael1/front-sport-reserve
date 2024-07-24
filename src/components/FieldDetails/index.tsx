@@ -2,9 +2,8 @@ import { FaFutbol, FaMapMarkerAlt, FaDollarSign, FaCheckCircle } from 'react-ico
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Alert from '../Alert';
-import { DatePicker } from 'antd';
+import DatePicker from '../../DatePicker';
 import { IField } from '../Home/interfaces/IFields';
-import { Moment } from 'moment';
 import { useParams } from 'react-router-dom';
 
 interface FieldDetailsProps {
@@ -15,8 +14,8 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 	const { token } = useAuth();
 	const idParam = useParams<{ id: string }>();
 	const [field, setField] = useState<IField | null>(props ? props?.field : null);
-	const [startTime, setStartTime] = useState<Moment | null>(null);
-	const [endTime, setEndTime] = useState<Moment | null>(null);
+	const [startTime, setStartTime] = useState<string>('');
+	const [endTime, setEndTime] = useState<string>('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<{ message: string; errors?: { [key: string]: string[] } } | null>(null);
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
@@ -51,7 +50,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 	}, []);
 
 	const handleReservation = () => {
-		if (!startTime || !endTime) {
+		if (!startTime.length || !endTime.length) {
 			alert('Por favor, selecione a data e hora de início e término.');
 			return;
 		}
@@ -65,8 +64,8 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 			},
 			body: JSON.stringify({
 				field_id: field?.id,
-				start_time: startTime.format('YYYY-MM-DDTHH:mm'),
-				end_time: endTime.format('YYYY-MM-DDTHH:mm'),
+				start_time: startTime,
+				end_time: endTime,
 			}),
 		})
 			.then(resp => resp.json())
@@ -129,29 +128,19 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 						<p className='text-center '>Selecione a data e hora que deseja reservar</p>
 						<div className='flex items-center justify-evenly flex-wrap'>
 							<div className='mt-4 relative w-full max-w-xs '>
-								<label className='absolute text-sm text-dark-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1'>
-									Hora de Início
-								</label>
 								<DatePicker
-									showTime={{ format: 'HH:mm' }}
-									format='DD/MM/YYYY HH:mm'
-									placeholder=''
+									dateLabel={`Data de Início`}
+									timeLabel={`Hora de Início`}
 									value={startTime}
 									onChange={value => setStartTime(value)}
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 								/>
 							</div>
 							<div className='mt-4 relative w-full max-w-xs '>
-								<label className='absolute text-sm text-dark-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1'>
-									Hora de Término
-								</label>
 								<DatePicker
-									showTime={{ format: 'HH:mm' }}
-									format='DD/MM/YYYY HH:mm'
-									placeholder=''
+									dateLabel={`Data de Término`}
+									timeLabel={`Hora de Término`}
 									value={endTime}
 									onChange={value => setEndTime(value)}
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none dark:text-dark dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 								/>
 							</div>
 						</div>
