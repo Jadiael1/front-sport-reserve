@@ -6,14 +6,14 @@ const container = document.createElement('div');
 document.body.appendChild(container);
 const root = createRoot(container);
 
-let notifyFunction: (options: MessageOptions) => void;
+const notifyFunctionRef = { current: null as null | ((options: MessageOptions) => void) };
 
 const MessageWrapper: React.FC = () => {
 	const managerRef = useRef<{ notify: (options: MessageOptions) => void }>(null);
 
 	useEffect(() => {
 		if (managerRef.current) {
-			notifyFunction = managerRef.current.notify;
+			notifyFunctionRef.current = managerRef.current.notify;
 		}
 	}, []);
 
@@ -24,8 +24,8 @@ root.render(<MessageWrapper />);
 
 export const messageManager = {
 	notify: (options: MessageOptions) => {
-		if (notifyFunction) {
-			notifyFunction(options);
+		if (notifyFunctionRef.current) {
+			notifyFunctionRef.current(options);
 		}
 	},
 };
