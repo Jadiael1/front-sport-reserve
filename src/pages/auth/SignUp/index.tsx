@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import { CiWarning } from 'react-icons/ci';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -82,12 +83,20 @@ const RegisterPage = () => {
 
 	return (
 		<section className='flex items-center justify-center min-h-screen bg-slate-200'>
-			<div className='container mx-auto p-6 max-w-lg'>
+			<div className='container mx-auto p-6 max-w-lg border border-gray-200 bg-white rounded-lg'>
+				<button
+					className='flex items-center px-4 py-2 bg-transparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105'
+					onClick={() => navigate(-1)}
+				>
+					<FaArrowLeft className='mr-2' />
+					Voltar
+				</button>
 				<h1 className='text-3xl text-blue-700 font-bold mb-6 text-center'>SportReserve</h1>
+
 				<p className='text-lg text-gray-700 mb-8 text-center'>Crie sua conta para começar a reservar!</p>
 				<form
 					onSubmit={handleRegister}
-					className='bg-white p-8 rounded-lg shadow-lg'
+					className='p-8 rounded-lg'
 				>
 					<div className='relative mb-6'>
 						<input
@@ -197,13 +206,6 @@ const RegisterPage = () => {
 						disabled={loading}
 					>
 						{loading ? 'Carregando...' : 'Registrar'}
-					</button>
-					<button
-						type='button'
-						className='w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 mt-4 font-semibold'
-						onClick={() => navigate('/signin')}
-					>
-						Voltar
 					</button>
 				</form>
 			</div>
