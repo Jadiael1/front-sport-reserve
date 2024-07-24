@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
-import { useAuth } from '../../contexts/AuthContext';
-import Modal from '../Modal';
-import Carousel from '../Carousel';
-import { Navbar } from '../NavBar/NavBar';
+import { useAuth } from '../../hooks/useAuth';
+import Modal from '../../components/common/Modal';
+import Carousel from '../../components/common/Carousel';
+import { Navbar } from '../../components/common/NavBar/NavBar';
 import { CiLogin } from 'react-icons/ci';
 import { IoMdFootball } from 'react-icons/io';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
-import FieldDetails from '../FieldDetails/index';
+import FieldDetails from '../FieldDetails';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
 

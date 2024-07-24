@@ -46,5 +46,5 @@ export interface IApiResponse {
 	status: string;
 	message: string;
 	data: IPaginationData;
-	errors: any | null;
+	errors: unknown | null;
 }

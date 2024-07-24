@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/useAuth.js';
 
 const EmailVerification = () => {
 	const [searchParams] = useSearchParams();
@@ -21,7 +21,8 @@ const EmailVerification = () => {
 		} else {
 			setError('Parâmetros de verificação inválidos.');
 		}
-	}, [searchParams]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const verifyEmail = async (id: string, expires: string, signature: string) => {
 		if (user?.email_verified_at) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const AccountActivationReminder = () => {
@@ -14,6 +14,7 @@ const AccountActivationReminder = () => {
 			setMessage('Email já foi verificado! Você será redirecionado em breve.');
 			setTimeout(() => navigate('/'), 3000);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleResendActivationEmail = async () => {

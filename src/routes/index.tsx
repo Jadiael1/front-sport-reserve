@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import routes from './routes';
 import { ProtectedRoute } from './ProtectedRoute';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 function AppRoutes() {
 	const { isLoading } = useAuth();

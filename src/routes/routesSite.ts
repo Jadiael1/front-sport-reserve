@@ -1,9 +1,9 @@
-import Home from '../components/Home/index';
-import FieldDetails from '../components/FieldDetails/index';
+import Home from '../pages/Home/index';
+import FieldDetails from '../pages/FieldDetails/index';
 import IRoutes from './IRoutes';
-import ReservationList from '../components/ReservationList';
-import FieldForm from '../components/FieldStore';
-import FieldUpdate from '../components/FieldUpdate';
+import ReservationList from '../pages/ReservationList';
+import FieldForm from '../pages/FieldStore';
+import FieldUpdate from '../pages/FieldUpdate';
 
 const routesSite: IRoutes[] = [
 	{

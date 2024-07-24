@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import Alert from '../Alert';
+import { useAuth } from '../../hooks/useAuth';
+import Alert from '../../components/common/Alert';
 import { useNavigate } from 'react-router-dom';
 import { IoMdHome, IoIosLogOut } from 'react-icons/io';
 import { MdHourglassEmpty, MdCheckCircle, MdCancel, MdInfo } from 'react-icons/md';

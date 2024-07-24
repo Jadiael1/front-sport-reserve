@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IField } from '../Home/interfaces/IFields';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { FaTrash } from 'react-icons/fa';
-import { messageManager } from '../Message/messageInstance';
+import { messageManager } from '../../components/common/Message/messageInstance';
 import { FaArrowLeft } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
-import ConfirmationModal from '../ConfirmationModalProps';
+import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 
 const FieldUpdateForm = () => {
 	const location = useLocation();

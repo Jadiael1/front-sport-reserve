@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import backgroundImage from '../../assets/img/campo.jpg';
+import { useAuth } from '../../../hooks/useAuth.js';
+import backgroundImage from '../../../assets/img/campo.jpg';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignInPage = () => {

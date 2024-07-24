@@ -1,8 +1,8 @@
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign, FaCheckCircle } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import Alert from '../Alert';
-import DatePicker from '../../DatePicker';
+import { useAuth } from '../../hooks/useAuth';
+import Alert from '../../components/common/Alert';
+import DatePicker from '../../components/common/DatePicker';
 import { IField } from '../Home/interfaces/IFields';
 import { useParams } from 'react-router-dom';
 
@@ -47,6 +47,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 					alert('Erro ao realizar a reserva. Tente novamente.');
 				});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleReservation = () => {

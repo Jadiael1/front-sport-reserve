@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, ReactNode, useEffect } from 'react';
+import { useState, createContext, ReactNode, useEffect } from 'react';
 
 export type UserType = {
 	id: string | number;
@@ -45,8 +45,6 @@ export const AuthContext = createContext<AuthContextType>({
 	isLoading: true,
 });
 
-export const useAuth = () => useContext(AuthContext);
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<UserType | null>(null);
 	const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
@@ -78,6 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		};
 
 		loadUser();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	const login = async (email: string, password: string) => {
