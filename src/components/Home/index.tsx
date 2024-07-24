@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IApiResponse, IField } from './interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
-import { Carousel, Modal } from 'antd';
+import Modal from '../Modal';
+import Carousel from '../Carousel';
 import { Navbar } from '../NavBar/NavBar';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
 import { CiLogin } from 'react-icons/ci';
 import { IoMdFootball } from 'react-icons/io';
 import { FaFutbol, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
 import FieldDetails from '../FieldDetails/index';
+import { Gallery, Item } from 'react-photoswipe-gallery';
+import 'photoswipe/dist/photoswipe.css';
 
 const HomePage = () => {
 	const { user, isLoading } = useAuth();
@@ -20,6 +21,18 @@ const HomePage = () => {
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
 	const galleryID = 'my-gallery';
+
+	// const arrowSVGString = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 100 125" width="100" height="125"><path d="M5,50L50,5l3,3L11,50l42,42l-3,3L5,50z M92,95l3-3L53,50L95,8l-3-3L47,50L92,95z"/></svg>';
+	const photoswipeOptions = {
+		// arrowPrevSVG: arrowSVGString,
+		// arrowNextSVG: arrowSVGString,
+		closeTitle: 'Fechar a caixa de diálogo',
+		zoomTitle: 'Amplie a foto',
+		arrowPrevTitle: 'Ir para a foto anterior',
+		arrowNextTitle: 'Vá para a próxima foto',
+		errorMsg: 'A foto não pode ser carregada',
+		indexIndicatorSep: ' de ',
+	};
 	const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>, imagePath: string) => {
 		const { naturalWidth, naturalHeight } = event.currentTarget;
 		setIntrinsicSize(prevSizes => ({
@@ -38,42 +51,12 @@ const HomePage = () => {
 			.then(resp => resp.json())
 			.then(resp => setResponseFields(resp))
 			.catch(err => console.error(err));
-
-		// PhotoSwipeLightbox
-		const lightbox = new PhotoSwipeLightbox({
-			gallery: `#${galleryID}`,
-			children: 'a',
-			pswpModule: () => import('photoswipe'),
-			zoom: true,
-			spacing: 0.1,
-			bgOpacity: 0.8,
-			allowPanToNext: false,
-			loop: false,
-			wheelToZoom: true,
-			padding: { top: 20, bottom: 40, left: 100, right: 100 },
-			indexIndicatorSep: ' / ',
-			closeTitle: 'Fechar a caixa de diálogo',
-			zoomTitle: 'Amplie a foto',
-			arrowPrevTitle: 'Ir para a foto anterior',
-			arrowNextTitle: 'Vá para a próxima foto',
-			errorMsg: 'A foto não pode ser carregada',
-			initialZoomLevel: 'fill',
-			secondaryZoomLevel: 1,
-			showHideAnimationType: 'zoom',
-			showAnimationDuration: 2,
-			counter: true,
-		});
-
-		lightbox.init();
-
-		return () => {
-			lightbox.destroy();
-		};
-	}, [baseURL, galleryID]);
+	}, [baseURL]);
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
-			navigate(`/field/${field.id}`, { state: { field } });
+			navigate(`/signin`);
+			return;
 		}
 		setSelectedField(field);
 		setIsFieldDetailsModalVisible(true);
@@ -160,35 +143,53 @@ const HomePage = () => {
 											<span>R$ {field.hourly_rate}</span>
 										</div>
 									</div>
-									<div className='h-48'>
-										<Carousel
-											autoplay
-											arrows={field.images.length > 1}
-											className='pswp-gallery h-full'
+									<div className='h-48 mb-5'>
+										<Gallery
+											withDownloadButton={false}
+											withCaption={true}
+											options={photoswipeOptions}
 											id={galleryID}
 										>
-											{field.images && field.images.length > 0 ?
-												field.images.map((image, index) => (
-													<a
-														href={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
-														data-pswp-width={intrinsicSize[image.path]?.width || 0}
-														data-pswp-height={intrinsicSize[image.path]?.height || 0}
-														key={`${galleryID}-${index}`}
-														target='_blank'
-														rel='noreferrer'
-													>
-														<img
-															src={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
-															alt={field.name}
-															onLoad={e => handleImageLoad(e, image.path)}
-														/>
-													</a>
-												))
-											:	<div className='h-full flex items-center justify-center'>
-													<h3>Sem imagens</h3>
-												</div>
-											}
-										</Carousel>
+											<Carousel
+												autoplay
+												arrows={field.images.length > 1}
+												className='h-full'
+											>
+												{field.images && field.images.length > 0 ?
+													field.images.map(image => (
+														<Item
+															id={`pic-${image.id}`}
+															key={image.id}
+															original={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
+															width={intrinsicSize[image.path]?.width || 0}
+															height={intrinsicSize[image.path]?.height || 0}
+															caption={`${intrinsicSize[image.path]?.width || 0}x${intrinsicSize[image.path]?.height || 0}`}
+														>
+															{({ ref, open }) => (
+																<img
+																	ref={ref}
+																	onClick={open}
+																	src={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
+																	alt={field.name}
+																	data-pswp-width={intrinsicSize[image.path]?.width || 0}
+																	data-pswp-height={intrinsicSize[image.path]?.height || 0}
+																	onLoad={e => handleImageLoad(e, image.path)}
+																	className='h-full w-full object-cover rounded-lg max-h-48 cursor-pointer'
+																/>
+															)}
+														</Item>
+													))
+												:	[
+														<div
+															className='h-full flex items-center justify-center'
+															key='no-images'
+														>
+															<h3>Sem imagens</h3>
+														</div>,
+													]
+												}
+											</Carousel>
+										</Gallery>
 									</div>
 
 									<div className='flex items-center '>
@@ -227,7 +228,7 @@ const HomePage = () => {
 				onCancel={() => setIsFieldDetailsModalVisible(false)}
 				footer={null}
 				width={800}
-				height={500}
+				height={576}
 			>
 				{selectedField && <FieldDetails field={selectedField} />}
 			</Modal>
