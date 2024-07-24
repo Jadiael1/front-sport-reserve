@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import backgroundImage from '../../../assets/img/campo.jpg';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
@@ -43,6 +43,13 @@ const SignInPage = () => {
 			}}
 		>
 			<div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md md:max-w-xl'>
+				<button
+					className='flex items-center px-4 py-2 bg-trasparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105'
+					onClick={() => navigate(-1)}
+				>
+					<FaArrowLeft className='mr-2' />
+					Voltar
+				</button>
 				<h1 className='text-4xl font-bold my-3 text-center text-blue-700'>SportReserve</h1>
 				<p className='text-sm mb-6 text-center'>Aluguel fácil, jogo garantido</p>
 
