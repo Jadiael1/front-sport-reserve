@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IField } from '../Home/interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaTrash } from 'react-icons/fa';
-import { messageManager } from '../Message/MessageManager';
+import { messageManager } from '../Message/messageInstance';
 import { FaArrowLeft } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
 import ConfirmationModal from '../ConfirmationModalProps';
+
 const FieldUpdateForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
