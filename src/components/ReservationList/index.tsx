@@ -162,7 +162,6 @@ const ReservationList = () => {
 			headers: {
 				Accept: 'application/json',
 				Authorization: `Bearer ${token}`,
-				'X-CSRF-TOKEN': '', // Adicione o valor real do CSRF token se necessário
 			},
 		})
 			.then(resp => resp.json())
@@ -201,13 +200,17 @@ const ReservationList = () => {
 	};
 
 	function format(date: Date): string {
-		const padTo2Digits = (num: number) => num.toString().padStart(2, '0');
-		const day = padTo2Digits(date.getDate());
-		const month = padTo2Digits(date.getMonth() + 1);
-		const year = date.getFullYear();
-		const hours = padTo2Digits(date.getHours());
-		const minutes = padTo2Digits(date.getMinutes());
-		return `${day}/${month}/${year} ${hours}:${minutes}`;
+		return date
+			.toLocaleString('pt-BR', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				hour12: false,
+				timeZone: 'America/Recife',
+			})
+			.replace(',', '');
 	}
 
 	return (
