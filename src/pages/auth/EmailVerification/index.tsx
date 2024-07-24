@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
 
-const EmailVerification: React.FC = () => {
+const EmailVerification = () => {
 	const timeRedirect = 4;
 	const [searchParams] = useSearchParams();
 	const [message, setMessage] = useState<string | null>(null);

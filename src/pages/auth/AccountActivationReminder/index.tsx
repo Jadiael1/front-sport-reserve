@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-const AccountActivationReminder: React.FC = () => {
+const AccountActivationReminder = () => {
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);

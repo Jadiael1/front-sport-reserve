@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-const ResetPasswordPage: React.FC = () => {
+const ResetPasswordPage = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [message, setMessage] = useState<string | null>(null);
