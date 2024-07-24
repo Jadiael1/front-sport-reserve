@@ -241,7 +241,7 @@ const ReservationList = () => {
 							className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center gap-3'
 							onClick={logout}
 						>
-							<IoIosLogOut className='text-base color-white text-lg' />
+							<IoIosLogOut className='text-base color-white' />
 							Sair
 						</button>
 					</div>
@@ -290,7 +290,7 @@ const ReservationList = () => {
 											</button>
 										</div>
 									:	<div>
-											<h2 className='text-xl font-bold mb-2 text-center mb-3'>{reservation.field.name}</h2>
+											<h2 className='text-xl font-bold mb-2 text-center'>{reservation.field.name}</h2>
 											<h3 className='text-gray-700 mb-1'>
 												<span className='font-bold'>Local: </span>
 												{reservation.field.location}

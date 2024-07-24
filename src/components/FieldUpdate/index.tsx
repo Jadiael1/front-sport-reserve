@@ -252,7 +252,7 @@ const FieldUpdateForm = () => {
 					/>
 					<label
 						htmlFor={`file-input-new`}
-						className='bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300 flex items-center gap-1 rounded-lg'
+						className='bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300 flex items-center gap-1'
 					>
 						<LuImagePlus />
 						Adicionar imagem
