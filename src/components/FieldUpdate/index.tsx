@@ -3,9 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IField } from '../Home/interfaces/IFields';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaTrash } from 'react-icons/fa';
-import { Modal, message } from 'antd';
+import { messageManager } from '../Message/MessageManager';
 import { FaArrowLeft } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
+import ConfirmationModal from '../ConfirmationModalProps';
 const FieldUpdateForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -20,6 +21,8 @@ const FieldUpdateForm = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleUpdateField = async () => {
 		// setMessage(null);
@@ -45,7 +48,7 @@ const FieldUpdateForm = () => {
 			const data = await response.json();
 
 			if (response.ok) {
-				message.success('Arena atualizada com sucesso!');
+				messageManager.notify({ message: 'Arena atualizada com sucesso!', type: 'success', duration: 3000 });
 				navigate('/');
 			} else {
 				setError(data.message || 'Falha ao atualizar a arena');
@@ -77,7 +80,7 @@ const FieldUpdateForm = () => {
 			});
 			const data = await response.json();
 			if (response.ok) {
-				message.success('Image updated successfully.');
+				messageManager.notify({ message: 'Image updated successfully.', type: 'success', duration: 3000 });
 				setImages(data.data.images);
 			} else {
 				setLoading(false);
@@ -90,46 +93,51 @@ const FieldUpdateForm = () => {
 		}
 	};
 
-	const handleDeleteImage = (imageId: number) => {
-		Modal.confirm({
-			title: 'Confirmar Exclusão',
-			content: 'Tem certeza de que deseja excluir esta imagem?',
-			okText: 'Sim',
-			cancelText: 'Não',
-			onOk: async () => {
-				setLoading(true);
-				try {
-					const formData = new FormData();
-					formData.append('_method', 'PATCH');
-					formData.append('image_ids[]', imageId.toString());
+	const handleCancel = () => {
+		setIsModalOpen(false);
+	};
 
-					const response = await fetch(`${baseURL}/fields/${field.id}`, {
-						method: 'POST',
-						headers: {
-							Authorization: `Bearer ${token}`,
-							Accept: 'application/json',
-						},
-						body: formData,
-					});
+	const handleDeleteImage = async (imageId: number) => {
+		setIsModalOpen(false);
+		setLoading(true);
+		try {
+			const formData = new FormData();
+			formData.append('_method', 'PATCH');
+			formData.append('image_ids[]', imageId.toString());
 
-					if (response.ok) {
-						message.success('Imagem excluída com sucesso.');
-						setImages(prevImages => prevImages.filter(image => image.id !== imageId));
-					} else {
-						const data = await response.json();
-						console.error('Erro ao excluir imagem:', data);
-						setError(data.message || 'Falha ao excluir a imagem.');
-						message.error(data.message || 'Falha ao excluir a imagem.');
-					}
-				} catch (error) {
-					console.error('Erro na requisição:', error);
-					setError('Falha ao excluir a imagem.');
-					message.error('Falha ao excluir a imagem.');
-				} finally {
-					setLoading(false);
-				}
-			},
-		});
+			const response = await fetch(`${baseURL}/fields/${field.id}`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+				body: formData,
+			});
+
+			if (response.ok) {
+				messageManager.notify({ message: 'Imagem excluída com sucesso.', type: 'success', duration: 3000 });
+				setImages(prevImages => prevImages.filter(image => image.id !== imageId));
+			} else {
+				const data = await response.json();
+				console.error('Erro ao excluir imagem:', data);
+				setError(data.message || 'Falha ao excluir a imagem.');
+				messageManager.notify({
+					message: data.message || 'Falha ao excluir a imagem.',
+					type: 'error',
+					duration: 3000,
+				});
+			}
+		} catch (error) {
+			console.error('Erro na requisição:', error);
+			setError('Falha ao excluir a imagem.');
+			messageManager.notify({
+				message: 'Falha ao excluir a imagem.',
+				type: 'error',
+				duration: 3000,
+			});
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const handleImageChange = (imageId: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,7 +168,7 @@ const FieldUpdateForm = () => {
 			});
 			const data = await response.json();
 			if (response.ok) {
-				message.success('Image updated successfully.');
+				messageManager.notify({ message: 'Image updated successfully.', type: 'success', duration: 3000 });
 				setImages(data.data.images);
 			} else {
 				setError(data.message || 'Falha ao atualizar a imagem');
@@ -264,12 +272,20 @@ const FieldUpdateForm = () => {
 									className='w-full h-32 object-cover mb-2 rounded '
 								/>
 								<button
-									onClick={() => handleDeleteImage(image.id)}
+									onClick={() => setIsModalOpen(true)}
 									className='absolute top-[-5px] right-0 text-red-500 bg-white border border-red-500 p-1 rounded-full hover:text-white hover:bg-red-500 transition duration-300'
 								>
 									<FaTrash size={16} />
 								</button>
 
+								<ConfirmationModal
+									isOpen={isModalOpen}
+									title='Confirmar Exclusão'
+									message='Tem certeza de que deseja excluir esta imagem?'
+									onConfirm={() => handleDeleteImage(image.id)}
+									onCancel={handleCancel}
+									icon={<FaTrash size={16} />}
+								/>
 								<input
 									type='file'
 									id={`file-input-${image.id}`}
