@@ -26,9 +26,9 @@ const FieldForm = () => {
 		formData.append('type', type);
 		formData.append('hourly_rate', hourlyRate);
 		if (images) {
-			for (let i = 0; i < images.length; i++) {
-				formData.append('images[]', images[i]);
-			}
+			Array.from(images).forEach(image => {
+				formData.append('images[]', image);
+			});
 		}
 
 		try {
