@@ -38,7 +38,7 @@ const FieldUpdateForm = () => {
 		formData.append('hourly_rate', hourlyRate.toString());
 
 		setLoading(true);
-		await new Promise(resolve => setTimeout(resolve, 10000));
+		// await new Promise(resolve => setTimeout(resolve, 10000));
 		try {
 			const response = await fetch(`${baseURL}/fields/${field.id}`, {
 				method: 'POST',
