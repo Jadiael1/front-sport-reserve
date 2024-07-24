@@ -133,7 +133,7 @@ const SignInPage = () => {
 						<button
 							type='button'
 							className='hover:underline text-sm'
-							onClick={() => navigate('/forgot-password')}
+							onClick={() => navigate('/auth/forgot-password')}
 						>
 							Esqueceu a senha?
 						</button>
@@ -151,7 +151,7 @@ const SignInPage = () => {
 							<a
 								href=''
 								className='text-blue-600 font-bold underline'
-								onClick={() => navigate('/signup')}
+								onClick={() => navigate('/auth/signup')}
 							>
 								Registre-se
 							</a>

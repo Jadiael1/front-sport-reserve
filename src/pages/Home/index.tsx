@@ -54,7 +54,7 @@ const HomePage = () => {
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
-			navigate(`/signin`);
+			navigate(`/auth/signin`);
 			return;
 		}
 		setSelectedField(field);

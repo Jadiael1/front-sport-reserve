@@ -20,7 +20,7 @@ const Navbar = () => {
 	};
 
 	const handleGoSignIn = () => {
-		navigate('/signin');
+		navigate('/auth/signin');
 	};
 
 	const handleGoHome = () => {

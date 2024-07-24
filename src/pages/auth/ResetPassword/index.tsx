@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
 
 			if (response.ok) {
 				setMessage(data.message);
-				setTimeout(() => navigate('/signin'), 3000);
+				setTimeout(() => navigate('/auth/signin'), 3000);
 			} else {
 				setError(data.message || 'Erro ao redefinir a senha. Tente novamente.');
 			}

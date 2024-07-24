@@ -11,12 +11,12 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
 	// se o usuario não fez login, e o loading terminou.
 	if (!user && !isLoading) {
-		return <Navigate to='/signin' />;
+		return <Navigate to='/auth/signin' />;
 	}
 
 	// se usuario tiver logado, e o loading tiver terminado, porem não ativou seu cadastro
 	if (user && !isLoading && !user?.email_verified_at) {
-		return <Navigate to='/activate-account' />;
+		return <Navigate to='/auth/activate-account' />;
 	}
 
 	// se chegou aqui é porque usuario fez login, e aqui verifica se loading terminou

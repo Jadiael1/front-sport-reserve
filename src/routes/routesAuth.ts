@@ -8,21 +8,21 @@ import ResetPasswordPage from '../pages/auth/ResetPassword';
 
 const routesAuth: IRoutes[] = [
 	{
-		path: '/signin',
+		path: '/auth/signin',
 		component: SignIn,
 		visibleInDisplay: false,
 		displayName: 'Login',
 		protected: false,
 	},
 	{
-		path: '/signup',
+		path: '/auth/signup',
 		component: Signup,
 		visibleInDisplay: false,
 		displayName: 'Registrar',
 		protected: false,
 	},
 	{
-		path: '/activate-account',
+		path: '/auth/activate-account',
 		component: AccountActivationReminder,
 		visibleInDisplay: true,
 		displayName: 'Home',
@@ -36,7 +36,7 @@ const routesAuth: IRoutes[] = [
 		protected: false,
 	},
 	{
-		path: '/forgot-password',
+		path: '/auth/forgot-password',
 		component: ForgotPasswordPage,
 		visibleInDisplay: false,
 		displayName: 'Forgot Password',
