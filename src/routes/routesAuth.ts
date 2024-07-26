@@ -13,6 +13,7 @@ const routesAuth: IRoutes[] = [
 		visibleInDisplay: false,
 		displayName: 'Login',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/auth/signup',
@@ -20,20 +21,23 @@ const routesAuth: IRoutes[] = [
 		visibleInDisplay: false,
 		displayName: 'Registrar',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/auth/activate-account',
 		component: AccountActivationReminder,
-		visibleInDisplay: true,
-		displayName: 'Home',
+		visibleInDisplay: false,
+		displayName: 'Ativar Conta',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/auth/email/verify',
 		component: EmailVerification,
-		visibleInDisplay: true,
-		displayName: 'Home',
+		visibleInDisplay: false,
+		displayName: 'Verificar E-mail',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/auth/forgot-password',
@@ -41,6 +45,7 @@ const routesAuth: IRoutes[] = [
 		visibleInDisplay: false,
 		displayName: 'Forgot Password',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/auth/reset-password',
@@ -48,6 +53,7 @@ const routesAuth: IRoutes[] = [
 		visibleInDisplay: false,
 		displayName: 'Reset Password',
 		protected: false,
+		adminOnly: false,
 	},
 ];
 

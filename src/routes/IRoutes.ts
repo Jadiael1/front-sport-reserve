@@ -3,6 +3,7 @@ export default interface IRoutes {
 	visibleInDisplay?: boolean;
 	displayName?: string;
 	protected: boolean;
+	adminOnly?: boolean;
 	component: () => React.ReactNode;
-	icon?: () => JSX.Element | null;
+	icon?: () => JSX.Element | React.ReactNode | null;
 }

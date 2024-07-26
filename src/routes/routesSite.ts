@@ -12,13 +12,15 @@ const routesSite: IRoutes[] = [
 		visibleInDisplay: true,
 		displayName: 'Home',
 		protected: false,
+		adminOnly: false,
 	},
 	{
 		path: '/field/:id',
 		component: FieldDetails,
-		visibleInDisplay: true,
+		visibleInDisplay: false,
 		displayName: 'Home',
 		protected: true,
+		adminOnly: false,
 	},
 	{
 		path: '/reservations',
@@ -26,6 +28,7 @@ const routesSite: IRoutes[] = [
 		visibleInDisplay: true,
 		displayName: 'Reservations',
 		protected: true,
+		adminOnly: false,
 	},
 	{
 		path: '/fields/new',
@@ -33,6 +36,7 @@ const routesSite: IRoutes[] = [
 		visibleInDisplay: true,
 		displayName: 'Novo Campo',
 		protected: true,
+		adminOnly: true,
 	},
 	{
 		path: '/fields/edit/:id',
@@ -40,6 +44,7 @@ const routesSite: IRoutes[] = [
 		visibleInDisplay: false,
 		displayName: 'Editar Campo',
 		protected: true,
+		adminOnly: true,
 	},
 ];
 
