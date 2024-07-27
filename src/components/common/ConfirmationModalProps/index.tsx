@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
 
