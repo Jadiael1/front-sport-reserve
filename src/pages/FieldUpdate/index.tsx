@@ -316,6 +316,7 @@ const FieldUpdateForm = () => {
 									onConfirm={() => handleDeleteImage(image.id)}
 									onCancel={handleCancel}
 									icon={<FaTrash size={16} />}
+									defaultClassName={true}
 								/>
 								<input
 									type='file'
