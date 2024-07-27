@@ -12,7 +12,7 @@ import MobileControlButtons from './MobileControlButtons';
 import UserDropdownSkeleton from './UserDropdownSkeleton';
 
 const Navbar = () => {
-	const [isMenuOpen, setIsMenuOpen] = useState(true);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 	const [isMobileUserDropdownOpen, setIsMobileUserDropdownOpen] = useState(true);
 
