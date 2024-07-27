@@ -79,7 +79,7 @@ const Navbar = () => {
 							</NavItem>
 							<hr className='my-1 border-gray-200' />
 							<NavItem
-								href='/signout'
+								href='/auth/signout'
 								icon={() => <FaSignOutAlt />}
 								className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50'
 							>

@@ -17,7 +17,7 @@ const MobileUserDropdown: React.FC<MobileUserDropdownProps> = ({ isDropdownOpen 
 				Perfil
 			</NavItem>
 			<NavItem
-				href='/signout'
+				href='/auth/signout'
 				icon={() => <FaSignOutAlt className='mr-2' />}
 				className='px-3 py-2 rounded-md text-sm hover:bg-gray-700 select-none flex items-center justify-center hover:bg-opacity-50'
 			>
