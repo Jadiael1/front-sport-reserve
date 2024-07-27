@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IField } from '../../interfaces/IField';
 import { useAuth } from '../../hooks/useAuth';
-import { FaTrash } from 'react-icons/fa';
-import { messageManager } from '../../components/common/Message/messageInstance';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaTrash, FaArrowLeft } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
+import { messageManager } from '../../components/common/Message/messageInstance';
 import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 import AnimateSpin from '../../assets/svg/AnimateSpin';
 import goBack from '../../utils/goBack';
@@ -14,34 +13,46 @@ const FieldUpdateForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { token } = useAuth();
-	const field: IField = location.state.field;
-	const [name, setName] = useState(field.name);
-	const [locationField, setLocationField] = useState(field.location);
-	const [type, setType] = useState(field.type);
-	const [hourlyRate, setHourlyRate] = useState(field.hourly_rate);
-	const [images, setImages] = useState(field.images || []);
+	const { id } = useParams<{ id: string }>();
+	const [field, setField] = useState<IField | null>(location.state?.field || null);
 
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	useEffect(() => {
+		if (!field) {
+			fetch(`${baseURL}/fields/${id}`, {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+			})
+				.then(resp => resp.json())
+				.then(resp => {
+					setField(resp.data);
+				})
+				.catch(console.error);
+		}
+	}, [baseURL, field, id, token]);
 
 	const handleUpdateField = async () => {
-		// setMessage(null);
+		if (!field) return;
 		setError(null);
 
 		const formData = new FormData();
 		formData.append('_method', 'PATCH');
-		formData.append('name', name);
-		formData.append('location', locationField);
-		formData.append('type', type);
-		formData.append('hourly_rate', hourlyRate.toString());
+		formData.append('name', field.name);
+		formData.append('location', field.location);
+		formData.append('type', field.type);
+		formData.append('hourly_rate', field.hourly_rate as string);
+		formData.append('status', field.status);
 
 		setLoading(true);
-		// await new Promise(resolve => setTimeout(resolve, 10000));
 		try {
-			const response = await fetch(`${baseURL}/fields/${field.id}`, {
+			const response = await fetch(`${baseURL}/fields/${field?.id}`, {
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -65,7 +76,7 @@ const FieldUpdateForm = () => {
 	};
 
 	const handleUpdateImage = async (imageId: number, newImage: File) => {
-		// setMessage(null);
+		if (!field) return;
 		setError(null);
 		setLoading(true);
 		const formData = new FormData();
@@ -85,7 +96,7 @@ const FieldUpdateForm = () => {
 			const data = await response.json();
 			if (response.ok) {
 				messageManager.notify({ message: 'Image updated successfully.', type: 'success', duration: 3000 });
-				setImages(data.data.images);
+				setField((prev: IField | null) => (prev ? { ...prev, images: data.data.images } : prev));
 			} else {
 				setLoading(false);
 				setError(data.message || 'Falha ao atualizar a imagem');
@@ -102,6 +113,7 @@ const FieldUpdateForm = () => {
 	};
 
 	const handleDeleteImage = async (imageId: number) => {
+		if (!field) return;
 		setIsModalOpen(false);
 		setLoading(true);
 		try {
@@ -120,7 +132,9 @@ const FieldUpdateForm = () => {
 
 			if (response.ok) {
 				messageManager.notify({ message: 'Imagem excluída com sucesso.', type: 'success', duration: 3000 });
-				setImages(prevImages => prevImages.filter(image => image.id !== imageId));
+				setField((prev: IField | null) =>
+					prev ? { ...prev, images: prev.images.filter(image => image.id !== imageId) } : prev,
+				);
 			} else {
 				const data = await response.json();
 				console.error('Erro ao excluir imagem:', data);
@@ -151,6 +165,7 @@ const FieldUpdateForm = () => {
 	};
 
 	const handleStoreImage = async (newImage: FileList | null) => {
+		if (!field) return;
 		setError(null);
 		setLoading(true);
 		const formData = new FormData();
@@ -173,7 +188,7 @@ const FieldUpdateForm = () => {
 			const data = await response.json();
 			if (response.ok) {
 				messageManager.notify({ message: 'Image updated successfully.', type: 'success', duration: 3000 });
-				setImages(data.data.images);
+				setField((prev: IField | null) => (prev ? { ...prev, images: data.data.images } : prev));
 			} else {
 				setError(data.message || 'Falha ao atualizar a imagem');
 			}
@@ -208,9 +223,9 @@ const FieldUpdateForm = () => {
 						type='text'
 						id='name'
 						className={`block w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-white text-gray-900'}`}
-						value={name}
+						value={field?.name || ''}
 						disabled={loading}
-						onChange={e => setName(e.target.value)}
+						onChange={e => setField(prev => prev && { ...prev, name: e.target.value })}
 					/>
 				</div>
 
@@ -225,9 +240,9 @@ const FieldUpdateForm = () => {
 						type='text'
 						id='location'
 						className={`block w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-white text-gray-900'}`}
-						value={locationField}
+						value={field?.location || ''}
 						disabled={loading}
-						onChange={e => setLocationField(e.target.value)}
+						onChange={e => setField(prev => prev && { ...prev, location: e.target.value })}
 					/>
 				</div>
 
@@ -242,9 +257,9 @@ const FieldUpdateForm = () => {
 						type='text'
 						id='type'
 						className={`block w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-white text-gray-900'}`}
-						value={type}
+						value={field?.type || ''}
 						disabled={loading}
-						onChange={e => setType(e.target.value)}
+						onChange={e => setField(prev => prev && { ...prev, type: e.target.value })}
 					/>
 				</div>
 
@@ -259,10 +274,31 @@ const FieldUpdateForm = () => {
 						type='number'
 						id='hourlyRate'
 						className={`block w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-white text-gray-900'}`}
-						value={hourlyRate}
+						value={field?.hourly_rate || ''}
 						disabled={loading}
-						onChange={e => setHourlyRate(parseFloat(e.target.value))}
+						onChange={e => setField(prev => prev && { ...prev, hourly_rate: e.target.value })}
 					/>
+				</div>
+
+				<div className='mb-4'>
+					<label
+						htmlFor='status'
+						className='block text-sm font-medium text-gray-700'
+					>
+						Status
+					</label>
+					<select
+						id='status'
+						className={`block w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-white text-gray-900'}`}
+						value={field?.status || 'active'}
+						disabled={loading}
+						onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+							setField(prev => prev && { ...prev, status: e.target.value as 'active' | 'inactive' })
+						}
+					>
+						<option value='active'>Ativo</option>
+						<option value='inactive'>Inativo</option>
+					</select>
 				</div>
 
 				<h3 className='text-xl font-semibold mb-2 text-center'>Imagens da arena</h3>
@@ -288,10 +324,10 @@ const FieldUpdateForm = () => {
 					</label>
 				</div>
 
-				{images.length === 0 ?
+				{field?.images.length === 0 ?
 					<p className='text-gray-500'>Nenhuma imagem disponível</p>
 				:	<div className='flex flex-wrap gap-4'>
-						{images.map(image => (
+						{field?.images.map(image => (
 							<div
 								key={image.id}
 								className='relative flex flex-col items-center bg-gray-100 p-3 rounded-xl'
