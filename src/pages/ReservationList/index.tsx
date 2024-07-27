@@ -6,9 +6,10 @@ import Navbar from '../../components/common/NavBar/NavBar';
 import formatDate from '../../utils/formateDate';
 import { IReservation } from '../../interfaces/IReservation';
 import { IApiReservationResponse } from '../../interfaces/IApiReservationResponse';
+import capitalize from '../../utils/capitalize';
 
 const ReservationList = () => {
-	const { token } = useAuth();
+	const { user, token } = useAuth();
 	const [reservations, setReservations] = useState<IReservation[]>([]);
 	const [error, setError] = useState<{ message: string; errors?: string | { [key: string]: string[] } | null } | null>(
 		null,
@@ -249,6 +250,12 @@ const ReservationList = () => {
 													<span className='font-bold'>Reservado em: </span>
 													{formatDate(new Date(reservation.created_at))}
 												</p>
+												{user && user.is_admin && (
+													<p className='text-gray-700'>
+														<span className='font-bold'>Reservado por: </span>
+														{capitalize(reservation.user.name)}
+													</p>
+												)}
 												{reservation.status === 'WAITING' && (
 													<>
 														{paymentLink && paymentLink.id === reservation.id && (
