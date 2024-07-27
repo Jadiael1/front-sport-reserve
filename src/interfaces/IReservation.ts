@@ -1,4 +1,5 @@
 import { IField } from './IField';
+import { IUser } from './IUser';
 
 export interface IReservation {
 	id: number;
@@ -10,4 +11,5 @@ export interface IReservation {
 	updated_at: string;
 	status: string;
 	field: IField;
+	user: IUser;
 }
