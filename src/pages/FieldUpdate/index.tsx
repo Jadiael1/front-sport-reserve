@@ -8,6 +8,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
 import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 import AnimateSpin from '../../assets/svg/AnimateSpin';
+import goBack from '../../utils/goBack';
 
 const FieldUpdateForm = () => {
 	const location = useLocation();
@@ -188,7 +189,7 @@ const FieldUpdateForm = () => {
 			<div className='w-full max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg'>
 				<button
 					className='flex items-center px-4 py-2 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out transform hover:scale-105'
-					onClick={() => navigate(-1)}
+					onClick={() => goBack(navigate)}
 				>
 					<FaArrowLeft className='mr-2' />
 					Voltar

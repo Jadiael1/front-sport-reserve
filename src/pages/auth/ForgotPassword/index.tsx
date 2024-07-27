@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import goBack from '../../../utils/goBack';
 
 const ForgotPasswordPage = () => {
 	const [email, setEmail] = useState('');
@@ -43,7 +44,7 @@ const ForgotPasswordPage = () => {
 			<div className='container mx-auto p-6 max-w-lg h-[300px] bg-white border rounded-xl'>
 				<button
 					className='flex items-center px-4 py-2 bg-trasparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105'
-					onClick={() => navigate(-1)}
+					onClick={() => goBack(navigate)}
 				>
 					<FaArrowLeft className='mr-2' />
 					Voltar

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import { CiWarning } from 'react-icons/ci';
 import { FaArrowLeft } from 'react-icons/fa';
+import goBack from '../../../utils/goBack.js';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -86,7 +87,7 @@ const RegisterPage = () => {
 			<div className='container mx-auto p-6 max-w-lg border border-gray-200 bg-white rounded-lg'>
 				<button
 					className='flex items-center px-4 py-2 bg-transparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105'
-					onClick={() => navigate(-1)}
+					onClick={() => goBack(navigate)}
 				>
 					<FaArrowLeft className='mr-2' />
 					Voltar

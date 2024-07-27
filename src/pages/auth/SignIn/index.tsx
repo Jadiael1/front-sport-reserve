@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth.js';
 import backgroundImage from '../../../assets/img/campo.jpg';
 import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
+import goBack from '../../../utils/goBack.js';
 
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
@@ -45,7 +46,7 @@ const SignInPage = () => {
 			<div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md md:max-w-xl'>
 				<button
 					className='flex items-center px-4 py-2 bg-trasparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:scale-105'
-					onClick={() => navigate(-1)}
+					onClick={() => goBack(navigate)}
 				>
 					<FaArrowLeft className='mr-2' />
 					Voltar
@@ -129,7 +130,7 @@ const SignInPage = () => {
 							:	'Entrar'}
 						</button>
 					</div>
-					<div className='flex justify-end mt-3'>
+					<div className='flex justify-end mt-4'>
 						<button
 							type='button'
 							className='hover:underline text-sm'
@@ -138,7 +139,7 @@ const SignInPage = () => {
 							Esqueceu a senha?
 						</button>
 					</div>
-					<div className='flex items-center justify-center'>
+					<div className='flex items-center justify-center mt-4'>
 						{/* <button
 							type='button'
 							className='w-full bg-gray-300 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-400 transition duration-300'
