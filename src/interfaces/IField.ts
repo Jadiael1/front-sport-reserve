@@ -9,4 +9,5 @@ export interface IField {
 	created_at: string | null;
 	updated_at: string | null;
 	images: IImage[];
+	status: 'active' | 'inactive';
 }
