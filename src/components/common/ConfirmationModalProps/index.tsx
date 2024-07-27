@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import { twMerge } from 'tailwind-merge';
 
 interface ConfirmationModalProps {
 	isOpen: boolean;
@@ -8,13 +9,31 @@ interface ConfirmationModalProps {
 	onConfirm: () => void;
 	onCancel: () => void;
 	icon?: ReactNode;
+	className?: string;
+	defaultClassName: boolean;
+	merge?: boolean;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title, message, onConfirm, onCancel, icon }) => {
+const ConfirmationModal = ({
+	isOpen,
+	title,
+	message,
+	onConfirm,
+	onCancel,
+	icon,
+	className = '',
+	defaultClassName = false,
+	merge = false,
+	...props
+}: ConfirmationModalProps) => {
 	if (!isOpen) return null;
-
+	const classNameDefault =
+		defaultClassName ? 'fixed inset-0 flex items-center justify-center bg-background bg-opacity-50 z-50' : '';
 	return (
-		<div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+		<div
+			className={merge ? twMerge(classNameDefault, className) : `${classNameDefault} ${className}`}
+			{...props}
+		>
 			<div className='bg-white rounded-lg shadow-lg w-96 p-6 relative'>
 				<button
 					onClick={onCancel}
@@ -22,13 +41,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title, me
 				>
 					<AiOutlineClose size={24} />
 				</button>
-				<div className='flex items-center justify-center mb-4'>
-					{/* <MdCheckCircle
-						size={48}
-						className='text-green-500'
-					/> */}
-					{icon}
-				</div>
+				<div className='flex items-center justify-center mb-4'>{icon}</div>
 				<h2 className='text-xl font-semibold text-center mb-2'>{title}</h2>
 				<p className='text-gray-700 text-center mb-6'>{message}</p>
 				<div className='flex justify-center space-x-4'>
