@@ -193,9 +193,9 @@ const HomePage = () => {
 											</Gallery>
 										</div>
 
-										<div className='flex items-center space-x-2'>
+										<div className='flex flex-wrap justify-center gap-2'>
 											<button
-												className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 w-full flex items-center justify-center'
+												className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full'
 												onClick={() => handleRentClick(field)}
 											>
 												<FaShoppingCart className='mr-2' />
@@ -204,14 +204,14 @@ const HomePage = () => {
 											{user?.is_admin && (
 												<>
 													<button
-														className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 w-full flex items-center justify-center'
+														className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center w-full'
 														onClick={() => handleEditClick(field)}
 													>
 														<FaEdit className='mr-2' />
 														Editar
 													</button>
 													<button
-														className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 w-full flex items-center justify-center'
+														className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center w-full'
 														onClick={() => handleDeleteClick(field)}
 													>
 														<FaTrash className='mr-2' />

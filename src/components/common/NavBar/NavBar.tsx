@@ -24,13 +24,14 @@ const Navbar = () => {
 	useEffect(() => {
 		const handleResize = () => {
 			if (window.innerWidth > 768) {
-				// setIsMenuOpen(false);
+				setIsMenuOpen(false);
 				setIsUserDropdownOpen(false);
 			}
 		};
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				setIsUserDropdownOpen(false);
+				setIsMobileUserDropdownOpen(false);
 			}
 		};
 		const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +50,7 @@ const Navbar = () => {
 	}, []);
 
 	return (
-		<nav className='bg-background text-black shadow-lg border-2 border-gray-50'>
+		<nav className='bg-background text-black shadow-lg border-2 border-gray-50 font-sans'>
 			<div className='flex justify-between items-center py-4 sm:px-6'>
 				<div className='flex items-center'>
 					<Logo />
@@ -72,8 +73,9 @@ const Navbar = () => {
 							} absolute right-0 top-full mt-2 w-48 rounded-md shadow-lg py-1 bg-background border-2 border-gray-50 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200 ease-out`}
 						>
 							<NavItem
+								href='/profile'
 								icon={() => <FaUserCircle />}
-								className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50'
+								className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50 text-blue-700'
 							>
 								Perfil
 							</NavItem>
@@ -81,7 +83,7 @@ const Navbar = () => {
 							<NavItem
 								href='/auth/signout'
 								icon={() => <FaSignOutAlt />}
-								className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50'
+								className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50 text-blue-700'
 							>
 								Sair
 							</NavItem>
@@ -113,8 +115,16 @@ const Navbar = () => {
 							<div
 								className='flex items-center justify-center py-2 cursor-pointer select-none'
 								onClick={() => setIsMobileUserDropdownOpen(!isMobileUserDropdownOpen)}
+								onKeyDown={e => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										e.preventDefault();
+										setIsMobileUserDropdownOpen(!isMobileUserDropdownOpen);
+									}
+								}}
+								role='button'
+								tabIndex={0}
 							>
-								<FaUser className='h-8 w-8 rounded-full select-none' />
+								<FaUser className='h-8 w-8 rounded-full select-none text-blue-700' />
 								<span className='ml-2 font-semibold text-lg text-black select-none'>
 									{(user.name as string).charAt(0).toUpperCase() + (user.name as string).slice(1)}
 								</span>

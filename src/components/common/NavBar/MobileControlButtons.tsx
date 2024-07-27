@@ -18,7 +18,7 @@ const MobileControlButtons: React.FC<MobileControlButtonsProps> = ({ isMenuOpen,
 					merge={true}
 					onClick={navigateToSignIn}
 					icon={
-						<div className='mr-2 ml-4 px-1 rounded border-2 flex items-center justify-center hover:bg-gray-500 text-sm sm:text-lg'>
+						<div className='mr-2 ml-4 px-1 rounded border-2 flex items-center justify-center hover:bg-gray-500 text-sm sm:text-lg text-blue-700'>
 							<span>Entrar</span>
 							<FaSignInAlt className='h-6 w-6 ml-2' />
 						</div>
@@ -29,7 +29,12 @@ const MobileControlButtons: React.FC<MobileControlButtonsProps> = ({ isMenuOpen,
 			)}
 			<IconButton
 				onClick={toggleMenu}
-				icon={isMenuOpen ? <FaTimes className='h-6 w-6 mr-2 sm:mr-0' /> : <FaBars className='h-6 w-6 mr-2 sm:mr-0' />}
+				icon={
+					isMenuOpen ?
+						<FaTimes className='h-6 w-6 mr-2 sm:mr-0 text-blue-700' />
+					:	<FaBars className='h-6 w-6 mr-2 sm:mr-0 text-blue-700' />
+				}
+				aria-label='Menu'
 			/>
 		</div>
 	);

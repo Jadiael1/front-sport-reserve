@@ -17,7 +17,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 	defaultClassName = false,
 	...props
 }) => {
-	const classNameDefault = defaultClassName ? 'focus:outline-none' : '';
+	const classNameDefault = defaultClassName ? 'focus:outline-none focus:ring-2 focus:ring-blue-500' : '';
 	return (
 		<button
 			onClick={onClick}

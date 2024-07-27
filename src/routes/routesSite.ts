@@ -4,6 +4,7 @@ import IRoutes from './IRoutes';
 import ReservationList from '../pages/ReservationList';
 import FieldForm from '../pages/FieldStore';
 import FieldUpdate from '../pages/FieldUpdate';
+import Profile from '../pages/Profile';
 
 const routesSite: IRoutes[] = [
 	{
@@ -45,6 +46,14 @@ const routesSite: IRoutes[] = [
 		displayName: 'Editar Campo',
 		protected: true,
 		adminOnly: true,
+	},
+	{
+		path: '/profile',
+		component: Profile,
+		visibleInDisplay: false,
+		displayName: 'Perfil',
+		protected: true,
+		adminOnly: false,
 	},
 ];
 

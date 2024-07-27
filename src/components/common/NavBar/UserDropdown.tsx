@@ -12,6 +12,14 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ userName, isDropdownOpen, t
 	<div
 		className='flex items-center cursor-pointer'
 		onClick={toggleDropdown}
+		role='button'
+		tabIndex={0}
+		onKeyDown={e => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				toggleDropdown();
+			}
+		}}
 	>
 		<UserAvatar />
 		<span className={`ml-2 font-semibold text-lg ${isDropdownOpen ? 'opacity-90' : 'opacity-80'} hover:opacity-90`}>

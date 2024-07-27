@@ -105,7 +105,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 			)}
 			{field ?
 				<div className='w-full max-w-4xl px-4 md:px-0'>
-					<div className='bg-white p-4 md:p-6 rounded-lg shadow-md border mt-4 md:mt-10'>
+					<div className='bg-white p-4 md:p-6 rounded-lg shadow-md border'>
 						<h1 className='text-2xl md:text-3xl font-bold mb-2 md:mb-4 text-center'>{field.name}</h1>
 						<div className='flex items-center gap-1 mb-2'>
 							<FaMapMarkerAlt className='mr-2 text-red-500' />

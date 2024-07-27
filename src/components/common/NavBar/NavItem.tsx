@@ -25,7 +25,7 @@ const NavItem: React.FC<NavItemProps> = ({
 			className={
 				merge ?
 					twMerge(
-						'flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 text-white',
+						'flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 text-blue-700',
 						className,
 					)
 				:	className
