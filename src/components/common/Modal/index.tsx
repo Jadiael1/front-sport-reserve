@@ -11,14 +11,14 @@ interface ModalProps {
 	height?: number;
 }
 
-const Modal: FC<ModalProps> = ({ title, open, onCancel, children, footer, width = 800, height = 500 }) => {
+const Modal: FC<ModalProps> = ({ title, open, onCancel, children, footer }) => {
 	if (!open) return null;
 
 	return (
 		<div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50'>
 			<div
-				className='bg-white rounded-lg shadow-lg'
-				style={{ width: width, height: height }}
+				className='bg-white rounded-lg shadow-lg w-full max-w-md md:max-w-lg lg:max-w-xl'
+				style={{ maxHeight: '90vh' }}
 			>
 				<div className='flex justify-between items-center p-4 border-b'>
 					<h2 className='text-xl font-semibold'>{title}</h2>
@@ -27,8 +27,8 @@ const Modal: FC<ModalProps> = ({ title, open, onCancel, children, footer, width 
 					</button>
 				</div>
 				<div
-					className='pr-4 pl-4 pb-4 overflow-auto'
-					style={{ height: `calc(${height}px - 96px)` }}
+					className='p-4 overflow-auto'
+					style={{ maxHeight: 'calc(90vh - 96px)' }}
 				>
 					{children}
 				</div>

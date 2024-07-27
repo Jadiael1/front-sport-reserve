@@ -105,8 +105,8 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 			)}
 			{field ?
 				<div className='w-full max-w-4xl px-4 md:px-0'>
-					<div className='bg-white p-6 rounded-lg shadow-md border mt-10'>
-						<h1 className='text-3xl font-bold mb-4 text-center'>{field.name}</h1>
+					<div className='bg-white p-4 md:p-6 rounded-lg shadow-md border mt-4 md:mt-10'>
+						<h1 className='text-2xl md:text-3xl font-bold mb-2 md:mb-4 text-center'>{field.name}</h1>
 						<div className='flex items-center gap-1 mb-2'>
 							<FaMapMarkerAlt className='mr-2 text-red-500' />
 							<h3 className='font-bold'>Localização:</h3>
@@ -146,7 +146,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							</div>
 						</div>
 
-						<div className='flex flex-col items-center mt-10'>
+						<div className='flex flex-col items-center mt-6 md:mt-10'>
 							<button
 								type='submit'
 								className='mt-6 w-full md:w-1/2 max-w-[250px] bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
