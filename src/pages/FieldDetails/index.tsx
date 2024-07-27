@@ -5,6 +5,7 @@ import Alert from '../../components/common/Alert';
 import DatePicker from '../../components/common/DatePicker';
 import { IField } from '../../interfaces/IField';
 import { useParams } from 'react-router-dom';
+import { messageManager } from '../../components/common/Message/messageInstance';
 
 interface FieldDetailsProps {
 	field: IField;
@@ -44,7 +45,11 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 				.catch(error => {
 					setLoading(false);
 					console.error('Error:', error);
-					alert('Erro ao realizar a reserva. Tente novamente.');
+					messageManager.notify({
+						message: 'Erro ao realizar a reserva. Tente novamente.',
+						type: 'error',
+						duration: 3000,
+					});
 				});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,7 +57,11 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 
 	const handleReservation = () => {
 		if (!startTime.length || !endTime.length) {
-			alert('Por favor, selecione a data e hora de início e término.');
+			messageManager.notify({
+				message: 'Por favor, selecione a data e hora de início e término.',
+				type: 'warning',
+				duration: 3000,
+			});
 			return;
 		}
 		setLoading(true);
@@ -81,7 +90,11 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 			.catch(error => {
 				setLoading(false);
 				console.error('Error:', error);
-				alert('Erro ao realizar a reserva. Tente novamente.');
+				messageManager.notify({
+					message: 'Erro ao realizar a reserva. Tente novamente.',
+					type: 'error',
+					duration: 3000,
+				});
 			});
 	};
 

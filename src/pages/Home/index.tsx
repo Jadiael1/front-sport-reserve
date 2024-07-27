@@ -11,6 +11,7 @@ import FieldDetails from '../FieldDetails';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
 import ConfirmationModal from '../../components/common/ConfirmationModalProps';
+import { messageManager } from '../../components/common/Message/messageInstance';
 
 const HomePage = () => {
 	const { user, token } = useAuth();
@@ -94,13 +95,25 @@ const HomePage = () => {
 						},
 					};
 				});
-				alert('Quadra deletada com sucesso.');
+				messageManager.notify({
+					message: 'Quadra deletada com sucesso.',
+					type: 'success',
+					duration: 3000,
+				});
 			} else {
-				alert('Falha ao deletar a quadra.');
+				messageManager.notify({
+					message: 'Falha ao deletar a quadra.',
+					type: 'error',
+					duration: 3000,
+				});
 			}
 		} catch (error) {
 			console.error('Error deleting field:', error);
-			alert('Erro ao deletar a quadra.');
+			messageManager.notify({
+				message: 'Erro ao deletar a quadra.',
+				type: 'error',
+				duration: 3000,
+			});
 		} finally {
 			setFieldToDelete(null);
 			setConfirmationModal(false);

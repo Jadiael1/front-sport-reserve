@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import backgroundImage from '../../../assets/img/campo.jpg';
-import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import goBack from '../../../utils/goBack';
+import GoBackButton from '../../../components/common/GoBack';
 
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
@@ -40,13 +41,7 @@ const SignInPage = () => {
 			style={{ backgroundImage: `url(${backgroundImage})` }}
 		>
 			<div className='bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md'>
-				<button
-					className='flex items-center px-4 py-2 bg-transparent text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-transform transform hover:scale-105'
-					onClick={() => goBack(navigate)}
-				>
-					<FaArrowLeft className='mr-2' />
-					Voltar
-				</button>
+				<GoBackButton defaultClassName={true} />
 				<h1 className='text-3xl md:text-4xl font-bold my-3 text-center text-blue-700'>SportReserve</h1>
 				<p className='text-sm mb-6 text-center'>Aluguel fácil, jogo garantido</p>
 

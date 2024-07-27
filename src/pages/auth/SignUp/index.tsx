@@ -4,6 +4,7 @@ import { useAuth } from '../../../hooks/useAuth.js';
 import { CiWarning } from 'react-icons/ci';
 import { FaArrowLeft } from 'react-icons/fa';
 import goBack from '../../../utils/goBack.js';
+import { messageManager } from '../../../components/common/Message/messageInstance.js';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -70,7 +71,7 @@ const RegisterPage = () => {
 			setLoading(false);
 			if (response.status === 201 && data.status === 'success') {
 				await login(formData.email, formData.password);
-				alert('Registro realizado com sucesso!');
+				messageManager.notify({ message: 'Registro realizado com sucesso!', type: 'success', duration: 3000 });
 				navigate('/');
 			} else {
 				setError(data.message || 'Falha ao registrar');
