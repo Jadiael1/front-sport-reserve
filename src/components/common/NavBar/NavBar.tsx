@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
-import { FaAngleDown, FaAngleUp, FaSignOutAlt, FaUser, FaUserCircle } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp, FaSignOutAlt, FaTachometerAlt, FaUser, FaUserCircle } from 'react-icons/fa';
 import Logo from './Logo';
 import NavItem from './NavItem';
 import NavigationMenu from './NavigationMenu';
@@ -72,6 +72,15 @@ const Navbar = () => {
 								isUserDropdownOpen ? 'block' : 'hidden'
 							} absolute right-0 top-full mt-2 w-48 rounded-md shadow-lg py-1 bg-background border-2 border-gray-50 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200 ease-out`}
 						>
+							{user && user.is_admin ?
+								<NavItem
+									href='/dashboard'
+									icon={() => <FaTachometerAlt />}
+									className='flex items-center px-3 py-2 rounded-md text-sm font-medium transition duration-300 hover:bg-gray-700 hover:bg-opacity-50 text-blue-700'
+								>
+									Dashboard
+								</NavItem>
+							:	null}
 							<NavItem
 								href='/profile'
 								icon={() => <FaUserCircle />}

@@ -1,4 +1,4 @@
-import routes from '../../../routes/routes';
+import routesSite from '../../../routes/routesSite';
 import NavItem from './NavItem';
 import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../../../hooks/useAuth';
@@ -14,7 +14,7 @@ const NavigationMenu = ({ className, merge = false, defaultClassName = false }: 
 	const { user } = useAuth();
 	return (
 		<div className={merge ? twMerge(defaultClassNameValue, className) : `${defaultClassNameValue} ${className}`}>
-			{routes
+			{routesSite
 				.filter(route => route.visibleInDisplay)
 				.filter(route => !route.adminOnly || (route.adminOnly && user && user.is_admin))
 				.map(route => (
