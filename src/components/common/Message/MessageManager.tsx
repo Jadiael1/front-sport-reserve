@@ -26,10 +26,11 @@ const MessageManager = forwardRef((_, ref) => {
 
 	return (
 		<div>
-			{messages.map(msg => (
+			{messages.map((msg, index) => (
 				<Message
 					key={msg.id}
 					{...msg}
+					index={index}
 				/>
 			))}
 		</div>

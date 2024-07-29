@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineInfoCircle, AiOutlineWarning } from 'react-icons/ai';
 
 interface MessageProps {
 	message: string;
 	duration?: number;
 	type?: 'success' | 'error' | 'warning' | 'info';
+	index: number;
 }
 
-const Message: React.FC<MessageProps> = ({ message, duration = 3000, type = 'success' }) => {
+const Message: React.FC<MessageProps> = ({ message, duration = 3000, type = 'success', index }) => {
 	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
@@ -28,11 +29,19 @@ const Message: React.FC<MessageProps> = ({ message, duration = 3000, type = 'suc
 		info: 'bg-blue-500',
 	};
 
+	const typeIcons = {
+		success: <AiOutlineCheckCircle size={24} />,
+		error: <AiOutlineCloseCircle size={24} />,
+		warning: <AiOutlineWarning size={24} />,
+		info: <AiOutlineInfoCircle size={24} />,
+	};
+
 	return ReactDOM.createPortal(
 		<div
-			className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded shadow-lg flex items-center space-x-2 z-50 ${typeStyles[type]}`}
+			className={`fixed left-1/2 transform -translate-x-1/2 text-white px-4 py-2 rounded shadow-lg flex items-center space-x-2 z-50 ${typeStyles[type]}`}
+			style={{ top: `${4 + index * 60}px` }}
 		>
-			<AiOutlineCheckCircle size={24} />
+			{typeIcons[type]}
 			<span>{message}</span>
 		</div>,
 		document.body,
