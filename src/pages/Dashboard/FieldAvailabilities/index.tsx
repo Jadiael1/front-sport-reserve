@@ -1,7 +1,7 @@
 import Sidebar from '../../../components/common/Sidebar';
 import { useAuth } from '../../../hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaTimes } from 'react-icons/fa';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IFieldAvailability } from '../../../interfaces/IFieldAvailability';
 import { IField } from '../../../interfaces/IField';
@@ -198,6 +198,11 @@ const FieldAvailabilities = () => {
 		fetchAvailabilities(newPage);
 	};
 
+	const handleCancelEdit = () => {
+		setEditingAvailability(null);
+		setNewAvailability({ field_id: '', day_of_week: 'Monday', start_time: '', end_time: '' });
+	};
+
 	return (
 		<Sidebar>
 			<div className='p-4'>
@@ -250,16 +255,73 @@ const FieldAvailabilities = () => {
 							onChange={e => handleInputChange('end_time', e.target.value)}
 						/>
 					</div>
-					<button
-						onClick={editingAvailability ? handleUpdate : handleCreate}
-						className='flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
-					>
-						<AiOutlinePlus className='mr-2' />{' '}
-						{editingAvailability ? 'Atualizar Disponibilidade' : 'Criar Disponibilidade'}
-					</button>
+					<div className='flex justify-between'>
+						<button
+							onClick={editingAvailability ? handleUpdate : handleCreate}
+							className='flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700'
+						>
+							<AiOutlinePlus className='mr-2' />{' '}
+							{editingAvailability ? 'Atualizar Disponibilidade' : 'Criar Disponibilidade'}
+						</button>
+						{editingAvailability && (
+							<button
+								onClick={handleCancelEdit}
+								className='flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700'
+							>
+								<FaTimes className='mr-2' /> Cancelar
+							</button>
+						)}
+					</div>
 				</div>
 
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+				{/* Tabela para telas maiores */}
+				<div className='hidden lg:block'>
+					<div className='overflow-x-auto'>
+						<table className='min-w-full bg-white border'>
+							<thead>
+								<tr>
+									<th className='py-2 px-4 border'>Campo</th>
+									<th className='py-2 px-4 border'>Dia</th>
+									<th className='py-2 px-4 border'>Hora de Início</th>
+									<th className='py-2 px-4 border'>Hora Final</th>
+									<th className='py-2 px-4 border'>Ações</th>
+								</tr>
+							</thead>
+							<tbody>
+								{availabilities.map(availability => (
+									<tr key={availability.id}>
+										<td className='py-2 px-4 border'>
+											{fields.find(field => field.id === availability.field_id)?.name}
+										</td>
+										<td className='py-2 px-4 border'>{translateDaysOfTheWeek(availability.day_of_week)}</td>
+										<td className='py-2 px-4 border'>{availability.start_time}</td>
+										<td className='py-2 px-4 border'>{availability.end_time}</td>
+										<td className='py-2 px-4 border flex justify-around'>
+											<button
+												className='text-red-500 hover:text-red-700'
+												onClick={() => {
+													setdeletingAvailability(availability);
+													setOpenConfirmationModal(true);
+												}}
+											>
+												<FaTrash />
+											</button>
+											<button
+												className='text-blue-500 hover:text-blue-700'
+												onClick={() => handleEditClick(availability)}
+											>
+												<FaEdit />
+											</button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				{/* Cards para telas menores */}
+				<div className='lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4'>
 					{availabilities.map(availability => (
 						<div
 							key={availability.id}
