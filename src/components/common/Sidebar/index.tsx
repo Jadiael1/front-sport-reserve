@@ -85,8 +85,8 @@ const Sidebar = ({ children }: TSidebarProps) => {
 				<ul className='p-4'>
 					<li className='mb-6'>
 						<div
-							onClick={() => (window.location.href = '/')} // Redirects to the homepage
-							className='flex items-center justify-center py-2 cursor-pointer hover:text-gray-200 bg-gray-900 rounded'
+							onClick={() => (window.location.href = '/')}
+							className='flex items-center justify-center py-2 cursor-pointer bg-gray-900 rounded hover:bg-gray-700 hover:text-white transition duration-200'
 						>
 							<FaHome className='mr-2' />
 							<span>Início</span>
@@ -95,7 +95,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 					<li className={`${isActive('/dashboard')} mb-6`}>
 						<div
 							onClick={() => navigate('/dashboard')}
-							className='flex items-center justify-center py-2 cursor-pointer hover:text-gray-200'
+							className='flex items-center justify-center py-2 cursor-pointer rounded-md hover:bg-gray-700 hover:text-white transition duration-200'
 						>
 							<FaUserCircle className='mr-2' />
 							<span>Dashboard</span>
@@ -111,7 +111,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 							>
 								<div
 									onClick={() => navigate(route.path)}
-									className='flex items-center justify-center py-2 cursor-pointer hover:text-gray-200'
+									className='flex items-center justify-center py-2 cursor-pointer rounded-md pl-2 hover:bg-gray-700 hover:text-white transition duration-200'
 								>
 									<div className='mr-2'>
 										{route.icon ?
@@ -126,7 +126,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 					<li className={`cursor-pointer rounded mt-6`}>
 						<NavItem
 							href='/auth/signout'
-							className='flex items-center hover:text-red-900 justify-center hover:bg-gray-700'
+							className='flex items-center hover:text-red-900 justify-center hover:bg-gray-700 transition duration-200'
 							noSpan
 						>
 							<FaSignOutAlt className='mr-2 fill-red-900' />
