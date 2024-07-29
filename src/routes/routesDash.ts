@@ -2,6 +2,8 @@ import IRoutes from './IRoutes';
 import Home from '../pages/Dashboard/Home';
 import FieldAvailabilities from '../pages/Dashboard/FieldAvailabilities';
 import { AiOutlineFieldTime } from 'react-icons/ai';
+import Users from '../pages/Dashboard/Users';
+import { FaUserCircle } from 'react-icons/fa';
 
 const routesDash: IRoutes[] = [
 	{
@@ -20,6 +22,15 @@ const routesDash: IRoutes[] = [
 		protected: true,
 		adminOnly: true,
 		icon: AiOutlineFieldTime,
+	},
+	{
+		path: '/dashboard/users',
+		component: Users,
+		visibleInDisplay: true,
+		displayName: 'Usuarios',
+		protected: true,
+		adminOnly: true,
+		icon: FaUserCircle,
 	},
 ];
 

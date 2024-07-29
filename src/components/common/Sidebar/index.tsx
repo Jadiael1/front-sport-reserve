@@ -111,7 +111,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 							>
 								<div
 									onClick={() => navigate(route.path)}
-									className='flex items-center justify-center py-2 cursor-pointer rounded-md pl-2 hover:bg-gray-700 hover:text-white transition duration-200'
+									className='flex items-center py-2 cursor-pointer rounded-md pl-2 hover:bg-gray-700 hover:text-white transition duration-200'
 								>
 									<div className='mr-2'>
 										{route.icon ?
