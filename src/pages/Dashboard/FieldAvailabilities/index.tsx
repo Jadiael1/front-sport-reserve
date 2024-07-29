@@ -7,10 +7,21 @@ import { IFieldAvailability } from '../../../interfaces/IFieldAvailability';
 import { IField } from '../../../interfaces/IField';
 import ConfirmationModal from '../../../components/common/ConfirmationModalProps';
 import { messageManager } from '../../../components/common/Message/messageInstance';
+import translateDaysOfTheWeek from '../../../utils/translateDaysOfTheWeek';
 
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+type Tdays = {
+	Monday: string;
+	Tuesday: string;
+	Wednesday: string;
+	Thursday: string;
+	Friday: string;
+	Saturday: string;
+	Sunday: string;
+};
 
-const Home = () => {
+const daysOfWeek: (keyof Tdays)[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+const FieldAvailabilities = () => {
 	const { token } = useAuth();
 	const [availabilities, setAvailabilities] = useState<IFieldAvailability[]>([]);
 	const [fields, setFields] = useState<IField[]>([]);
@@ -23,11 +34,17 @@ const Home = () => {
 	const [editingAvailability, setEditingAvailability] = useState<IFieldAvailability | null>(null);
 	const [deletingAvailability, setdeletingAvailability] = useState<IFieldAvailability | null>(null);
 	const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
+	const [pagination, setPagination] = useState({
+		current_page: 1,
+		last_page: 1,
+		per_page: 15,
+		total: 0,
+	});
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
 		fetchFields();
-		fetchAvailabilities();
+		fetchAvailabilities(1, 'created_at', 'desc');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -41,16 +58,25 @@ const Home = () => {
 		setFields(data.data.data);
 	};
 
-	const fetchAvailabilities = async () => {
-		const response = await fetch(`${baseURL}/fieldAvailabilities`, {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`,
-				Accept: 'application/json',
+	const fetchAvailabilities = async (page: number, sortBy = 'created_at', sortOrder = 'desc') => {
+		const response = await fetch(
+			`${baseURL}/fieldAvailabilities?page=${page}&sort_by=${sortBy}&sort_order=${sortOrder}`,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
 			},
-		});
+		);
 		const data = await response.json();
 		setAvailabilities(data.data.data);
+		setPagination({
+			current_page: data.data.current_page,
+			last_page: data.data.last_page,
+			per_page: data.data.per_page,
+			total: data.data.total,
+		});
 	};
 
 	const handleCreate = async () => {
@@ -67,7 +93,7 @@ const Home = () => {
 
 			if (response.ok) {
 				const data = await response.json();
-				setAvailabilities(prev => [...prev, data.data]);
+				setAvailabilities(prev => [data.data, ...prev]); // Adicionando ao início
 				setNewAvailability({ field_id: '', day_of_week: 'Monday', start_time: '', end_time: '' });
 				messageManager.notify({
 					message: 'Disponibilidade de horario criada com sucesso.',
@@ -87,6 +113,15 @@ const Home = () => {
 
 	const handleUpdate = async () => {
 		if (!editingAvailability) return;
+
+		setEditingAvailability(prev => {
+			if (!prev) return null;
+			return {
+				...prev,
+				start_time: prev.start_time.substring(0, 5),
+				end_time: prev.end_time.substring(0, 5),
+			};
+		});
 
 		try {
 			const response = await fetch(
@@ -159,6 +194,10 @@ const Home = () => {
 		}
 	};
 
+	const handlePageChange = (newPage: number) => {
+		fetchAvailabilities(newPage);
+	};
+
 	return (
 		<Sidebar>
 			<div className='p-4'>
@@ -168,7 +207,7 @@ const Home = () => {
 					<h2 className='text-xl mb-2'>
 						{editingAvailability ? 'Editar Disponibilidade' : 'Criar nova disponibilidade'}
 					</h2>
-					<div className='grid grid-cols-4 gap-4 mb-4'>
+					<div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-4'>
 						<select
 							className='p-2 border rounded'
 							value={editingAvailability ? editingAvailability.field_id : newAvailability.field_id}
@@ -194,7 +233,7 @@ const Home = () => {
 									key={day}
 									value={day}
 								>
-									{day}
+									{translateDaysOfTheWeek(day)}
 								</option>
 							))}
 						</select>
@@ -220,46 +259,60 @@ const Home = () => {
 					</button>
 				</div>
 
-				<div className='overflow-x-auto'>
-					<table className='min-w-full bg-white border'>
-						<thead>
-							<tr>
-								<th className='py-2 px-4 border'>Campo</th>
-								<th className='py-2 px-4 border'>Dia</th>
-								<th className='py-2 px-4 border'>Hora de Início</th>
-								<th className='py-2 px-4 border'>Hora Final</th>
-								<th className='py-2 px-4 border'>Ações</th>
-							</tr>
-						</thead>
-						<tbody>
-							{availabilities.map(availability => (
-								<tr key={availability.id}>
-									<td className='py-2 px-4 border'>{fields.find(field => field.id === availability.field_id)?.name}</td>
-									<td className='py-2 px-4 border'>{availability.day_of_week}</td>
-									<td className='py-2 px-4 border'>{availability.start_time}</td>
-									<td className='py-2 px-4 border'>{availability.end_time}</td>
-									<td className='py-2 px-4 border flex justify-around'>
-										<button
-											className='text-red-500 hover:text-red-700'
-											onClick={() => {
-												setdeletingAvailability(availability);
-												setOpenConfirmationModal(true);
-											}}
-										>
-											<FaTrash />
-										</button>
-										<button
-											className='text-blue-500 hover:text-blue-700'
-											onClick={() => handleEditClick(availability)}
-										>
-											<FaEdit />
-										</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+					{availabilities.map(availability => (
+						<div
+							key={availability.id}
+							className='p-4 border rounded shadow-md'
+						>
+							<h3 className='text-lg font-semibold'>
+								{fields.find(field => field.id === availability.field_id)?.name}
+							</h3>
+							<p>{translateDaysOfTheWeek(availability.day_of_week)}</p>
+							<p>
+								{availability.start_time} - {availability.end_time}
+							</p>
+							<div className='flex justify-around mt-4'>
+								<button
+									className='text-red-500 hover:text-red-700'
+									onClick={() => {
+										setdeletingAvailability(availability);
+										setOpenConfirmationModal(true);
+									}}
+								>
+									<FaTrash />
+								</button>
+								<button
+									className='text-blue-500 hover:text-blue-700'
+									onClick={() => handleEditClick(availability)}
+								>
+									<FaEdit />
+								</button>
+							</div>
+						</div>
+					))}
 				</div>
+
+				<div className='flex justify-between items-center mt-4'>
+					<button
+						disabled={pagination.current_page === 1}
+						onClick={() => handlePageChange(pagination.current_page - 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Anterior
+					</button>
+					<span>
+						Página {pagination.current_page} de {pagination.last_page}
+					</span>
+					<button
+						disabled={pagination.current_page === pagination.last_page}
+						onClick={() => handlePageChange(pagination.current_page + 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === pagination.last_page ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Próxima
+					</button>
+				</div>
+
 				<ConfirmationModal
 					isOpen={openConfirmationModal}
 					title='Confirmar Exclusão'
@@ -274,4 +327,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default FieldAvailabilities;

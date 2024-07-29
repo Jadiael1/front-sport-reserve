@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaSignOutAlt, FaHome, FaBars, FaTimes, FaUserCircle } from 'react-icons/fa';
-
 import ProfilePhoto from '../../../assets/img/user-profile-transparent.png';
 import NavItem from '../NavBar/NavItem';
-
 import routesDash from '../../../routes/routesDash';
 
 type TSidebarProps = {
@@ -14,7 +12,6 @@ type TSidebarProps = {
 
 const Sidebar = ({ children }: TSidebarProps) => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-	// const [isChargesSubmenuOpen, setIsChargesSubmenuOpen] = useState(true);
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
 	const { user } = useAuth();
@@ -45,12 +42,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
 
-	// const toggleChargesSubmenu = () => {
-	// 	setIsChargesSubmenuOpen(!isChargesSubmenuOpen);
-	// };
-
 	const isActive = (path: string) => {
-		// return location.pathname === path ? 'opacity-100' : 'opacity-50';
 		return location.pathname.startsWith(path) ? 'opacity-100' : 'opacity-50';
 	};
 
@@ -67,13 +59,6 @@ const Sidebar = ({ children }: TSidebarProps) => {
 							<FaTimes className='fill-white' />
 						:	<FaBars className='fill-white' />}
 					</button>
-					<div
-						onClick={() => navigate('/')}
-						className='flex items-center cursor-pointer rounded border ml-4 px-1 hover:bg-gray-900'
-					>
-						<FaHome className='text-xl fill-white' />
-						<span className='ml-1 font-bold text-white'>Início</span>
-					</div>
 				</div>
 				<div className='text-xl font-bold text-white'>SportReserve</div>
 			</nav>
@@ -85,7 +70,7 @@ const Sidebar = ({ children }: TSidebarProps) => {
 				} transition-transform duration-300 ease-in-out md:translate-x-0`}
 				ref={sidebarRef}
 			>
-				{/* ...User profile content... */}
+				{/* User profile content */}
 				<div className='bg-gray-700 p-4 text-center'>
 					<img
 						src={ProfilePhoto}
@@ -96,9 +81,17 @@ const Sidebar = ({ children }: TSidebarProps) => {
 						{(user?.name as string).charAt(0).toUpperCase() + (user?.name as string).slice(1)}
 					</h3>
 				</div>
-				{/* ...End User Profile Content... */}
+
 				<ul className='p-4'>
-					{/* cursor-pointer hover:text-gray-200 hover:bg-gray-700 rounded */}
+					<li className='mb-6'>
+						<div
+							onClick={() => (window.location.href = '/')} // Redirects to the homepage
+							className='flex items-center justify-center py-2 cursor-pointer hover:text-gray-200 bg-gray-900 rounded'
+						>
+							<FaHome className='mr-2' />
+							<span>Início</span>
+						</div>
+					</li>
 					<li className={`${isActive('/dashboard')} mb-6`}>
 						<div
 							onClick={() => navigate('/dashboard')}
@@ -113,90 +106,23 @@ const Sidebar = ({ children }: TSidebarProps) => {
 						.filter(route => route.adminOnly && user && user.is_admin)
 						.map((route, index) => (
 							<li
-								className={`${isActive('/dashboard')} mb-6`}
+								className={`${isActive(route.path)} mb-6`}
 								key={index}
 							>
 								<div
 									onClick={() => navigate(route.path)}
 									className='flex items-center justify-center py-2 cursor-pointer hover:text-gray-200'
 								>
-									<FaUserCircle className='mr-2' />
+									<div className='mr-2'>
+										{route.icon ?
+											<route.icon />
+										:	<FaHome />}
+									</div>
+
 									<span>{route.displayName}</span>
 								</div>
 							</li>
 						))}
-					{/* */}
-					{/* <li className='mb-2'>
-						<div
-							className={`${isActive(
-								'/dashboard/charge',
-							)} flex items-center justify-between py-2 cursor-pointer hover:bg-gray-700 rounded`}
-							onClick={toggleChargesSubmenu}
-						>
-							<span className='flex items-center'>
-								<FaMoneyBillWave className='mr-2' />
-								Cobranças
-							</span>
-							{isChargesSubmenuOpen ?
-								<FaCaretDown />
-							:	<FaCaretRight />}
-						</div>
-						{isChargesSubmenuOpen && (
-							<ul className='pl-4'>
-								<li
-									className={`${isActive(
-										'/dashboard/charge/create',
-									)} cursor-pointer hover:text-gray-200 hover:bg-gray-700`}
-								>
-									<div
-										onClick={() => navigate('/dashboard/charge/create')}
-										className='py-1 flex items-center'
-									>
-										<FaPlus className='mr-2' />
-										Criar Nova Cobrança
-									</div>
-								</li>
-								<li
-									className={`${isActive('/dashboard/charges')} cursor-pointer hover:text-gray-200 hover:bg-gray-700`}
-								>
-									<div
-										onClick={() => navigate('/dashboard/charges')}
-										className='py-1 flex items-center'
-									>
-										<FaList className='mr-2' />
-										Suas Cobranças
-									</div>
-								</li>
-								<li
-									className={`${isActive(
-										'/dashboard/charge/charge-invitations',
-									)} cursor-pointer hover:text-gray-200 hover:bg-gray-700`}
-								>
-									<div
-										onClick={() => navigate('/dashboard/charge/charge-invitations')}
-										className='py-1 flex items-center'
-									>
-										<FaList className='mr-2' />
-										Convites
-									</div>
-								</li>
-							</ul>
-						)}
-					</li> */}
-					{/* */}
-					{/* <li
-						className={`${isActive(
-							'/dashboard/perfil',
-						)} mb-2 cursor-pointer hover:text-gray-200 hover:bg-gray-700 rounded`}
-					>
-						<div
-							onClick={() => navigate('/dashboard/perfil')}
-							className='flex items-center py-2'
-						>
-							<FaUserCircle className='mr-2' />
-							<span>Perfil</span>
-						</div>
-					</li> */}
 					<li className={`cursor-pointer rounded mt-6`}>
 						<NavItem
 							href='/auth/signout'

@@ -1,6 +1,7 @@
 import IRoutes from './IRoutes';
 import Home from '../pages/Dashboard/Home';
 import FieldAvailabilities from '../pages/Dashboard/FieldAvailabilities';
+import { AiOutlineFieldTime } from 'react-icons/ai';
 
 const routesDash: IRoutes[] = [
 	{
@@ -12,12 +13,13 @@ const routesDash: IRoutes[] = [
 		adminOnly: true,
 	},
 	{
-		path: '/field-availabilities',
+		path: '/dashboard/field-availabilities',
 		component: FieldAvailabilities,
 		visibleInDisplay: true,
 		displayName: 'Disponibilidades de campo',
 		protected: true,
 		adminOnly: true,
+		icon: AiOutlineFieldTime,
 	},
 ];
 

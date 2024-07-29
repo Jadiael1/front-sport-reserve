@@ -5,5 +5,5 @@ export default interface IRoutes {
 	protected: boolean;
 	adminOnly?: boolean;
 	component: () => React.ReactNode;
-	icon?: () => JSX.Element | React.ReactNode | null;
+	icon?: React.ComponentType | null;
 }
