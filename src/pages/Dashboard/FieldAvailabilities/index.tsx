@@ -195,7 +195,7 @@ const FieldAvailabilities = () => {
 	};
 
 	const handlePageChange = (newPage: number) => {
-		fetchAvailabilities(newPage);
+		fetchAvailabilities(newPage, 'created_at', 'desc');
 	};
 
 	const handleCancelEdit = () => {
