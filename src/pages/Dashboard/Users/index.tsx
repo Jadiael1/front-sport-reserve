@@ -6,6 +6,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { IUser } from '../../../interfaces/IUser';
 import ConfirmationModal from '../../../components/common/ConfirmationModalProps';
 import { messageManager } from '../../../components/common/Message/messageInstance';
+import { handleValidationError } from '../../../utils/errorHandler';
+import isEmptyObject from '../../../utils/isEmptyObject';
 
 const Users = () => {
 	const { token } = useAuth();
@@ -21,15 +23,21 @@ const Users = () => {
 	const [editingUser, setEditingUser] = useState<IUser | null>(null);
 	const [deletingUser, setDeletingUser] = useState<IUser | null>(null);
 	const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
+	const [pagination, setPagination] = useState({
+		current_page: 1,
+		last_page: 1,
+		per_page: 15,
+		total: 0,
+	});
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
-		fetchUsers();
+		fetchUsers(pagination.current_page);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const fetchUsers = async () => {
-		const response = await fetch(`${baseURL}/users`, {
+	const fetchUsers = async (page: number) => {
+		const response = await fetch(`${baseURL}/users?page=${page}&sort_by=created_at&sort_order=desc`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 				Accept: 'application/json',
@@ -37,6 +45,12 @@ const Users = () => {
 		});
 		const data = await response.json();
 		setUsers(data.data.data);
+		setPagination({
+			current_page: data.data.current_page,
+			last_page: data.data.last_page,
+			per_page: data.data.per_page,
+			total: data.data.total,
+		});
 	};
 
 	const handleCreate = async () => {
@@ -77,9 +91,11 @@ const Users = () => {
 					type: 'success',
 					duration: 3000,
 				});
+			} else {
+				const errorData = await response.json();
+				handleValidationError(errorData);
 			}
 		} catch (error) {
-			console.error(error);
 			messageManager.notify({
 				message: 'Erro ao criar usuário.',
 				type: 'error',
@@ -102,6 +118,16 @@ const Users = () => {
 			}
 		});
 
+		if (isEmptyObject(payload)) {
+			setEditingUser(null);
+			messageManager.notify({
+				message: 'Usuário atualizado com sucesso.',
+				type: 'success',
+				duration: 3000,
+			});
+			return;
+		}
+
 		try {
 			const response = await fetch(`${baseURL}/users/${editingUser.id}`, {
 				method: 'PATCH',
@@ -122,6 +148,9 @@ const Users = () => {
 					type: 'success',
 					duration: 3000,
 				});
+			} else {
+				const errorData = await response.json();
+				handleValidationError(errorData);
 			}
 		} catch (error) {
 			console.error(error);
@@ -153,6 +182,9 @@ const Users = () => {
 				type: 'success',
 				duration: 3000,
 			});
+		} else {
+			const errorData = await response.json();
+			handleValidationError(errorData);
 		}
 	};
 
@@ -187,6 +219,11 @@ const Users = () => {
 		} else {
 			handleCreate();
 		}
+	};
+
+	const handlePageChange = (newPage: number) => {
+		setPagination(prev => ({ ...prev, current_page: newPage }));
+		fetchUsers(newPage);
 	};
 
 	return (
@@ -313,7 +350,7 @@ const Users = () => {
 												<td className='py-2 px-4 border'>{user.email}</td>
 												<td className='py-2 px-4 border'>{user.cpf}</td>
 												<td className='py-2 px-4 border'>{user.phone}</td>
-												<td className='py-2 px-4 border'>{user.is_admin ? 'Sim' : 'Não'}</td>
+												<td className='py-2 px-4 border'>{user.is_admin.toString() === '1' ? 'Sim' : 'Não'}</td>
 												<td className='py-2 px-4 border'>
 													<div className='flex items-center justify-center h-full space-x-2'>
 														<button
@@ -354,7 +391,7 @@ const Users = () => {
 									<p>{user.email}</p>
 									<p>{user.cpf}</p>
 									<p>{user.phone}</p>
-									<p>{user.is_admin ? 'Administrador' : 'Usuário'}</p>
+									<p>{user.is_admin.toString() === '1' ? 'Administrador' : 'Usuário'}</p>
 									<div className='flex justify-around mt-4'>
 										<button
 											className='text-red-500 hover:text-red-700'
@@ -376,6 +413,26 @@ const Users = () => {
 							:	null,
 						)
 					:	null}
+				</div>
+
+				<div className='flex justify-between items-center mt-4'>
+					<button
+						disabled={pagination.current_page === 1}
+						onClick={() => handlePageChange(pagination.current_page - 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Anterior
+					</button>
+					<span>
+						Página {pagination.current_page} de {pagination.last_page}
+					</span>
+					<button
+						disabled={pagination.current_page === pagination.last_page}
+						onClick={() => handlePageChange(pagination.current_page + 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === pagination.last_page ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Próxima
+					</button>
 				</div>
 
 				<ConfirmationModal
