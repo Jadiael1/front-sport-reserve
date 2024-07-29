@@ -9,15 +9,16 @@ const Home = () => {
 			<div className='flex flex-wrap justify-center gap-6 p-4'>
 				{[
 					{
-						title: 'Configurar Disponibilidade dos Campos',
-						description: 'Configure uma variedade de faixas de horário para um campo, para cada dia da semana.',
+						title: 'Disponibilidade dos Campos',
+						description:
+							'Atualize, adicione e delete uma variedade de faixas de horário para um campo, para cada dia da semana.',
 						buttonText: 'Ir',
 						icon: <AiOutlineFieldTime className='text-4xl text-blue-500 mb-2' />,
 						onClick: () => navigate('/dashboard/field-availabilities'),
 					},
 					{
-						title: 'Configurar Usuários',
-						description: 'Configure dados de usuários.',
+						title: 'Usuários',
+						description: 'Atualize, adicione e delete usuarios.',
 						buttonText: 'Ir',
 						icon: <AiOutlineUser className='text-4xl text-blue-500 mb-2' />,
 						onClick: () => navigate('/dashboard/users'),
