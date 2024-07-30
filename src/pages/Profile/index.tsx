@@ -11,10 +11,11 @@ import { formatCPF } from '../../utils/formatCPF';
 import { formatPhone } from '../../utils/formatPhone';
 
 const Profile = () => {
-	const { user, token } = useAuth();
+	const { user, token, updateUser } = useAuth();
 	const [userData, setUserData] = useState<IUser | null>(user as IUser);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [editingField, setEditingField] = useState<string | null>(null);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +34,23 @@ const Profile = () => {
 					Authorization: `Bearer ${token}`,
 					Accept: 'application/json',
 				},
-				body: JSON.stringify({ phone: userData.phone }),
+				body: JSON.stringify({ phone: userData.phone, email: userData.email }),
 			});
 			if (response.ok) {
 				messageManager.notify({ message: 'Perfil atualizado com sucesso!', type: 'success', duration: 3000 });
 				const updatedUser = await response.json();
 				setUserData(updatedUser.data);
 				setIsEditing(false);
+				setEditingField(null);
+
+				if (editingField === 'email' && userData.email !== user?.email) {
+					messageManager.notify({
+						message: 'Verifique sua caixa de entrada para confirmar o novo e-mail.',
+						type: 'info',
+						duration: 5000,
+					});
+					updateUser({ ...updatedUser.data, email_verified_at: null }); // Atualizar o contexto do usuário
+				}
 			} else {
 				messageManager.notify({ message: 'Falha ao atualizar os dados do usuário.', type: 'error', duration: 3000 });
 			}
@@ -71,11 +82,19 @@ const Profile = () => {
 								icon={FaEnvelope}
 								label='Email'
 								value={userData?.email}
+								onEdit={() => {
+									setIsEditing(true);
+									setEditingField('email');
+								}}
 							/>
 							<InfoItem
 								icon={FaPhone}
 								label='Telefone'
 								value={formatPhone(userData?.phone as string)}
+								onEdit={() => {
+									setIsEditing(true);
+									setEditingField('phone');
+								}}
 							/>
 							<InfoItem
 								icon={FaIdCard}
@@ -83,24 +102,46 @@ const Profile = () => {
 								value={formatCPF(userData?.cpf as string)}
 							/>
 						</div>
-						<button
-							onClick={() => setIsEditing(true)}
-							className='mt-6 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center w-full transition duration-300'
-						>
-							<FaEdit className='mr-2' />
-							Editar Perfil
-						</button>
+						{editingField ?
+							<button
+								onClick={() => setIsEditing(true)}
+								className='mt-6 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center w-full transition duration-300'
+							>
+								<FaEdit className='mr-2' />
+								Editar Perfil
+							</button>
+						:	null}
 					</div>
 				:	<form className='bg-white shadow-md rounded-lg p-8'>
-						<EditInputField
-							icon={FaPhone}
-							label='Phone'
-							name='phone'
-							value={userData?.phone}
-							placeholder='Digite seu telefone'
-							autocomplete='phone'
-							handleInputChange={handleInputChange}
-						/>
+						{editingField === 'phone' && (
+							<EditInputField
+								icon={FaPhone}
+								label='Phone'
+								name='phone'
+								value={userData?.phone}
+								placeholder='Digite seu telefone'
+								autocomplete='phone'
+								handleInputChange={handleInputChange}
+							/>
+						)}
+						{editingField === 'email' && (
+							<>
+								<EditInputField
+									icon={FaEnvelope}
+									label='Email'
+									name='email'
+									value={userData?.email}
+									placeholder='Digite seu e-mail'
+									autocomplete='email'
+									handleInputChange={handleInputChange}
+								/>
+								<p className='text-sm text-gray-600 mt-2'>
+									<strong>Nota:</strong> Ao atualizar seu e-mail, você precisará verificar o novo e-mail para continuar
+									acessando o sistema.
+								</p>
+							</>
+						)}
+
 						<div className='flex items-center justify-between mt-6'>
 							<button
 								type='button'
@@ -118,7 +159,10 @@ const Profile = () => {
 							</button>
 							<button
 								type='button'
-								onClick={() => setIsEditing(false)}
+								onClick={() => {
+									setIsEditing(false);
+									setEditingField(null);
+								}}
 								disabled={loading}
 								className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center transition duration-300'
 							>
