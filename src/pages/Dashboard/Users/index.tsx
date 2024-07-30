@@ -22,6 +22,7 @@ const Users = () => {
 	});
 	const [editingUser, setEditingUser] = useState<IUser | null>(null);
 	const [deletingUser, setDeletingUser] = useState<IUser | null>(null);
+	const [togglingUser, setTogglingUser] = useState<IUser | null>(null);
 	const [openConfirmationModal, setOpenConfirmationModal] = useState<boolean>(false);
 	const [pagination, setPagination] = useState({
 		current_page: 1,
@@ -188,6 +189,82 @@ const Users = () => {
 		}
 	};
 
+	const handleToggleActive = async (user: IUser, active?: boolean) => {
+		setTogglingUser(user);
+
+		try {
+			const response = await fetch(`${baseURL}/users/${user.id}/toggle-active`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+				body: JSON.stringify({ active }),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				setUsers(prev => (prev ? prev.map(u => (u.id === data.data.id ? data.data : u)) : prev));
+				messageManager.notify({
+					message: 'Status do usuário atualizado com sucesso.',
+					type: 'success',
+					duration: 3000,
+				});
+			} else {
+				const errorData = await response.json();
+				handleValidationError(errorData);
+			}
+		} catch (error) {
+			console.error(error);
+			messageManager.notify({
+				message: 'Erro ao atualizar status do usuário.',
+				type: 'error',
+				duration: 3000,
+			});
+		} finally {
+			setTogglingUser(null);
+		}
+	};
+
+	const handleToggleConfirmation = async (user: IUser, confirm?: boolean) => {
+		setTogglingUser(user);
+
+		try {
+			const response = await fetch(`${baseURL}/users/${user.id}/toggle-confirmation`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+				body: JSON.stringify({ confirm }),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				setUsers(prev => (prev ? prev.map(u => (u.id === data.data.id ? data.data : u)) : prev));
+				messageManager.notify({
+					message: 'Confirmação do usuário atualizada com sucesso.',
+					type: 'success',
+					duration: 3000,
+				});
+			} else {
+				const errorData = await response.json();
+				handleValidationError(errorData);
+			}
+		} catch (error) {
+			console.error(error);
+			messageManager.notify({
+				message: 'Erro ao atualizar confirmação do usuário.',
+				type: 'error',
+				duration: 3000,
+			});
+		} finally {
+			setTogglingUser(null);
+		}
+	};
+
 	const handleEditClick = (user: IUser) => {
 		setEditingUser(user);
 	};
@@ -338,6 +415,8 @@ const Users = () => {
 									<th className='py-2 px-4 border'>CPF</th>
 									<th className='py-2 px-4 border'>Telefone</th>
 									<th className='py-2 px-4 border'>Admin</th>
+									<th className='py-2 px-4 border'>Status</th>
+									<th className='py-2 px-4 border'>Confirmado</th>
 									<th className='py-2 px-4 border'>Ações</th>
 								</tr>
 							</thead>
@@ -351,6 +430,8 @@ const Users = () => {
 												<td className='py-2 px-4 border'>{user.cpf}</td>
 												<td className='py-2 px-4 border'>{user.phone}</td>
 												<td className='py-2 px-4 border'>{user.is_admin.toString() === '1' ? 'Sim' : 'Não'}</td>
+												<td className='py-2 px-4 border'>{user.active ? 'Ativo' : 'Inativo'}</td>
+												<td className='py-2 px-4 border'>{user.email_verified_at ? 'Confirmado' : 'Não Confirmado'}</td>
 												<td className='py-2 px-4 border'>
 													<div className='flex items-center justify-center h-full space-x-2'>
 														<button
@@ -367,6 +448,20 @@ const Users = () => {
 															onClick={() => handleEditClick(user)}
 														>
 															<FaEdit />
+														</button>
+														<button
+															className={`text-${user.active ? 'yellow' : 'green'}-500 hover:text-${user.active ? 'yellow' : 'green'}-700`}
+															onClick={() => handleToggleActive(user)}
+															disabled={togglingUser?.id === user.id}
+														>
+															{user.active ? 'Inativar' : 'Ativar'}
+														</button>
+														<button
+															className={`text-${user.email_verified_at ? 'yellow' : 'green'}-500 hover:text-${user.email_verified_at ? 'yellow' : 'green'}-700`}
+															onClick={() => handleToggleConfirmation(user)}
+															disabled={togglingUser?.id === user.id}
+														>
+															{user.email_verified_at ? 'Desconfirmar' : 'Confirmar'}
 														</button>
 													</div>
 												</td>
@@ -392,6 +487,8 @@ const Users = () => {
 									<p>{user.cpf}</p>
 									<p>{user.phone}</p>
 									<p>{user.is_admin.toString() === '1' ? 'Administrador' : 'Usuário'}</p>
+									<p>{user.active ? 'Ativo' : 'Inativo'}</p>
+									<p>{user.email_verified_at ? 'Confirmado' : 'Não Confirmado'}</p>
 									<div className='flex justify-around mt-4'>
 										<button
 											className='text-red-500 hover:text-red-700'
@@ -407,6 +504,20 @@ const Users = () => {
 											onClick={() => handleEditClick(user)}
 										>
 											<FaEdit />
+										</button>
+										<button
+											className={`text-${user.active ? 'yellow' : 'green'}-500 hover:text-${user.active ? 'yellow' : 'green'}-700`}
+											onClick={() => handleToggleActive(user)}
+											disabled={togglingUser?.id === user.id}
+										>
+											{user.active ? 'Inativar' : 'Ativar'}
+										</button>
+										<button
+											className={`text-${user.email_verified_at ? 'yellow' : 'green'}-500 hover:text-${user.email_verified_at ? 'yellow' : 'green'}-700`}
+											onClick={() => handleToggleConfirmation(user)}
+											disabled={togglingUser?.id === user.id}
+										>
+											{user.email_verified_at ? 'Desconfirmar' : 'Confirmar'}
 										</button>
 									</div>
 								</div>
