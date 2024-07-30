@@ -431,7 +431,7 @@ const Users = () => {
 												<td className='py-2 px-4 border'>{user.phone}</td>
 												<td className='py-2 px-4 border'>{user.is_admin.toString() === '1' ? 'Sim' : 'Não'}</td>
 												<td className='py-2 px-4 border'>{user.active ? 'Ativo' : 'Inativo'}</td>
-												<td className='py-2 px-4 border'>{user.email_verified_at ? 'Confirmado' : 'Não Confirmado'}</td>
+												<td className='py-2 px-4 border'>{user.email_verified_at ? 'Sim' : 'Não'}</td>
 												<td className='py-2 px-4 border'>
 													<div className='flex items-center justify-center h-full space-x-2'>
 														<button
@@ -449,6 +449,8 @@ const Users = () => {
 														>
 															<FaEdit />
 														</button>
+													</div>
+													<div className='flex items-center justify-center h-full mt-2 space-x-2'>
 														<button
 															className={`text-${user.active ? 'yellow' : 'green'}-500 hover:text-${user.active ? 'yellow' : 'green'}-700`}
 															onClick={() => handleToggleActive(user)}
@@ -456,6 +458,8 @@ const Users = () => {
 														>
 															{user.active ? 'Inativar' : 'Ativar'}
 														</button>
+													</div>
+													<div className='flex items-center justify-center h-full space-x-2'>
 														<button
 															className={`text-${user.email_verified_at ? 'yellow' : 'green'}-500 hover:text-${user.email_verified_at ? 'yellow' : 'green'}-700`}
 															onClick={() => handleToggleConfirmation(user)}
