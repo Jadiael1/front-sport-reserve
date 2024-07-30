@@ -96,7 +96,7 @@ const FieldAvailabilities = () => {
 				setAvailabilities(prev => [data.data, ...prev]); // Adicionando ao início
 				setNewAvailability({ field_id: '', day_of_week: 'Monday', start_time: '', end_time: '' });
 				messageManager.notify({
-					message: 'Disponibilidade de horario criada com sucesso.',
+					message: 'Disponibilidade de horário criada com sucesso.',
 					type: 'success',
 					duration: 3000,
 				});
@@ -104,7 +104,7 @@ const FieldAvailabilities = () => {
 		} catch (error) {
 			console.error(error);
 			messageManager.notify({
-				message: 'Erro ao criar disponibilidade de horario.',
+				message: 'Erro ao criar disponibilidade de horário.',
 				type: 'error',
 				duration: 3000,
 			});
@@ -142,7 +142,7 @@ const FieldAvailabilities = () => {
 				setAvailabilities(prev => prev.map(avail => (avail.id === data.data.id ? data.data : avail)));
 				setEditingAvailability(null);
 				messageManager.notify({
-					message: 'Disponibilidade de horario editada com sucesso.',
+					message: 'Disponibilidade de horário editada com sucesso.',
 					type: 'success',
 					duration: 3000,
 				});
@@ -150,7 +150,7 @@ const FieldAvailabilities = () => {
 		} catch (error) {
 			console.error(error);
 			messageManager.notify({
-				message: 'Erro ao editar disponibilidade de horario.',
+				message: 'Erro ao editar disponibilidade de horário.',
 				type: 'error',
 				duration: 3000,
 			});
@@ -175,7 +175,7 @@ const FieldAvailabilities = () => {
 		if (response.ok) {
 			setAvailabilities(prev => prev.filter(avai => avai.id !== deletingAvailability.id));
 			messageManager.notify({
-				message: 'Disponibilidade de horario deletada com sucesso.',
+				message: 'Disponibilidade de horário deletada com sucesso.',
 				type: 'success',
 				duration: 3000,
 			});
@@ -213,47 +213,59 @@ const FieldAvailabilities = () => {
 						{editingAvailability ? 'Editar Disponibilidade' : 'Criar nova disponibilidade'}
 					</h2>
 					<div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-4'>
-						<select
-							className='p-2 border rounded'
-							value={editingAvailability ? editingAvailability.field_id : newAvailability.field_id}
-							onChange={e => handleInputChange('field_id', e.target.value)}
-						>
-							<option value=''>Selecione o campo</option>
-							{fields.map(field => (
-								<option
-									key={field.id}
-									value={field.id}
-								>
-									{field.name}
-								</option>
-							))}
-						</select>
-						<select
-							className='p-2 border rounded'
-							value={editingAvailability ? editingAvailability.day_of_week : newAvailability.day_of_week}
-							onChange={e => handleInputChange('day_of_week', e.target.value)}
-						>
-							{daysOfWeek.map(day => (
-								<option
-									key={day}
-									value={day}
-								>
-									{translateDaysOfTheWeek(day)}
-								</option>
-							))}
-						</select>
-						<input
-							type='time'
-							className='p-2 border rounded'
-							value={editingAvailability ? editingAvailability.start_time : newAvailability.start_time}
-							onChange={e => handleInputChange('start_time', e.target.value)}
-						/>
-						<input
-							type='time'
-							className='p-2 border rounded'
-							value={editingAvailability ? editingAvailability.end_time : newAvailability.end_time}
-							onChange={e => handleInputChange('end_time', e.target.value)}
-						/>
+						<div className='w-full'>
+							<label className='block text-sm font-medium text-gray-700'>Campo</label>
+							<select
+								className='p-2 border rounded w-full'
+								value={editingAvailability ? editingAvailability.field_id : newAvailability.field_id}
+								onChange={e => handleInputChange('field_id', e.target.value)}
+							>
+								<option value=''>Selecione o campo</option>
+								{fields.map(field => (
+									<option
+										key={field.id}
+										value={field.id}
+									>
+										{field.name}
+									</option>
+								))}
+							</select>
+						</div>
+						<div className='w-full'>
+							<label className='block text-sm font-medium text-gray-700'>Dia</label>
+							<select
+								className='p-2 border rounded w-full'
+								value={editingAvailability ? editingAvailability.day_of_week : newAvailability.day_of_week}
+								onChange={e => handleInputChange('day_of_week', e.target.value)}
+							>
+								{daysOfWeek.map(day => (
+									<option
+										key={day}
+										value={day}
+									>
+										{translateDaysOfTheWeek(day)}
+									</option>
+								))}
+							</select>
+						</div>
+						<div className='w-full'>
+							<label className='block text-sm font-medium text-gray-700'>Hora de Início</label>
+							<input
+								type='time'
+								className='p-2 border rounded w-full'
+								value={editingAvailability ? editingAvailability.start_time : newAvailability.start_time}
+								onChange={e => handleInputChange('start_time', e.target.value)}
+							/>
+						</div>
+						<div className='w-full'>
+							<label className='block text-sm font-medium text-gray-700'>Hora Final</label>
+							<input
+								type='time'
+								className='p-2 border rounded w-full'
+								value={editingAvailability ? editingAvailability.end_time : newAvailability.end_time}
+								onChange={e => handleInputChange('end_time', e.target.value)}
+							/>
+						</div>
 					</div>
 					<div className='flex justify-between'>
 						<button
@@ -296,22 +308,24 @@ const FieldAvailabilities = () => {
 										<td className='py-2 px-4 border'>{translateDaysOfTheWeek(availability.day_of_week)}</td>
 										<td className='py-2 px-4 border'>{availability.start_time}</td>
 										<td className='py-2 px-4 border'>{availability.end_time}</td>
-										<td className='py-2 px-4 border flex justify-around'>
-											<button
-												className='text-red-500 hover:text-red-700'
-												onClick={() => {
-													setdeletingAvailability(availability);
-													setOpenConfirmationModal(true);
-												}}
-											>
-												<FaTrash />
-											</button>
-											<button
-												className='text-blue-500 hover:text-blue-700'
-												onClick={() => handleEditClick(availability)}
-											>
-												<FaEdit />
-											</button>
+										<td className='py-2 px-4 border'>
+											<div className='flex items-center justify-center h-full space-x-2'>
+												<button
+													className='text-red-500 hover:text-red-700'
+													onClick={() => {
+														setdeletingAvailability(availability);
+														setOpenConfirmationModal(true);
+													}}
+												>
+													<FaTrash />
+												</button>
+												<button
+													className='text-blue-500 hover:text-blue-700'
+													onClick={() => handleEditClick(availability)}
+												>
+													<FaEdit />
+												</button>
+											</div>
 										</td>
 									</tr>
 								))}
@@ -378,7 +392,7 @@ const FieldAvailabilities = () => {
 				<ConfirmationModal
 					isOpen={openConfirmationModal}
 					title='Confirmar Exclusão'
-					message='Tem certeza de que deseja excluir essa disponibilidade de horario?'
+					message='Tem certeza de que deseja excluir essa disponibilidade de horário?'
 					onConfirm={handleDelete}
 					onCancel={() => setOpenConfirmationModal(false)}
 					icon={<FaTrash size={16} />}
