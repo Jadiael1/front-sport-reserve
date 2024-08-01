@@ -6,4 +6,5 @@ export interface IReport {
 	total_transactions?: number;
 	total_users?: number;
 	field_id?: number;
+	field_name?: string;
 }

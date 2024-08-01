@@ -7,6 +7,7 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { FaFilePdf, FaFileExcel, FaFilter, FaSync } from 'react-icons/fa';
 
 const Reports = () => {
 	const { token } = useAuth();
@@ -14,16 +15,19 @@ const Reports = () => {
 	const [loading, setLoading] = useState(false);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
-	const [filters, setFilters] = useState<{ start_date: string; end_date: string }>({ start_date: '', end_date: '' });
 	const [reportType, setReportType] = useState('performance');
 	const [startDate, setStartDate] = useState(() => {
 		const date = new Date();
-		return new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+		date.setDate(date.getDate() - 30);
+		return date.toISOString().split('T')[0];
 	});
 	const [endDate, setEndDate] = useState(() => {
 		const date = new Date();
-		date.setDate(date.getDate() - 1);
 		return date.toISOString().split('T')[0];
+	});
+	const [filters, setFilters] = useState<{ start_date: string; end_date: string }>({
+		start_date: startDate,
+		end_date: endDate,
 	});
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -120,55 +124,41 @@ const Reports = () => {
 	};
 
 	const renderReportCard = (report: IReport, index: number) => {
-		switch (reportType) {
-			case 'performance':
-				return (
-					<div
-						key={index}
-						className='bg-white shadow-md rounded-lg p-4 mb-4'
-					>
-						<p className='font-bold'>Data: {report.date}</p>
-						<p>Total de Reservas: {report.total_reservations}</p>
-					</div>
-				);
-			case 'financial':
-				return (
-					<div
-						key={index}
-						className='bg-white shadow-md rounded-lg p-4 mb-4'
-					>
-						<p className='font-bold'>Data: {report.date}</p>
-						<p>Valor Total: {report.total_amount}</p>
-						<p>Total de Transações: {report.total_transactions}</p>
-					</div>
-				);
-			case 'users':
-				return (
-					<div
-						key={index}
-						className='bg-white shadow-md rounded-lg p-4 mb-4'
-					>
-						<p className='font-bold'>Data: {report.date}</p>
-						<p>Total de Usuários: {report.total_users}</p>
-					</div>
-				);
-			case 'occupancy':
-				return (
-					<div
-						key={index}
-						className='bg-white shadow-md rounded-lg p-4 mb-4'
-					>
-						<p className='font-bold'>ID do Campo: {report.field_id}</p>
-						<p>Total de Reservas: {report.total_reservations}</p>
-					</div>
-				);
-			default:
-				return null;
-		}
+		const formatDateToLocale = (dateString: string) => {
+			const [year, month, day] = dateString.split('-').map(Number);
+			return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+		};
+		return (
+			<div
+				key={index}
+				className='bg-white shadow-lg rounded-lg p-4 mb-4 border border-gray-200 transition-transform hover:scale-105'
+			>
+				<h4 className='font-bold text-center mb-2'>
+					{formatDateToLocale(report?.date ? report?.date : new Date().toISOString().split('T')[0])}
+				</h4>
+				<ul>
+					{reportType === 'performance' && <li>Total de Reservas: {report.total_reservations}</li>}
+					{reportType === 'financial' && (
+						<>
+							<li>Valor Total: R$ {report.total_amount}</li>
+							<li>Total de Transações: {report.total_transactions}</li>
+						</>
+					)}
+					{reportType === 'users' && <li>Total de Usuários: {report.total_users}</li>}
+					{reportType === 'occupancy' && (
+						<>
+							<li>ID do Campo: {report.field_id}</li>
+							<li>Nome do Campo: {report.field_name}</li>
+							<li>Total de Reservas: {report.total_reservations}</li>
+						</>
+					)}
+				</ul>
+			</div>
+		);
 	};
 
 	const renderChartData = () => {
-		const labels = reports.map(report => report.date);
+		const labels = reports.map(report => new Date(report.date).toLocaleDateString('pt-BR'));
 		const data = (() => {
 			switch (reportType) {
 				case 'performance':
@@ -184,16 +174,31 @@ const Reports = () => {
 			}
 		})();
 
+		const reportTypePtBr = (() => {
+			switch (reportType) {
+				case 'performance':
+					return 'Performance';
+				case 'financial':
+					return 'Financeiro';
+				case 'users':
+					return 'Usuários';
+				case 'occupancy':
+					return 'Ocupação';
+				default:
+					return '';
+			}
+		})();
+
 		return {
 			labels,
 			datasets: [
 				{
-					label: `Relatório de ${reportType.charAt(0).toUpperCase() + reportType.slice(1)}`,
+					label: `Relatório de ${reportTypePtBr}`,
 					data,
 					fill: false,
-					backgroundColor: 'rgba(75,192,192,0.2)',
+					backgroundColor: 'rgba(75,192,192,0.4)',
 					borderColor: 'rgba(75,192,192,1)',
-					borderWidth: 1,
+					borderWidth: 2,
 				},
 			],
 		};
@@ -201,152 +206,127 @@ const Reports = () => {
 
 	return (
 		<Sidebar>
-			<div className='container mx-auto p-4'>
-				<h1 className='text-3xl font-bold mb-4'>Relatórios</h1>
-				<div className='mb-4'>
-					<label className='mr-2'>Tipo de Relatório:</label>
-					<select
-						value={reportType}
-						onChange={e => handleReportTypeChange(e.target.value)}
-						className='border border-gray-300 rounded-lg p-2'
+			<div className='container mx-auto p-6'>
+				<h1 className='text-4xl font-bold text-center mb-8'>Relatórios</h1>
+				<div className='flex flex-col items-center mb-6'>
+					<div className='flex items-center space-x-4 mb-4'>
+						<label className='flex items-center space-x-2'>
+							<FaFilter className='text-gray-600' />
+							<span className='text-lg font-medium'>Tipo de Relatório:</span>
+						</label>
+						<select
+							value={reportType}
+							onChange={e => handleReportTypeChange(e.target.value)}
+							className='border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-blue-200 transition'
+						>
+							<option value='performance'>Performance</option>
+							<option value='financial'>Financeiro</option>
+							<option value='users'>Usuários</option>
+							<option value='occupancy'>Ocupação</option>
+						</select>
+					</div>
+					<form
+						onSubmit={handleSubmit}
+						className='flex flex-col md:flex-row items-center md:items-end space-y-2 md:space-y-0 md:space-x-4'
 					>
-						<option value='performance'>Performance</option>
-						<option value='financial'>Financeiro</option>
-						<option value='users'>Usuários</option>
-						<option value='occupancy'>Ocupação</option>
-					</select>
+						<div className='flex flex-col'>
+							<label
+								htmlFor='start_date'
+								className='text-sm text-gray-600 mb-1'
+							>
+								Data de Início
+							</label>
+							<input
+								type='date'
+								name='start_date'
+								className='input input-bordered p-2 border border-gray-300 rounded-lg w-full md:w-auto shadow-sm focus:ring focus:ring-blue-200 transition'
+								value={startDate}
+								onChange={e => setStartDate(e.target.value)}
+								required
+							/>
+						</div>
+
+						<div className='flex flex-col'>
+							<label
+								htmlFor='end_date'
+								className='text-sm text-gray-600 mb-1'
+							>
+								Data de Fim
+							</label>
+							<input
+								type='date'
+								name='end_date'
+								className='input input-bordered p-2 border border-gray-300 rounded-lg w-full md:w-auto shadow-sm focus:ring focus:ring-blue-200 transition'
+								value={endDate}
+								onChange={e => setEndDate(e.target.value)}
+								required
+							/>
+						</div>
+						<div className='flex items-center h-full'>
+							<button
+								type='submit'
+								className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 shadow-lg flex items-center justify-center space-x-2 mb-1'
+							>
+								<FaSync />
+								<span>Filtrar</span>
+							</button>
+						</div>
+					</form>
 				</div>
-				<form
-					onSubmit={handleSubmit}
-					className='mb-4 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'
-				>
-					<input
-						type='date'
-						name='start_date'
-						className='input input-bordered p-2 border border-gray-300 rounded-lg w-full md:w-auto'
-						value={startDate}
-						onChange={e => setStartDate(e.target.value)}
-						required
-					/>
-					<input
-						type='date'
-						name='end_date'
-						className='input input-bordered p-2 border border-gray-300 rounded-lg w-full md:w-auto'
-						value={endDate}
-						onChange={e => setEndDate(e.target.value)}
-						required
-					/>
-					<button
-						type='submit'
-						className='btn btn-primary bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto'
-					>
-						Filtrar
-					</button>
-				</form>
-				<div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 mb-4'>
+
+				<div className='flex justify-center space-x-4 mb-6'>
 					<button
 						onClick={() => exportToPDF(reports, reportType)}
-						className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto'
+						className='bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300 shadow-lg flex items-center justify-center space-x-2'
 					>
-						Exportar para PDF
+						<FaFilePdf />
+						<span>Exportar para PDF</span>
 					</button>
 					<button
 						onClick={() => exportToExcel(reports)}
-						className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full md:w-auto'
+						className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 shadow-lg flex items-center justify-center space-x-2'
 					>
-						Exportar para Excel
+						<FaFileExcel />
+						<span>Exportar para Excel</span>
 					</button>
 				</div>
-				{loading ?
-					<p>Carregando...</p>
+				{reports && reports.length <= 0 && loading ?
+					<p className='text-center text-lg'>Carregando...</p>
 				:	<>
-						<div className='block md:hidden'>{reports.map((report, index) => renderReportCard(report, index))}</div>
-						<div className='hidden md:block'>
-							<div className='overflow-x-auto'>
-								<table className='min-w-full bg-white'>
-									<thead className='bg-gray-200'>
-										{reportType === 'performance' && (
-											<tr>
-												<th className='py-2 px-4'>Data</th>
-												<th className='py-2 px-4'>Total de Reservas</th>
-											</tr>
-										)}
-										{reportType === 'financial' && (
-											<tr>
-												<th className='py-2 px-4'>Data</th>
-												<th className='py-2 px-4'>Valor Total</th>
-												<th className='py-2 px-4'>Total de Transações</th>
-											</tr>
-										)}
-										{reportType === 'users' && (
-											<tr>
-												<th className='py-2 px-4'>Data</th>
-												<th className='py-2 px-4'>Total de Usuários</th>
-											</tr>
-										)}
-										{reportType === 'occupancy' && (
-											<tr>
-												<th className='py-2 px-4'>ID do Campo</th>
-												<th className='py-2 px-4'>Total de Reservas</th>
-											</tr>
-										)}
-									</thead>
-									<tbody>
-										{reports.map((report, index) => (
-											<tr key={index}>
-												{reportType === 'performance' && (
-													<>
-														<td className='border px-4 py-2'>{report.date}</td>
-														<td className='border px-4 py-2'>{report.total_reservations}</td>
-													</>
-												)}
-												{reportType === 'financial' && (
-													<>
-														<td className='border px-4 py-2'>{report.date}</td>
-														<td className='border px-4 py-2'>{report.total_amount}</td>
-														<td className='border px-4 py-2'>{report.total_transactions}</td>
-													</>
-												)}
-												{reportType === 'users' && (
-													<>
-														<td className='border px-4 py-2'>{report.date}</td>
-														<td className='border px-4 py-2'>{report.total_users}</td>
-													</>
-												)}
-												{reportType === 'occupancy' && (
-													<>
-														<td className='border px-4 py-2'>{report.field_id}</td>
-														<td className='border px-4 py-2'>{report.total_reservations}</td>
-													</>
-												)}
-											</tr>
-										))}
-									</tbody>
-								</table>
+						{reports && reports.length > 0 ?
+							<>
+								<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center'>
+									{reports.map((report, index) => renderReportCard(report, index))}
+								</div>
+								<div className='flex justify-center items-center mt-8 space-x-4'>
+									<button
+										onClick={() => setPage(page - 1)}
+										disabled={page === 1}
+										className={`${page === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} px-4 py-2 text-white rounded-lg shadow-lg transition`}
+									>
+										Anterior
+									</button>
+									<span className='text-lg font-semibold'>
+										{page} de {totalPages}
+									</span>
+									<button
+										onClick={() => setPage(page + 1)}
+										disabled={page === totalPages}
+										className={`${page === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} px-4 py-2 text-white rounded-lg shadow-lg transition`}
+									>
+										Próxima
+									</button>
+								</div>
+								<div className='mt-8'>
+									<Line data={renderChartData()} />
+								</div>
+							</>
+						:	<div className='text-center'>
+								<h2 className='text-lg font-semibold'>
+									{reports && reports.length ? '' : 'Nenhum relatório disponível no momento.'}
+								</h2>
 							</div>
-						</div>
-						<div className='flex justify-center items-center my-4 space-x-4'>
-							<button
-								onClick={() => setPage(page - 1)}
-								disabled={page === 1}
-								className={`${page === 1 ? 'bg-gray-500 hover:bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} px-4 py-2 text-white rounded-lg`}
-							>
-								&laquo;
-							</button>
-							<span className='mx-2'>
-								{page} de {totalPages}
-							</span>
-							<button
-								onClick={() => setPage(page + 1)}
-								disabled={page === totalPages}
-								className={`${page === totalPages ? 'bg-gray-500 hover:bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} px-4 py-2 text-white rounded-lg`}
-							>
-								&raquo;
-							</button>
-						</div>
-						<div className='mt-8'>
-							<Line data={renderChartData()} />
-						</div>
+						}
 					</>
 				}
 			</div>
