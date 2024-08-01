@@ -5,6 +5,8 @@ import Sidebar from '../../../components/common/Sidebar';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 const Reports = () => {
 	const { token } = useAuth();
@@ -165,6 +167,38 @@ const Reports = () => {
 		}
 	};
 
+	const renderChartData = () => {
+		const labels = reports.map(report => report.date);
+		const data = (() => {
+			switch (reportType) {
+				case 'performance':
+					return reports.map(report => report.total_reservations);
+				case 'financial':
+					return reports.map(report => parseFloat(report.total_amount ?? '0'));
+				case 'users':
+					return reports.map(report => report.total_users);
+				case 'occupancy':
+					return reports.map(report => report.total_reservations);
+				default:
+					return [];
+			}
+		})();
+
+		return {
+			labels,
+			datasets: [
+				{
+					label: `Relatório de ${reportType.charAt(0).toUpperCase() + reportType.slice(1)}`,
+					data,
+					fill: false,
+					backgroundColor: 'rgba(75,192,192,0.2)',
+					borderColor: 'rgba(75,192,192,1)',
+					borderWidth: 1,
+				},
+			],
+		};
+	};
+
 	return (
 		<Sidebar>
 			<div className='container mx-auto p-4'>
@@ -309,6 +343,9 @@ const Reports = () => {
 							>
 								&raquo;
 							</button>
+						</div>
+						<div className='mt-8'>
+							<Line data={renderChartData()} />
 						</div>
 					</>
 				}
