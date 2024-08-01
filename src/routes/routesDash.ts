@@ -3,7 +3,8 @@ import Home from '../pages/Dashboard/Home';
 import FieldAvailabilities from '../pages/Dashboard/FieldAvailabilities';
 import { AiOutlineFieldTime } from 'react-icons/ai';
 import Users from '../pages/Dashboard/Users';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaChartLine } from 'react-icons/fa';
+import Reports from '../pages/Dashboard/Reports';
 
 const routesDash: IRoutes[] = [
 	{
@@ -31,6 +32,15 @@ const routesDash: IRoutes[] = [
 		protected: true,
 		adminOnly: true,
 		icon: FaUserCircle,
+	},
+	{
+		path: '/dashboard/reports',
+		component: Reports,
+		visibleInDisplay: true,
+		displayName: 'Relatórios',
+		protected: true,
+		adminOnly: true,
+		icon: FaChartLine,
 	},
 ];
 
