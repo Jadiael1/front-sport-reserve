@@ -285,7 +285,25 @@ const FieldAvailabilities = () => {
 						)}
 					</div>
 				</div>
-
+				<div className='flex justify-between items-center mt-4 mb-4'>
+					<button
+						disabled={pagination.current_page === 1}
+						onClick={() => handlePageChange(pagination.current_page - 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Anterior
+					</button>
+					<span>
+						Página {pagination.current_page} de {pagination.last_page}
+					</span>
+					<button
+						disabled={pagination.current_page === pagination.last_page}
+						onClick={() => handlePageChange(pagination.current_page + 1)}
+						className={`px-4 py-2 rounded ${pagination.current_page === pagination.last_page ? 'bg-gray-300' : 'bg-blue-500 text-white hover:bg-blue-700'}`}
+					>
+						Próxima
+					</button>
+				</div>
 				{/* Tabela para telas maiores */}
 				<div className='hidden lg:block'>
 					<div className='overflow-x-auto'>
