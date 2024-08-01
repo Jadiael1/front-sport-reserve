@@ -43,16 +43,20 @@ const HomePage = () => {
 	};
 
 	useEffect(() => {
+		const headers: HeadersInit = {
+			Accept: 'application/json',
+		};
+		if (user && user.is_admin) {
+			headers['Authorization'] = `Bearer ${token}`;
+		}
 		fetch(`${baseURL}/fields`, {
 			method: 'GET',
-			headers: {
-				Accept: 'application/json',
-			},
+			headers,
 		})
 			.then(resp => resp.json())
 			.then(resp => setResponseFields(resp))
 			.catch(err => console.error(err));
-	}, [baseURL]);
+	}, [baseURL, token, user]);
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
@@ -138,7 +142,7 @@ const HomePage = () => {
 								{responseFields.data.data.map(field => (
 									<div
 										key={field.id}
-										className='bg-white p-6 rounded-lg shadow-md w-full max-w-sm mx-auto'
+										className={`${field.status === 'inactive' ? 'opacity-50 bg-gray-200 cursor-not-allowed' : 'bg-white'} p-6 rounded-lg shadow-md w-full max-w-sm mx-auto`}
 									>
 										<h3 className='text-xl font-semibold mb-2 text-center'>{field.name}</h3>
 
@@ -207,6 +211,9 @@ const HomePage = () => {
 										</div>
 
 										<div className='flex flex-wrap justify-center gap-2'>
+											{field.status === 'inactive' ?
+												<p>Status: Inativo</p>
+											:	<p>✓</p>}
 											<button
 												className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full'
 												onClick={() => handleRentClick(field)}
