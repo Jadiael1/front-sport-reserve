@@ -131,11 +131,9 @@ const Reports = () => {
 		return (
 			<div
 				key={index}
-				className='bg-white shadow-lg rounded-lg p-4 mb-4 border border-gray-200 transition-transform hover:scale-105'
+				className='bg-white shadow-lg rounded-lg p-4 mx-4 my-4 border border-gray-200 transition-transform hover:scale-105'
 			>
-				<h4 className='font-bold text-center mb-2'>
-					{formatDateToLocale(report?.date ? report?.date : new Date().toISOString().split('T')[0])}
-				</h4>
+				<h4 className='font-bold text-center mb-2'>{report?.date ? formatDateToLocale(report?.date) : ''}</h4>
 				<ul>
 					{reportType === 'performance' && <li>Total de Reservas: {report.total_reservations}</li>}
 					{reportType === 'financial' && (
@@ -295,7 +293,7 @@ const Reports = () => {
 				:	<>
 						{reports && reports.length > 0 ?
 							<>
-								<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center'>
+								<div className='flex flex-row justify-center items-center'>
 									{reports.map((report, index) => renderReportCard(report, index))}
 								</div>
 								<div className='flex justify-center items-center mt-8 space-x-4'>
