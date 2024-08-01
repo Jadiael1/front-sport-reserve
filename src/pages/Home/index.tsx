@@ -82,7 +82,6 @@ const HomePage = () => {
 
 	const handleDeleteClick = async (field: IField) => {
 		setFieldToDelete(field);
-		// open confirmation modal
 		setConfirmationModal(true);
 	};
 
@@ -136,25 +135,50 @@ const HomePage = () => {
 	return (
 		<>
 			<Navbar />
-			<section className='mx-auto p-4 w-full bg-background min-h-screen'>
+			<section className='mx-auto p-4 w-full bg-background min-h-screen flex flex-col items-center'>
 				<div className='text-center mb-8'>
-					<h3 className='text-dark text-2xl md:text-3xl font-bold mt-5'>
+					<h3 className='text-gray-800 text-2xl md:text-3xl font-bold mt-5'>
 						Alugue nossas quadras esportivas com facilidade.
 					</h3>
-					<p className='mt-2'>Escolha uma das nossas quadras</p>
+					<p className='mt-2 text-gray-600'>Escolha uma das nossas quadras</p>
 				</div>
 
 				{responseFields ?
-					<div>
+					<div className='w-full flex flex-col items-center'>
 						{responseFields.data.data.length ?
 							<>
-								<div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+								<div className='flex justify-center items-center mt-8 space-x-4'>
+									<button
+										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+										disabled={currentPage === 1}
+										className={`${
+											currentPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+										} text-white py-2 px-4 rounded`}
+									>
+										&laquo;
+									</button>
+									<span className='text-lg font-bold'>
+										{currentPage} de {totalPages}
+									</span>
+									<button
+										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+										disabled={currentPage === totalPages}
+										className={`${
+											currentPage === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+										} text-white py-2 px-4 rounded`}
+									>
+										&raquo;
+									</button>
+								</div>
+								<div className='flex flex-row flex-wrap justify-center items-center'>
 									{responseFields.data.data.map(field => (
 										<div
 											key={field.id}
-											className={`${field.status === 'inactive' ? 'opacity-50 bg-gray-200' : 'bg-white'} p-6 rounded-lg shadow-md w-full max-w-sm mx-auto`}
+											className={`${
+												field.status === 'inactive' ? 'opacity-50 bg-gray-300' : 'bg-white'
+											} p-6 rounded-lg shadow-md w-full max-w-xs mx-2 my-2 max-h-[560px]`}
 										>
-											<h3 className='text-xl font-semibold mb-2 text-center'>{field.name}</h3>
+											<h3 className='text-xl font-semibold mb-2 text-center text-gray-800'>{field.name}</h3>
 
 											<div className='text-gray-700 mb-2 flex items-center'>
 												<FaMapMarkerAlt className='mr-2 text-red-500' />
@@ -191,7 +215,9 @@ const HomePage = () => {
 																	original={`${baseURL}/${image.path}`.replace('/api/v1/', '')}
 																	width={intrinsicSize[image.path]?.width || 0}
 																	height={intrinsicSize[image.path]?.height || 0}
-																	caption={`${intrinsicSize[image.path]?.width || 0}x${intrinsicSize[image.path]?.height || 0}`}
+																	caption={`${intrinsicSize[image.path]?.width || 0}x${
+																		intrinsicSize[image.path]?.height || 0
+																	}`}
 																>
 																	{({ ref, open }) => (
 																		<img
@@ -225,7 +251,9 @@ const HomePage = () => {
 													<p>Status: Inativo</p>
 												:	<p>✓</p>}
 												<button
-													className={`${field.status === 'inactive' ? 'hidden' : ''} bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full`}
+													className={`${
+														field.status === 'inactive' ? 'invisible' : ''
+													} bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full`}
 													onClick={() => handleRentClick(field)}
 												>
 													<FaShoppingCart className='mr-2' />
@@ -241,7 +269,9 @@ const HomePage = () => {
 															Editar
 														</button>
 														<button
-															className={`${field.status === 'inactive' ? 'hidden' : ''} bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center w-full`}
+															className={`${
+																field.status === 'inactive' ? 'invisible' : ''
+															} bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center w-full`}
 															onClick={() => handleDeleteClick(field)}
 														>
 															<FaTrash className='mr-2' />
@@ -257,7 +287,9 @@ const HomePage = () => {
 									<button
 										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
 										disabled={currentPage === 1}
-										className={`${currentPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded`}
+										className={`${
+											currentPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+										} text-white py-2 px-4 rounded`}
 									>
 										&laquo;
 									</button>
@@ -267,7 +299,9 @@ const HomePage = () => {
 									<button
 										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
 										disabled={currentPage === totalPages}
-										className={`${currentPage === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded`}
+										className={`${
+											currentPage === totalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+										} text-white py-2 px-4 rounded`}
 									>
 										&raquo;
 									</button>
