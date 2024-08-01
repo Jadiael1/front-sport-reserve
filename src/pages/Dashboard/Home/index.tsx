@@ -23,6 +23,13 @@ const Home = () => {
 						icon: <AiOutlineUser className='text-4xl text-blue-500 mb-2' />,
 						onClick: () => navigate('/dashboard/users'),
 					},
+					{
+						title: 'Relatórios',
+						description: 'Veja relatórios filtrando por data, com grafico e com opção de exportar para PDF.',
+						buttonText: 'Ir',
+						icon: <AiOutlineUser className='text-4xl text-blue-500 mb-2' />,
+						onClick: () => navigate('/dashboard/reports'),
+					},
 				].map((card, index) => (
 					<div
 						key={index}
