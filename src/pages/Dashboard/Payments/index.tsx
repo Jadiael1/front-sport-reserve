@@ -100,7 +100,11 @@ const Payments = () => {
 					:	prev,
 				);
 			} else {
-				alert('Falha ao atualizar status.');
+				messageManager.notify({
+					message: 'Falha ao atualizar status.',
+					type: 'error',
+					duration: 3000,
+				});
 			}
 		} catch (error) {
 			console.error('Error updating status:', error);
