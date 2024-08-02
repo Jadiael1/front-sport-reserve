@@ -5,7 +5,7 @@ type AlertProps = {
 	message: string;
 	errors?: { [key: string]: string[] } | null | string;
 	onClose: () => void;
-	type: 'success' | 'error';
+	type: 'success' | 'error' | 'warning' | 'info';
 	redirectTo?: string;
 };
 
@@ -13,11 +13,18 @@ const Alert: React.FC<AlertProps> = ({ message, errors, onClose, type, redirectT
 	const navigate = useNavigate();
 
 	const alertStyles =
-		type === 'success' ?
-			'bg-green-100 border border-green-400 text-green-700'
-		:	'bg-red-100 border border-red-400 text-red-700';
+		type === 'success' ? 'bg-green-100 border border-green-400 text-green-700'
+		: type === 'error' ? 'bg-red-100 border border-red-400 text-red-700'
+		: type === 'warning' ? 'bg-yellow-100 border border-yellow-400 text-yellow-700'
+		: type === 'info' ? 'bg-blue-100 border border-blue-400 text-blue-700'
+		: '';
 
-	const iconColor = type === 'success' ? 'text-green-500' : 'text-red-500';
+	const iconColor =
+		type === 'success' ? 'text-green-500'
+		: type === 'error' ? 'text-red-500'
+		: type === 'warning' ? 'text-yellow-500'
+		: type === 'info' ? 'text-blue-500'
+		: '';
 
 	const handleRedirect = () => {
 		if (redirectTo) {
@@ -30,7 +37,17 @@ const Alert: React.FC<AlertProps> = ({ message, errors, onClose, type, redirectT
 			className={`${alertStyles} px-4 py-3 rounded relative`}
 			role='alert'
 		>
-			<strong className='font-bold'>{type === 'success' ? 'Success: ' : 'Error: '}</strong>
+			<strong className='font-bold'>
+				{type === 'success' ?
+					'Success: '
+				: type === 'error' ?
+					'Error: '
+				: type === 'warning' ?
+					'Warning: '
+				: type === 'info' ?
+					'Info: '
+				:	''}
+			</strong>
 			<span className='block sm:inline'>{message}</span>
 			{redirectTo && (
 				<span
