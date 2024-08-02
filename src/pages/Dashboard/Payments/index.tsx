@@ -67,7 +67,7 @@ const Payments = () => {
 			case 'CANCELED':
 				return 'Cancelado';
 			case 'INACTIVE':
-				return 'Inativo';
+				return 'Inativado';
 			default:
 				return 'Desconhecido';
 		}
@@ -97,7 +97,9 @@ const Payments = () => {
 	const renderActionButton = (payment: IPayments) => {
 		const now = new Date();
 		const startTime = new Date(payment.reservation.start_time);
-		const canToggle = startTime > now && (payment.status === 'WAITING' || payment.status === 'CANCELED');
+		const canToggle =
+			startTime > now &&
+			(payment.status === 'WAITING' || payment.status === 'CANCELED' || payment.status === 'INACTIVE');
 
 		const toggleText = payment.status === 'WAITING' ? 'Inativar' : 'Ativar';
 		const toggleColor = payment.status === 'WAITING' ? 'bg-red-500' : 'bg-green-500';
@@ -166,6 +168,7 @@ const Payments = () => {
 									<th className='py-2 px-4 border'>Quantia</th>
 									<th className='py-2 px-4 border'>Status</th>
 									<th className='py-2 px-4 border'>Data Pagamento</th>
+									<th className='py-2 px-4 border'>Data Reserva</th>
 									<th className='py-2 px-4 border'>Url Pagamento</th>
 									<th className='py-2 px-4 border'>Ações</th>
 								</tr>
@@ -191,6 +194,11 @@ const Payments = () => {
 												<td className='py-2 px-4 border'>
 													<div className='flex flex-col justify-center items-center'>
 														{formatDate(payment.payment_date)}
+													</div>
+												</td>
+												<td className='py-2 px-4 border'>
+													<div className='flex flex-col justify-center items-center'>
+														{formatDate(payment.reservation.start_time)} as {formatDate(payment.reservation.end_time)}
 													</div>
 												</td>
 												<td className='py-2 px-4 border'>
@@ -233,6 +241,10 @@ const Payments = () => {
 									</p>
 									<p>
 										<strong>Data Pagamento:</strong> {formatDate(payment.payment_date)}
+									</p>
+									<p>
+										<strong>Data Reserva:</strong> {formatDate(payment.reservation.start_time)} as{' '}
+										{formatDate(payment.reservation.end_time)}
 									</p>
 									<p>
 										<strong>Url Pagamento:</strong>{' '}
