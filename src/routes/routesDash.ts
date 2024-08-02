@@ -3,8 +3,9 @@ import Home from '../pages/Dashboard/Home';
 import FieldAvailabilities from '../pages/Dashboard/FieldAvailabilities';
 import { AiOutlineFieldTime } from 'react-icons/ai';
 import Users from '../pages/Dashboard/Users';
-import { FaUserCircle, FaChartLine } from 'react-icons/fa';
+import { FaUserCircle, FaChartLine, FaCreditCard } from 'react-icons/fa';
 import Reports from '../pages/Dashboard/Reports';
+import Payments from '../pages/Dashboard/Payments';
 
 const routesDash: IRoutes[] = [
 	{
@@ -41,6 +42,15 @@ const routesDash: IRoutes[] = [
 		protected: true,
 		adminOnly: true,
 		icon: FaChartLine,
+	},
+	{
+		path: '/dashboard/payments',
+		component: Payments,
+		visibleInDisplay: true,
+		displayName: 'Pagamentos',
+		protected: true,
+		adminOnly: true,
+		icon: FaCreditCard,
 	},
 ];
 
