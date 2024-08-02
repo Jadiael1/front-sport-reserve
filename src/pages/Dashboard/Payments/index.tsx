@@ -66,6 +66,8 @@ const Payments = () => {
 				return 'Pago';
 			case 'CANCELED':
 				return 'Cancelado';
+			case 'INACTIVE':
+				return 'Inativo';
 			default:
 				return 'Desconhecido';
 		}
