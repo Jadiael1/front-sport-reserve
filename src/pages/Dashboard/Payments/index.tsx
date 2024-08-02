@@ -4,6 +4,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { IPayments } from '../../../interfaces/IPayments';
 import { FaChevronLeft, FaChevronRight, FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
 import Alert from '../../../components/common/Alert';
+import { messageManager } from '../../../components/common/Message/messageInstance';
 
 const Payments = () => {
 	const { token } = useAuth();
@@ -84,8 +85,20 @@ const Payments = () => {
 			});
 			const data = await response.json();
 			if (data.status === 'success') {
-				alert('Status atualizado com sucesso.');
-				fetchPayments(pagination.current_page);
+				messageManager.notify({
+					message: 'Status atualizado com sucesso.',
+					type: 'success',
+					duration: 3000,
+				});
+				setPayments(prev =>
+					prev ?
+						prev.map(payment =>
+							payment.checkout_id === data.data.checkout_id ?
+								{ ...payment, status: data.data.current_status }
+							:	payment,
+						)
+					:	prev,
+				);
 			} else {
 				alert('Falha ao atualizar status.');
 			}
