@@ -158,7 +158,7 @@ const Payments = () => {
 		const toggleColor = payment.status === 'WAITING' ? 'bg-red-500' : 'bg-green-500';
 		const hoverColor = payment.status === 'WAITING' ? 'hover:bg-red-700' : 'hover:bg-green-700';
 
-		const canRefund = payment.status === 'PAID';
+		const canRefund = payment.status === 'PAID' && payment.charge_id;
 
 		return (
 			<div className='flex justify-center gap-2'>
