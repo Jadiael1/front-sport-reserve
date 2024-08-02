@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Sidebar from '../../../components/common/Sidebar';
 import { useAuth } from '../../../hooks/useAuth';
 import { IPayments } from '../../../interfaces/IPayments';
-import { FaChevronLeft, FaChevronRight, FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaTimesCircle, FaCheckCircle, FaUndo } from 'react-icons/fa';
 import Alert from '../../../components/common/Alert';
 import { messageManager } from '../../../components/common/Message/messageInstance';
 
@@ -69,6 +69,8 @@ const Payments = () => {
 				return 'Cancelado';
 			case 'INACTIVE':
 				return 'Inativado';
+			case 'REFUNDED':
+				return 'Reembolsado';
 			default:
 				return 'Desconhecido';
 		}
@@ -111,6 +113,40 @@ const Payments = () => {
 		}
 	};
 
+	// New function to handle refund
+	const handleRefund = async (chargeId: string) => {
+		try {
+			const response = await fetch(`${baseURL}/payments/${chargeId}/refund`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					Accept: 'application/json',
+				},
+			});
+			const data = await response.json();
+			if (data.status === 'success') {
+				messageManager.notify({
+					message: 'Pagamento estornado com sucesso.',
+					type: 'success',
+					duration: 3000,
+				});
+				setPayments(prev =>
+					prev ?
+						prev.map(payment => (payment.id === data.data.payment_id ? { ...payment, status: 'REFUNDED' } : payment))
+					:	prev,
+				);
+			} else {
+				messageManager.notify({
+					message: 'Falha ao estornar pagamento.',
+					type: 'error',
+					duration: 3000,
+				});
+			}
+		} catch (error) {
+			console.error('Error processing refund:', error);
+		}
+	};
+
 	const renderActionButton = (payment: IPayments) => {
 		const now = new Date();
 		const startTime = new Date(payment.reservation.start_time);
@@ -122,8 +158,10 @@ const Payments = () => {
 		const toggleColor = payment.status === 'WAITING' ? 'bg-red-500' : 'bg-green-500';
 		const hoverColor = payment.status === 'WAITING' ? 'hover:bg-red-700' : 'hover:bg-green-700';
 
+		const canRefund = payment.status === 'PAID';
+
 		return (
-			<div className='flex justify-center'>
+			<div className='flex justify-center gap-2'>
 				<button
 					onClick={() => handleToggleStatus(payment.checkout_id)}
 					className={`w-28 ${canToggle ? toggleColor + ' ' + hoverColor : 'opacity-50 bg-gray-500 hover:bg-gray-700'} text-white px-2 py-1 rounded transition flex items-center justify-center`}
@@ -133,6 +171,14 @@ const Payments = () => {
 						<FaTimesCircle className='mr-1' />
 					:	<FaCheckCircle className='mr-1' />}
 					{toggleText}
+				</button>
+
+				<button
+					onClick={() => handleRefund(payment.charge_id)}
+					className={`w-28 ${canRefund ? 'bg-yellow-500 hover:bg-yellow-700' : 'opacity-50 bg-gray-500 hover:bg-gray-700'} text-white px-2 py-1 rounded transition flex items-center justify-center`}
+					disabled={!canRefund}
+				>
+					<FaUndo className='mr-1' /> Estornar
 				</button>
 			</div>
 		);
