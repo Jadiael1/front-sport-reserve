@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../../components/common/Sidebar';
-import { AiOutlineFieldTime, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineCreditCard, AiOutlineFieldTime, AiOutlineUser } from 'react-icons/ai';
 
 const Home = () => {
 	const navigate = useNavigate();
@@ -29,6 +29,14 @@ const Home = () => {
 						buttonText: 'Ir',
 						icon: <AiOutlineUser className='text-4xl text-blue-500 mb-2' />,
 						onClick: () => navigate('/dashboard/reports'),
+					},
+					{
+						title: 'Pagamentos',
+						description:
+							'Acesse relatórios detalhados de todos os checkouts criados. Ative ou desative checkouts com facilidade, processe estornos para pagamentos concluídos e veja informações completas sobre cada checkout em aberto.',
+						buttonText: 'Ir',
+						icon: <AiOutlineCreditCard className='text-4xl text-blue-500 mb-2' />,
+						onClick: () => navigate('/dashboard/payments'),
 					},
 				].map((card, index) => (
 					<div
