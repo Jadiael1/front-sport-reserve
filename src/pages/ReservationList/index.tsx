@@ -220,7 +220,8 @@ const ReservationList = () => {
 												<h2 className='text-xl font-bold mb-2 text-center'>{reservation.field.name}</h2>
 												<p className='text-gray-700 mb-1'>
 													<span className='font-bold'>Local: </span>
-													{reservation.field.location}
+													{reservation.field.address}, {reservation.field.number}, {reservation.field.district},{' '}
+													{reservation.field.city} - {reservation.field.uf}, CEP: {reservation.field.cep}
 												</p>
 												<p className='text-gray-700 mb-1'>
 													<span className='font-bold'>Tipo: </span> {reservation.field.type}
