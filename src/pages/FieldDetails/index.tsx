@@ -35,7 +35,6 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	// const apiIsLoaded = useApiIsLoaded();
-	console.log(idParam);
 
 	useEffect(() => {
 		if (!field) {
