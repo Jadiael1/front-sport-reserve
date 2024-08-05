@@ -181,7 +181,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							<Map
 								style={containerStyle}
 								defaultCenter={initialCenter}
-								defaultZoom={14}
+								defaultZoom={15}
 								gestureHandling='satellite2'
 								disableDefaultUI={true}
 								mapId='MAP_SR_ID_R'
