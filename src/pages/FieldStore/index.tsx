@@ -159,6 +159,38 @@ const FieldForm = () => {
 								onChange={e => setName(e.target.value)}
 							/>
 						</div>
+						<div className='relative'>
+							<label
+								htmlFor='type'
+								className='text-sm text-gray-600'
+							>
+								<FaTag className='inline-block mr-2' /> Modalidade
+							</label>
+							<input
+								id='type'
+								type='text'
+								className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
+								required
+								value={type}
+								onChange={e => setType(e.target.value)}
+							/>
+						</div>
+						<div className='relative'>
+							<label
+								htmlFor='hourlyRate'
+								className='text-sm text-gray-600'
+							>
+								<FaMoneyBill className='inline-block mr-2' /> Valor por hora
+							</label>
+							<input
+								id='hourlyRate'
+								type='number'
+								className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
+								required
+								value={hourlyRate}
+								onChange={e => setHourlyRate(e.target.value)}
+							/>
+						</div>
 						<div className='col-span-1 md:col-span-2'>
 							<h3 className='text-sm text-gray-600 mb-2'>Selecione a localização no mapa:</h3>
 							{apiIsLoaded ?
@@ -210,38 +242,6 @@ const FieldForm = () => {
 									</div>
 								</div>
 							}
-						</div>
-						<div className='relative'>
-							<label
-								htmlFor='type'
-								className='text-sm text-gray-600'
-							>
-								<FaTag className='inline-block mr-2' /> Modalidade
-							</label>
-							<input
-								id='type'
-								type='text'
-								className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
-								required
-								value={type}
-								onChange={e => setType(e.target.value)}
-							/>
-						</div>
-						<div className='relative'>
-							<label
-								htmlFor='hourlyRate'
-								className='text-sm text-gray-600'
-							>
-								<FaMoneyBill className='inline-block mr-2' /> Valor por hora
-							</label>
-							<input
-								id='hourlyRate'
-								type='number'
-								className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
-								required
-								value={hourlyRate}
-								onChange={e => setHourlyRate(e.target.value)}
-							/>
 						</div>
 						<div className='relative'>
 							<label
