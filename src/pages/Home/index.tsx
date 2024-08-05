@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import Modal from '../../components/common/Modal';
 import Carousel from '../../components/common/Carousel';
 import Navbar from '../../components/common/NavBar/NavBar';
-import { FaFutbol, FaMapMarkerAlt, FaDollarSign, FaShoppingCart, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaFutbol, FaDollarSign, FaShoppingCart, FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
 import FieldDetails from '../FieldDetails';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
@@ -181,11 +181,6 @@ const HomePage = () => {
 											<h3 className='text-xl font-semibold mb-2 text-center text-gray-800'>{field.name}</h3>
 
 											<div className='text-gray-700 mb-2 flex items-center'>
-												<FaMapMarkerAlt className='mr-2 text-red-500' />
-												<h3 className='font-bold mr-1'>Localização:</h3>
-												<p>{field.location}</p>
-											</div>
-											<div className='text-gray-700 mb-2 flex items-center'>
 												<FaFutbol className='mr-2' />
 												<h3 className='font-bold mr-1'>Modalidade:</h3>
 												<span>{field.type}</span>
@@ -194,6 +189,15 @@ const HomePage = () => {
 												<FaDollarSign className='mr-2 text-green-400' />
 												<h3 className='font-bold mr-1'>Valor da hora:</h3>
 												<span>R$ {field.hourly_rate}</span>
+											</div>
+											<div className='flex items-center justify-end'>
+												<button
+													onClick={() => navigate(`/field/${field.id}`, { state: { field } })}
+													className='my-2 flex items-center text-blue-600 hover:text-blue-800 hover:underline transition duration-200'
+												>
+													<FaInfoCircle className='mr-1' />
+													Mais detalhes
+												</button>
 											</div>
 											<div className='h-48 mb-5'>
 												<Gallery
