@@ -1,13 +1,21 @@
-import { FaFutbol, FaMapMarkerAlt, FaDollarSign, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
+import {
+	FaFutbol,
+	FaMapMarkerAlt,
+	FaDollarSign,
+	FaCheckCircle,
+	FaInfoCircle,
+	FaExclamationTriangle,
+} from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import Alert from '../../components/common/Alert';
 import DatePicker from '../../components/common/DatePicker';
 import { IField } from '../../interfaces/IField';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { messageManager } from '../../components/common/Message/messageInstance';
 import { Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import Navbar from '../../components/common/NavBar/NavBar';
+import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 
 interface FieldDetailsProps {
 	field: IField;
@@ -24,7 +32,7 @@ const initialCenter = {
 };
 
 const FieldDetails = (props?: FieldDetailsProps) => {
-	const { token } = useAuth();
+	const { user, token } = useAuth();
 	const idParam = useParams<{ id: string }>();
 	const location = useLocation();
 	const [field, setField] = useState<IField | null>(location.state?.field || props?.field || null);
@@ -34,6 +42,8 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 	const [error, setError] = useState<{ message: string; errors?: { [key: string]: string[] } } | null>(null);
 	const [success, setSuccess] = useState<{ message: string } | null>(null);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
+	const navigate = useNavigate();
+	const [fieldAvailabilities, setFieldAvailabilities] = useState<IFieldAvailability[] | null>(null);
 	// const apiIsLoaded = useApiIsLoaded();
 
 	useEffect(() => {
@@ -66,6 +76,24 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 					});
 				});
 		}
+
+		setLoading(true);
+		fetch(`${baseURL}/fieldAvailabilities/${idParam.id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				Accept: 'application/json',
+			},
+		})
+			.then(resp => resp.json())
+			.then(resp => {
+				if (resp.status === 'error') {
+					throw new Error(resp.message);
+				}
+				setFieldAvailabilities(resp.data);
+			})
+			.catch(console.error)
+			.finally(() => setLoading(false));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -176,6 +204,64 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							<h3 className='font-bold'>Complemento:</h3>
 							<p>{field.complement}</p>
 						</div>
+						{!loading && (
+							<div className='p-4 rounded-lg shadow-md bg-white border border-gray-200 max-w mx-auto mb-4'>
+								{fieldAvailabilities ?
+									<>
+										<h2 className='text-lg font-semibold text-gray-700 mb-4'>Disponibilidade de Campo:</h2>
+										<table className='min-w-full table-auto border-collapse'>
+											<thead>
+												<tr>
+													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+														Dia da Semana
+													</th>
+													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+														Hora de Início
+													</th>
+													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+														Hora de Fim
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												{fieldAvailabilities.map((availability, index) => (
+													<tr
+														key={index}
+														className='bg-blue-100'
+													>
+														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.day_of_week}</td>
+														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.start_time}</td>
+														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.end_time}</td>
+													</tr>
+												))}
+											</tbody>
+										</table>
+										{user && user?.is_admin && (
+											<button
+												onClick={() => navigate(`/dashboard/field-availabilities`)}
+												className='items-center space-x-1 text-blue-500 hover:text-blue-700 mt-4'
+											>
+												<span>Adicionar Disponibilidades</span>
+											</button>
+										)}
+									</>
+								:	<div className='flex items-center space-x-2'>
+										<FaExclamationTriangle className='text-red-500 w-5 h-5' />
+										<span className='text-red-500 font-medium text-sm'>
+											Este campo só poderá ser ativado se houver registro de disponibilidade.{' '}
+											{user && user?.is_admin && (
+												<button
+													onClick={() => navigate(`/dashboard/field-availabilities`)}
+													className='inline-flex items-center space-x-1 text-blue-500 hover:text-blue-700 font-semibold'
+												>
+													<span>Registrar</span>
+												</button>
+											)}
+										</span>
+									</div>
+								}
+							</div>
+						)}
 						<div className='mt-4'>
 							<h3 className='font-bold mb-2'>Localização no Mapa:</h3>
 							<Map
