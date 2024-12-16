@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IField } from '../../interfaces/IField';
 import { useAuth } from '../../hooks/useAuth';
-import { FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { FaTrash, FaArrowLeft, FaExclamationTriangle } from 'react-icons/fa';
 import { LuImagePlus } from 'react-icons/lu';
 import { messageManager } from '../../components/common/Message/messageInstance';
 import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 import AnimateSpin from '../../assets/svg/AnimateSpin';
 import goBack from '../../utils/goBack';
+import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 
 const FieldUpdateForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { token } = useAuth();
+	const { user, token } = useAuth();
 	const { id } = useParams<{ id: string }>();
 	const [field, setField] = useState<IField | null>(location.state?.field || null);
+	const [fieldAvailabilities, setFieldAvailabilities] = useState<IFieldAvailability[] | null>(null);
 
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -36,6 +38,23 @@ const FieldUpdateForm = () => {
 				})
 				.catch(console.error);
 		}
+		setLoading(true);
+		fetch(`${baseURL}/fieldAvailabilities/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				Accept: 'application/json',
+			},
+		})
+			.then(resp => resp.json())
+			.then(resp => {
+				if (resp.status === 'error') {
+					throw new Error(resp.message);
+				}
+				setFieldAvailabilities(resp.data);
+			})
+			.catch(console.error)
+			.finally(() => setLoading(false));
 	}, [baseURL, field, id, token]);
 
 	const handleUpdateField = async () => {
@@ -300,7 +319,64 @@ const FieldUpdateForm = () => {
 						<option value='inactive'>Inativo</option>
 					</select>
 				</div>
-
+				{!loading && (
+					<div className='p-4 rounded-lg shadow-md bg-white border border-gray-200 max-w mx-auto mb-4'>
+						{fieldAvailabilities ?
+							<>
+								<h2 className='text-lg font-semibold text-gray-700 mb-4'>Disponibilidade de Campo:</h2>
+								<table className='min-w-full table-auto border-collapse'>
+									<thead>
+										<tr>
+											<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+												Dia da Semana
+											</th>
+											<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+												Hora de Início
+											</th>
+											<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
+												Hora de Fim
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{fieldAvailabilities.map((availability, index) => (
+											<tr
+												key={index}
+												className='bg-blue-100'
+											>
+												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.day_of_week}</td>
+												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.start_time}</td>
+												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.end_time}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+								{user && user?.is_admin && (
+									<button
+										onClick={() => navigate(`/dashboard/field-availabilities`)}
+										className='items-center space-x-1 text-blue-500 hover:text-blue-700 mt-4'
+									>
+										<span>Adicionar Disponibilidades</span>
+									</button>
+								)}
+							</>
+						:	<div className='flex items-center space-x-2'>
+								<FaExclamationTriangle className='text-red-500 w-5 h-5' />
+								<span className='text-red-500 font-medium text-sm'>
+									Este campo só poderá ser ativado se houver registro de disponibilidade.{' '}
+									{user && user?.is_admin && (
+										<button
+											onClick={() => navigate(`/dashboard/field-availabilities`)}
+											className='inline-flex items-center space-x-1 text-blue-500 hover:text-blue-700 font-semibold'
+										>
+											<span>Registrar</span>
+										</button>
+									)}
+								</span>
+							</div>
+						}
+					</div>
+				)}
 				<h3 className='text-xl font-semibold mb-2 text-center'>Imagens da arena</h3>
 
 				<div className='flex items-center justify-between p-3 flex-wrap'>
@@ -333,7 +409,7 @@ const FieldUpdateForm = () => {
 								className='relative flex flex-col items-center bg-gray-100 p-3 rounded-xl'
 							>
 								<img
-									src={`${baseURL}/${image.path}`.replace('api/v1/', 'public')}
+									src={`${baseURL}/${image.path}`.replace('api/v1/', '')}
 									alt={`Field ${field.name}`}
 									className='w-full h-32 object-cover mb-2 rounded'
 								/>
