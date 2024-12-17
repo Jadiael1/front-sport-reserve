@@ -85,7 +85,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 		}
 
 		setLoading(true);
-		fetch(`${baseURL}/fieldAvailabilities/${idParam.id}`, {
+		fetch(`${baseURL}/fieldAvailabilities/${idParam.id || field?.id}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
