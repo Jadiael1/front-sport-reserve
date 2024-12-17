@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IField } from '../../interfaces/IField';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,6 +10,21 @@ import AnimateSpin from '../../assets/svg/AnimateSpin';
 import goBack from '../../utils/goBack';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+// ícones corretos do leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+
+const defaultIcon = L.icon({
+	iconRetinaUrl: iconRetinaUrl,
+	iconUrl: icon,
+	shadowUrl: iconShadow,
+});
+
+L.Marker.prototype.options.icon = defaultIcon;
 
 const FieldUpdateForm = () => {
 	const location = useLocation();
@@ -23,6 +38,11 @@ const FieldUpdateForm = () => {
 	const [loading, setLoading] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
+	const MapEvents = () => {
+		useMapEvents({ click: e => setField(prev => prev && { ...prev, location: JSON.stringify(e.latlng) }) });
+		return null;
+	};
+	const mapRef = useRef<L.Map | null>(null);
 
 	useEffect(() => {
 		if (!field) {
@@ -56,7 +76,8 @@ const FieldUpdateForm = () => {
 			})
 			.catch(console.error)
 			.finally(() => setLoading(false));
-	}, [baseURL, field, id, token]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [baseURL, id, token]);
 
 	const handleUpdateField = async () => {
 		if (!field) return;
@@ -324,7 +345,7 @@ const FieldUpdateForm = () => {
 					<div className='p-4 rounded-lg shadow-md bg-white border border-gray-200 max-w mx-auto mb-4'>
 						{fieldAvailabilities ?
 							<>
-								<h2 className='text-lg font-semibold text-gray-700 mb-4'>Disponibilidade de Campo:</h2>
+								<h2 className='text-lg font-semibold text-gray-700 mb-4'>Disponibilidades do Campo:</h2>
 								<table className='min-w-full table-auto border-collapse'>
 									<thead>
 										<tr>
@@ -380,6 +401,42 @@ const FieldUpdateForm = () => {
 						}
 					</div>
 				)}
+
+				<h3 className='text-sm text-gray-600 mb-2'>Informe a localização no mapa:</h3>
+				<MapContainer
+					center={[
+						JSON.parse(field?.location || '{ lat: -8.680645 }').lat,
+						JSON.parse(field?.location || '{ lng: -35.585074 }').lng,
+					]} // Posição inicial
+					zoom={18}
+					style={{ height: '400px', width: '100%' }}
+					ref={mapRef}
+				>
+					<TileLayer
+						url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+					/>
+					<MapEvents />
+					{location && (
+						<Marker
+							position={[
+								JSON.parse(field?.location || '{ lat: -8.680645 }').lat,
+								JSON.parse(field?.location || '{ lng: -35.585074 }').lng,
+							]}
+							draggable={true}
+							eventHandlers={{
+								dragend: e => {
+									const marker = e.target;
+									const newPosition = marker.getLatLng();
+									setField(
+										prev =>
+											prev && { ...prev, location: JSON.stringify({ lat: newPosition.lat, lng: newPosition.lng }) },
+									);
+								},
+							}}
+						/>
+					)}
+				</MapContainer>
 				<h3 className='text-xl font-semibold mb-2 text-center'>Imagens da arena</h3>
 
 				<div className='flex items-center justify-between p-3 flex-wrap'>
