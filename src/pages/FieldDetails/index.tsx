@@ -13,24 +13,26 @@ import DatePicker from '../../components/common/DatePicker';
 import { IField } from '../../interfaces/IField';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { messageManager } from '../../components/common/Message/messageInstance';
-import { Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import Navbar from '../../components/common/NavBar/NavBar';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
+import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+// ícones corretos do leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+const defaultIcon = L.icon({
+	iconRetinaUrl: iconRetinaUrl,
+	iconUrl: icon,
+	shadowUrl: iconShadow,
+});
 
+L.Marker.prototype.options.icon = defaultIcon;
 interface FieldDetailsProps {
 	field: IField;
 }
-
-const containerStyle = {
-	width: '100%',
-	height: '300px',
-};
-
-const initialCenter = {
-	lat: -8.6855317,
-	lng: -35.5914402,
-};
 
 const FieldDetails = (props?: FieldDetailsProps) => {
 	const { user, token } = useAuth();
@@ -45,7 +47,11 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const navigate = useNavigate();
 	const [fieldAvailabilities, setFieldAvailabilities] = useState<IFieldAvailability[] | null>(null);
-	// const apiIsLoaded = useApiIsLoaded();
+
+	const initialCenter = {
+		lat: JSON.parse(field?.location || '{ lat: -8.680645 }').lat,
+		lng: JSON.parse(field?.location || '{ lng: -35.585074 }').lng,
+	};
 
 	useEffect(() => {
 		if (!field) {
@@ -141,17 +147,6 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 			});
 	};
 
-	const parseLocation = (locationString: string) => {
-		try {
-			return JSON.parse(locationString);
-		} catch (e) {
-			console.error('Error parsing location:', e);
-			return initialCenter;
-		}
-	};
-
-	const fieldLocation = field ? parseLocation(field.location) : initialCenter;
-
 	return (
 		<>
 			{idParam && !props?.field && location.state?.field ?
@@ -206,39 +201,48 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							<p>{field.complement}</p>
 						</div>
 						{!loading && (
-							<div className='p-4 rounded-lg shadow-md bg-white border border-gray-200 max-w mx-auto mb-4'>
+							<div className='p-4 max-w-3xl mx-auto mb-4'>
 								{fieldAvailabilities ?
 									<>
-										<h2 className='text-lg font-semibold text-gray-700 mb-4'>Disponibilidade de Campo:</h2>
-										<table className='min-w-full table-auto border-collapse'>
-											<thead>
-												<tr>
-													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
-														Dia da Semana
-													</th>
-													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
-														Hora de Início
-													</th>
-													<th className='px-4 py-2 text-left font-medium text-sm text-gray-700 border-b border-gray-300'>
-														Hora de Fim
-													</th>
-												</tr>
-											</thead>
-											<tbody>
-												{fieldAvailabilities.map((availability, index) => (
-													<tr
-														key={index}
-														className='bg-blue-100'
-													>
-														<td className='px-4 py-2 text-sm border-b border-gray-200'>
-															{translateDaysOfTheWeek(availability.day_of_week)}
-														</td>
-														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.start_time}</td>
-														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.end_time}</td>
+										<h2 className='text-lg font-semibold text-gray-700 mb-1'>Disponibilidades do Campo:</h2>
+										<div className='overflow-x-auto relative shadow-md sm:rounded-lg'>
+											<table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+												<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+													<tr>
+														<th
+															scope='col'
+															className='py-3 px-6'
+														>
+															Dia da Semana
+														</th>
+														<th
+															scope='col'
+															className='py-3 px-6'
+														>
+															Hora de Início
+														</th>
+														<th
+															scope='col'
+															className='py-3 px-6'
+														>
+															Hora de Fim
+														</th>
 													</tr>
-												))}
-											</tbody>
-										</table>
+												</thead>
+												<tbody>
+													{fieldAvailabilities.map((availability, index) => (
+														<tr
+															key={index}
+															className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+														>
+															<td className='py-4 px-6'>{translateDaysOfTheWeek(availability.day_of_week)}</td>
+															<td className='py-4 px-6'>{availability.start_time}</td>
+															<td className='py-4 px-6'>{availability.end_time}</td>
+														</tr>
+													))}
+												</tbody>
+											</table>
+										</div>
 										{user && user?.is_admin && (
 											<button
 												onClick={() => navigate(`/dashboard/field-availabilities`)}
@@ -265,25 +269,26 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 								}
 							</div>
 						)}
-						<div className='mt-4'>
-							<h3 className='font-bold mb-2'>Localização no Mapa:</h3>
-							<Map
-								style={containerStyle}
-								defaultCenter={initialCenter}
-								defaultZoom={15}
-								gestureHandling='satellite2'
-								disableDefaultUI={true}
-								mapId='MAP_SR_ID_R'
-								id='MAP_SR_ID_R'
+						<h3 className='font-bold mb-2'>Localização no Mapa:</h3>
+						<div className='mt-4 w-full flex justify-center items-center'>
+							{/* <iframe
+								width='600'
+								height='450'
+								loading='lazy'
+								allowFullScreen
+								src={`https://www.openstreetmap.org/export/embed.html?bbox=${initialCenter.lng - 0.001}%2C${initialCenter.lat - 0.001}%2C${initialCenter.lng + 0.001}%2C${initialCenter.lat + 0.001}&layer=mapnik&marker=${initialCenter.lat}%2C${initialCenter.lng}`}
+							></iframe> */}
+							<MapContainer
+								center={[initialCenter.lat, initialCenter.lng]} // Posição inicial
+								zoom={18}
+								style={{ height: '400px', width: '100%' }}
 							>
-								<AdvancedMarker
-									position={fieldLocation}
-									clickable={false}
-									title='Localização do Campo'
-									onDrag={() => null}
-									draggable={false}
+								<TileLayer
+									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 								/>
-							</Map>
+								{location && <Marker position={[initialCenter.lat, initialCenter.lng]} />}
+							</MapContainer>
 						</div>
 						<p className='text-center mt-4'>Selecione a data e hora que deseja reservar</p>
 						<div className='flex items-center justify-evenly flex-wrap'>
