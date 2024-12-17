@@ -200,7 +200,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							<h3 className='font-bold'>Complemento:</h3>
 							<p>{field.complement}</p>
 						</div>
-						{!loading && (
+						{!loading ?
 							<div className='p-4 max-w-3xl mx-auto mb-4'>
 								{fieldAvailabilities ?
 									<>
@@ -268,7 +268,7 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 									</div>
 								}
 							</div>
-						)}
+						:	null}
 						<h3 className='font-bold mb-2'>Localização no Mapa:</h3>
 						<div className='mt-4 w-full flex justify-center items-center'>
 							{/* <iframe
