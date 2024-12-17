@@ -9,6 +9,7 @@ import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 import AnimateSpin from '../../assets/svg/AnimateSpin';
 import goBack from '../../utils/goBack';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
+import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
 
 const FieldUpdateForm = () => {
 	const location = useLocation();
@@ -344,7 +345,9 @@ const FieldUpdateForm = () => {
 												key={index}
 												className='bg-blue-100'
 											>
-												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.day_of_week}</td>
+												<td className='px-4 py-2 text-sm border-b border-gray-200'>
+													{translateDaysOfTheWeek(availability.day_of_week)}
+												</td>
 												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.start_time}</td>
 												<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.end_time}</td>
 											</tr>

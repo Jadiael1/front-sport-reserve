@@ -16,6 +16,7 @@ import { messageManager } from '../../components/common/Message/messageInstance'
 import { Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import Navbar from '../../components/common/NavBar/NavBar';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
+import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
 
 interface FieldDetailsProps {
 	field: IField;
@@ -229,7 +230,9 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 														key={index}
 														className='bg-blue-100'
 													>
-														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.day_of_week}</td>
+														<td className='px-4 py-2 text-sm border-b border-gray-200'>
+															{translateDaysOfTheWeek(availability.day_of_week)}
+														</td>
 														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.start_time}</td>
 														<td className='px-4 py-2 text-sm border-b border-gray-200'>{availability.end_time}</td>
 													</tr>
