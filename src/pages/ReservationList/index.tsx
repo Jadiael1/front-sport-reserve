@@ -251,12 +251,12 @@ const ReservationList = () => {
 													<span className='font-bold'>Reservado em: </span>
 													{formatDate(new Date(reservation.created_at))}
 												</p>
-												{user && user.is_admin && (
+												{user && user.is_admin ?
 													<p className='text-gray-700'>
 														<span className='font-bold'>Reservado por: </span>
 														{capitalize(reservation.user.name)}
 													</p>
-												)}
+												:	null}
 												{reservation.status === 'WAITING' && (
 													<>
 														{paymentLink && paymentLink.id === reservation.id && (
