@@ -3,9 +3,10 @@ import Home from '../pages/Dashboard/Home';
 import FieldAvailabilities from '../pages/Dashboard/FieldAvailabilities';
 import { AiOutlineFieldTime } from 'react-icons/ai';
 import Users from '../pages/Dashboard/Users';
-import { FaUserCircle, FaChartLine, FaCreditCard } from 'react-icons/fa';
+import { FaUserCircle, FaChartLine, FaCreditCard, FaPrint } from 'react-icons/fa';
 import Reports from '../pages/Dashboard/Reports';
 import Payments from '../pages/Dashboard/Payments';
+import ReservationFilterPage from '../pages/Dashboard/PrintReservations';
 
 const routesDash: IRoutes[] = [
 	{
@@ -51,6 +52,15 @@ const routesDash: IRoutes[] = [
 		protected: true,
 		adminOnly: true,
 		icon: FaCreditCard,
+	},
+	{
+		path: '/dashboard/print-reservations',
+		component: ReservationFilterPage,
+		visibleInDisplay: true,
+		displayName: 'Imprimir Reservas',
+		protected: true,
+		adminOnly: true,
+		icon: FaPrint,
 	},
 ];
 
