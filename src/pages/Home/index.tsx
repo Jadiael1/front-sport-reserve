@@ -263,7 +263,7 @@ const HomePage = () => {
 													<FaShoppingCart className='mr-2' />
 													Alugar
 												</button>
-												{user?.is_admin && (
+												{user?.is_admin ?
 													<>
 														<button
 															className='bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center w-full'
@@ -282,7 +282,7 @@ const HomePage = () => {
 															Deletar
 														</button>
 													</>
-												)}
+												:	null}
 											</div>
 										</div>
 									))}
