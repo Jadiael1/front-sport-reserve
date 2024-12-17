@@ -243,27 +243,27 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 												</tbody>
 											</table>
 										</div>
-										{user && user?.is_admin && (
+										{user && user?.is_admin ?
 											<button
 												onClick={() => navigate(`/dashboard/field-availabilities`)}
 												className='items-center space-x-1 text-blue-500 hover:text-blue-700 mt-4'
 											>
 												<span>Adicionar Disponibilidades</span>
 											</button>
-										)}
+										:	null}
 									</>
 								:	<div className='flex items-center space-x-2'>
 										<FaExclamationTriangle className='text-red-500 w-5 h-5' />
 										<span className='text-red-500 font-medium text-sm'>
 											Este campo só poderá ser ativado se houver registro de disponibilidade.{' '}
-											{user && user?.is_admin && (
+											{user && user?.is_admin ?
 												<button
 													onClick={() => navigate(`/dashboard/field-availabilities`)}
 													className='inline-flex items-center space-x-1 text-blue-500 hover:text-blue-700 font-semibold'
 												>
 													<span>Registrar</span>
 												</button>
-											)}
+											:	null}
 										</span>
 									</div>
 								}
