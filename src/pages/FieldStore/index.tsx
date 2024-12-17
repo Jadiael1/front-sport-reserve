@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import {
@@ -15,22 +15,25 @@ import {
 	FaEdit,
 } from 'react-icons/fa';
 import Navbar from '../../components/common/NavBar/NavBar';
-import { Map, MapMouseEvent, AdvancedMarker, useApiIsLoaded } from '@vis.gl/react-google-maps';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+// ícones corretos do leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 
-const containerStyle = {
-	width: '100%',
-	height: '400px',
-};
+const defaultIcon = L.icon({
+	iconRetinaUrl: iconRetinaUrl,
+	iconUrl: icon,
+	shadowUrl: iconShadow,
+});
 
-const initialCenter = {
-	lat: -8.6855317,
-	lng: -35.5914402,
-};
+L.Marker.prototype.options.icon = defaultIcon;
 
 const FieldForm = () => {
 	const { token } = useAuth();
 	const [name, setName] = useState('');
-	const [location, setLocation] = useState<{ lat: number; lng: number } | null>(initialCenter);
 	const [type, setType] = useState('');
 	const [hourlyRate, setHourlyRate] = useState('');
 	const [images, setImages] = useState<FileList | null>(null);
@@ -45,40 +48,13 @@ const FieldForm = () => {
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
-	const apiIsLoaded = useApiIsLoaded();
+	const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+	const mapRef = useRef<L.Map | null>(null);
 
-	const handleMapClick = useCallback((event: MapMouseEvent) => {
-		if (event.detail.latLng) {
-			const location = {
-				lat: event.detail.latLng.lat,
-				lng: event.detail.latLng.lng,
-			};
-			setLocation(location);
-			const geocoder = new window.google.maps.Geocoder();
-			geocoder.geocode({ location }, (results, status) => {
-				if (status === 'OK') {
-					if (results && results[0]) {
-						const address = results[0].address_components.filter(result => result.types.includes('route'));
-						const city = results[0].address_components.filter(
-							result => result.types.some(type => ['administrative_area_level_2'].includes(type)), // , 'political'
-						);
-						const uf = results[0].address_components.filter(
-							result => result.types.some(type => ['administrative_area_level_1'].includes(type)), // , 'political'
-						);
-						const cep = results[0].address_components.filter(result =>
-							result.types.some(type => ['postal_code'].includes(type)),
-						);
-						if (address && address.length) setAddress(address[0].long_name);
-						if (city && city.length) setCity(city[0].long_name);
-						if (uf && uf.length) setUF(uf[0].long_name);
-						if (cep && cep.length) setCep(cep[0].long_name);
-					} else {
-						console.log('Nenhum resultado encontrado');
-					}
-				}
-			});
-		}
-	}, []);
+	const MapEvents = () => {
+		useMapEvents({ click: e => setLocation(e.latlng) });
+		return null;
+	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -192,56 +168,50 @@ const FieldForm = () => {
 							/>
 						</div>
 						<div className='col-span-1 md:col-span-2'>
-							<h3 className='text-sm text-gray-600 mb-2'>Selecione a localização no mapa:</h3>
-							{apiIsLoaded ?
-								<Map
-									style={containerStyle}
-									defaultCenter={initialCenter}
-									defaultZoom={14}
-									gestureHandling='satellite2'
-									disableDefaultUI={true}
-									mapId='MAP_SR_ID'
-									onClick={handleMapClick}
-									id='MAP_SR_ID'
-								>
-									{location && (
-										<AdvancedMarker
-											position={location}
-											clickable={true}
-											title='clickable google.maps.Marker'
-											onDrag={() => null}
-										/>
-									)}
-								</Map>
-							:	<div>
-									<p className='text-sm text-gray-600 mb-2'>
-										<a
-											href='https://support.google.com/maps/answer/18539?hl=pt-BR&co=GENIE.Platform'
-											target='_blank'
-											rel='noopener noreferrer'
-											className='text-blue-500 hover:underline'
-										>
-											Como encontrar latitude e longitude no Google Maps
-										</a>
-									</p>
-									<div className='flex flex-col md:flex-row gap-4'>
-										<input
-											type='text'
-											placeholder='Latitude'
-											className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
-											value={location ? location.lat : ''}
-											onChange={e => setLocation({ ...location!, lat: parseFloat(e.target.value) })}
-										/>
-										<input
-											type='text'
-											placeholder='Longitude'
-											className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
-											value={location ? location.lng : ''}
-											onChange={e => setLocation({ ...location!, lng: parseFloat(e.target.value) })}
-										/>
-									</div>
+							<h3 className='text-sm text-gray-600 mb-2'>Informe a localização no mapa:</h3>
+							<MapContainer
+								center={[-8.680643, -35.585071]} // Posição inicial
+								zoom={15}
+								style={{ height: '400px', width: '100%' }}
+								ref={mapRef}
+							>
+								<TileLayer
+									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								/>
+								<MapEvents />
+								{location && (
+									<Marker
+										position={[location.lat, location.lng]}
+										draggable={true}
+										eventHandlers={{
+											dragend: e => {
+												const marker = e.target;
+												const newPosition = marker.getLatLng();
+												setLocation({ lat: newPosition.lat, lng: newPosition.lng });
+											},
+										}}
+									/>
+								)}
+							</MapContainer>
+							<div>
+								<div className='flex flex-col md:flex-row gap-4'>
+									<input
+										type='text'
+										placeholder='Latitude'
+										className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
+										value={location ? location.lat : ''}
+										onChange={e => setLocation({ ...location!, lat: parseFloat(e.target.value) })}
+									/>
+									<input
+										type='text'
+										placeholder='Longitude'
+										className='mt-1 block w-full px-3 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500'
+										value={location ? location.lng : ''}
+										onChange={e => setLocation({ ...location!, lng: parseFloat(e.target.value) })}
+									/>
 								</div>
-							}
+							</div>
 						</div>
 						<div className='relative'>
 							<label
