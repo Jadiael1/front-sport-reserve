@@ -22,9 +22,11 @@ const ReservationList = () => {
 	});
 	const [paymentLink, setPaymentLink] = useState<{ id: number; url: string } | null>(null);
 	const [loadingPayment, setLoadingPayment] = useState<number | null>(null);
+	const [loadingRequest, setLoadingRequest] = useState<boolean>(false);
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 	useEffect(() => {
+		setLoadingRequest(true);
 		fetch(`${baseURL}/reservations?sort_by=created_at&sort_order=desc`, {
 			method: 'GET',
 			headers: {
@@ -43,6 +45,9 @@ const ReservationList = () => {
 			.catch(error => {
 				console.error('Error:', error);
 				setError({ message: 'Erro ao buscar as reservas. Tente novamente mais tarde.' });
+			})
+			.finally(() => {
+				setLoadingRequest(false);
 			});
 	}, [baseURL, token]);
 
@@ -173,8 +178,10 @@ const ReservationList = () => {
 					<div className='flex justify-center items-center flex-wrap mb-8 '>
 						<h1 className='text-2xl font-bold text-center sm:text-2xl lg:text-3xl md:text-4xl'>Minhas Reservas</h1>
 					</div>
-					{reservations.length === 0 ?
+					{reservations.length === 0 && !loadingRequest ?
 						<p className='text-gray-700 text-center'>Nenhuma reserva encontrada.</p>
+					: reservations.length === 0 && loadingRequest ?
+						<p className='text-gray-700 text-center'>Carregando...</p>
 					:	<div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
 							{reservations.map((reservation: IReservation) => {
 								const statusDetails = getStatusDetails(reservation.status);
