@@ -9,6 +9,7 @@ import InfoItem from './InfoItem';
 import { messageManager } from '../../components/common/Message/messageInstance';
 import { formatCPF } from '../../utils/formatCPF';
 import { formatPhone } from '../../utils/formatPhone';
+import Footer from '../../components/common/Footer';
 
 const Profile = () => {
 	const { user, token, updateUser } = useAuth();
@@ -62,11 +63,11 @@ const Profile = () => {
 	};
 
 	return (
-		<>
+		<div className='flex flex-col min-h-screen bg-background'>
 			<Navbar />
-			<div className='mx-auto p-4 bg-background'>
+			<div className='flex-grow p-4'>
 				{!isEditing ?
-					<div className='bg-white shadow-md rounded-lg p-8'>
+					<div className='bg-slate-100 shadow-md rounded-lg p-8'>
 						<div className='text-center mb-6'>
 							<img
 								className='mx-auto w-24 h-24 rounded-full border-4 border-gray-300'
@@ -173,7 +174,8 @@ const Profile = () => {
 					</form>
 				}
 			</div>
-		</>
+			<Footer />
+		</div>
 	);
 };
 
