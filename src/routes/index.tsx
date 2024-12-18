@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import routes from './routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import { useAuth } from '../hooks/useAuth';
@@ -25,6 +25,10 @@ function AppRoutes() {
 						/>
 					);
 				})}
+				<Route
+					path='*'
+					element={<Navigate to='/' />}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);
