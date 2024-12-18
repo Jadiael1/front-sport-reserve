@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { IApiFieldResponse } from '../../interfaces/IApiFieldResponse';
 import { IField } from '../../interfaces/IField';
 import { useAuth } from '../../hooks/useAuth';
@@ -70,8 +70,10 @@ const HomePage = () => {
 
 	const handleRentClick = (field: IField) => {
 		if (!user) {
-			navigate(`/auth/signin`);
-			return;
+			return <Navigate to='/auth/signin' />;
+		}
+		if (user && !user.email_verified_at) {
+			return <Navigate to='/auth/activate-account' />;
 		}
 		setSelectedField(field);
 		setIsFieldDetailsModalVisible(true);
