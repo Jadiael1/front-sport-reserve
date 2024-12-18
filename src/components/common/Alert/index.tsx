@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import translations from '../../../utils/translations.json';
 
 type AlertProps = {
 	message: string;
@@ -48,7 +49,7 @@ const Alert: React.FC<AlertProps> = ({ message, errors, onClose, type, redirectT
 					'Info: '
 				:	''}
 			</strong>
-			<span className='block sm:inline'>{message}</span>
+			<span className='block sm:inline'>{translations[message as keyof typeof translations] || message}</span>
 			{redirectTo && (
 				<span
 					className='block sm:inline text-blue-500 cursor-pointer underline ml-2'
@@ -64,11 +65,13 @@ const Alert: React.FC<AlertProps> = ({ message, errors, onClose, type, redirectT
 							{Array.isArray(errors[key]) ?
 								errors[key].map((err, index) => (
 									<li key={`${key}-${index}`}>
-										{key}: {err}
+										{translations[key as keyof typeof translations] || key}:{' '}
+										{translations[err as keyof typeof translations] || err}
 									</li>
 								))
 							:	<li key={key}>
-									{key}: {errors[key]}
+									{translations[key as keyof typeof translations] || key}:{' '}
+									{translations[errors[key] as keyof typeof translations] || errors[key]}
 								</li>
 							}
 						</React.Fragment>
