@@ -12,6 +12,7 @@ import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
 import ConfirmationModal from '../../components/common/ConfirmationModalProps';
 import { messageManager } from '../../components/common/Message/messageInstance';
+import Footer from '../../components/common/Footer';
 
 const HomePage = () => {
 	const { user, token } = useAuth();
@@ -133,9 +134,9 @@ const HomePage = () => {
 	};
 
 	return (
-		<>
+		<div className='flex flex-col min-h-screen'>
 			<Navbar />
-			<section className='mx-auto p-4 w-full bg-background min-h-screen flex flex-col items-center'>
+			<section className='flex-grow p-4 w-full bg-background'>
 				<div className='text-center mb-8'>
 					<h3 className='text-gray-800 text-2xl md:text-3xl font-bold mt-5'>
 						Alugue nossas quadras esportivas com facilidade.
@@ -342,7 +343,8 @@ const HomePage = () => {
 					defaultClassName={true}
 				/>
 			</section>
-		</>
+			<Footer />
+		</div>
 	);
 };
 
