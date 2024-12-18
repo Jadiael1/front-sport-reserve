@@ -414,7 +414,7 @@ const Users = () => {
 						Anterior
 					</button>
 					<span>
-						Página {pagination.current_page} de {pagination.last_page}
+						{pagination.current_page} de {pagination.last_page}
 					</span>
 					<button
 						disabled={pagination.current_page === pagination.last_page}
@@ -559,7 +559,7 @@ const Users = () => {
 						Anterior
 					</button>
 					<span>
-						Página {pagination.current_page} de {pagination.last_page}
+						{pagination.current_page} de {pagination.last_page}
 					</span>
 					<button
 						disabled={pagination.current_page === pagination.last_page}
