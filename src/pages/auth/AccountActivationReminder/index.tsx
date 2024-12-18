@@ -65,7 +65,7 @@ const AccountActivationReminder = () => {
 						className='text-blue-600 hover:underline'
 						onClick={() => setShowResendSection(true)}
 					>
-						Cliccando Aqui!
+						Clicando Aqui!
 					</button>
 				</p>
 				{showResendSection && (
