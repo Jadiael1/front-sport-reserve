@@ -1,5 +1,8 @@
 {
 	"The phone number has already been taken.": "O número de telefone já em uso.",
 	"The CPF has already been taken.": "O CPF já em uso.",
-	"The email has already been taken.": "O e-mail já em uso."
+	"The email has already been taken.": "O e-mail já em uso.",
+	"Validation error.": "Erro de validação.",
+	"The reservation time is not within the field's availability.": "O horário da reserva não está dentro das disponibilidades do campo.",
+	"start_time": "Hora de início"
 }
