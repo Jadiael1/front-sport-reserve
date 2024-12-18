@@ -186,15 +186,15 @@ const ReservationFilterPage = () => {
 											</div>
 										</div>
 									))}
-								</div>
-								<div className='mt-6 text-center'>
-									<button
-										onClick={printReservations}
-										className='bg-blue-500 text-white px-6 py-2 rounded-md flex items-center justify-center space-x-2 hover:bg-blue-600'
-									>
-										<FaPrint />
-										<span>Imprimir</span>
-									</button>
+									<div className='mt-6 text-center'>
+										<button
+											onClick={printReservations}
+											className='bg-blue-500 text-white px-6 py-2 rounded-md flex items-center justify-center space-x-2 hover:bg-blue-600'
+										>
+											<FaPrint />
+											<span>Imprimir</span>
+										</button>
+									</div>
 								</div>
 							</>
 						:	<div className='text-center'>Nenhuma reserva encontrada.</div>}
