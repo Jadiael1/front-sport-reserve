@@ -38,6 +38,13 @@ const Home = () => {
 						icon: <AiOutlineCreditCard className='text-4xl text-blue-500 mb-2' />,
 						onClick: () => navigate('/dashboard/payments'),
 					},
+					{
+						title: 'Imprimnir Reservas',
+						description: 'Imprima reservas com o status que desejar, para determinado dia da semana que você desejar.',
+						buttonText: 'Ir',
+						icon: <AiOutlineCreditCard className='text-4xl text-blue-500 mb-2' />,
+						onClick: () => navigate('/dashboard/print-reservations'),
+					},
 				].map((card, index) => (
 					<div
 						key={index}
