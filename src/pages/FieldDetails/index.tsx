@@ -16,6 +16,7 @@ import { messageManager } from '../../components/common/Message/messageInstance'
 import Navbar from '../../components/common/NavBar/NavBar';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
+import translations from '../../utils/translations.json';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -134,6 +135,11 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 					setSuccess({ message: data.message });
 				} else {
 					setError({ message: data.message, errors: data.errors });
+					messageManager.notify({
+						message: translations[data.message as keyof typeof translations] || data.message,
+						type: 'error',
+						duration: 4000,
+					});
 				}
 			})
 			.catch(error => {
@@ -199,6 +205,35 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 							<FaInfoCircle className='mr-2 text-blue-500' />
 							<h3 className='font-bold'>Complemento:</h3>
 							<p>{field.complement}</p>
+						</div>
+						<p className='text-center mt-4'>Selecione a data e hora que deseja reservar</p>
+						<div className='flex items-center justify-evenly flex-wrap'>
+							<div className='mt-4 relative w-full max-w-xs'>
+								<DatePicker
+									dateLabel={`Data de Início`}
+									timeLabel={`Hora de Início`}
+									value={startTime}
+									onChange={value => setStartTime(value)}
+								/>
+							</div>
+							<div className='mt-2 relative w-full max-w-xs'>
+								<DatePicker
+									dateLabel={`Data de Término`}
+									timeLabel={`Hora de Término`}
+									value={endTime}
+									onChange={value => setEndTime(value)}
+								/>
+							</div>
+						</div>
+						<div className='flex flex-col items-center'>
+							<button
+								type='submit'
+								className='mt-2 w-full md:w-1/2 max-w-[250px] bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
+								onClick={handleReservation}
+								disabled={loading}
+							>
+								{loading ? 'Reservando...' : 'Reservar'}
+							</button>
 						</div>
 						{!loading ?
 							<div className='p-4 max-w-3xl mx-auto mb-4'>
@@ -289,35 +324,6 @@ const FieldDetails = (props?: FieldDetailsProps) => {
 								/>
 								{location && <Marker position={[initialCenter.lat, initialCenter.lng]} />}
 							</MapContainer>
-						</div>
-						<p className='text-center mt-4'>Selecione a data e hora que deseja reservar</p>
-						<div className='flex items-center justify-evenly flex-wrap'>
-							<div className='mt-4 relative w-full max-w-xs'>
-								<DatePicker
-									dateLabel={`Data de Início`}
-									timeLabel={`Hora de Início`}
-									value={startTime}
-									onChange={value => setStartTime(value)}
-								/>
-							</div>
-							<div className='mt-4 relative w-full max-w-xs'>
-								<DatePicker
-									dateLabel={`Data de Término`}
-									timeLabel={`Hora de Término`}
-									value={endTime}
-									onChange={value => setEndTime(value)}
-								/>
-							</div>
-						</div>
-						<div className='flex flex-col items-center mt-6 md:mt-10'>
-							<button
-								type='submit'
-								className='mt-6 w-full md:w-1/2 max-w-[250px] bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300'
-								onClick={handleReservation}
-								disabled={loading}
-							>
-								{loading ? 'Reservando...' : 'Reservar'}
-							</button>
 						</div>
 					</div>
 				</div>
