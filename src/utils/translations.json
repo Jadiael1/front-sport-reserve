@@ -96,5 +96,22 @@
 	"User confirmation status updated successfully.": "Status de confirmação do usuário atualizado com sucesso.",
 	"Failed to update user confirmation status.": "Falha ao atualizar o status de confirmação do usuário.",
 	"The password must be at least 8 characters.": "A senha deve ter pelo menos 8 caracteres.",
-	"password" : "senha"
+	"password" : "senha",
+	"The name is required.": "O nome é obrigatório.",
+	"The name must be a string.": "O nome deve ser uma string.",
+	"The name may not be greater than 255 characters.": "O nome não pode ter mais de 255 caracteres.",
+	"The CPF is required.": "O CPF é obrigatório.",
+	"The CPF must be a string.": "O CPF deve ser uma string.",
+	"The CPF must be exactly 11 characters.": "O CPF deve ter exatamente 11 caracteres.",
+	"The phone number is required.": "O número de telefone é obrigatório.",
+	"The phone number must be a string.": "O número de telefone deve ser uma sequência de caracteres.",
+	"The phone number may not be greater than 15 characters.": "O número de telefone não pode ter mais de 15 caracteres.",
+	"The email is required.": "O e-mail é obrigatório.",
+	"The email must be a string.": "O e-mail deve ser uma string.",
+	"The email must be a valid email address.": "O e-mail deve ser um endereço de e-mail válido.",
+	"The email may not be greater than 255 characters.": "O e-mail não pode ter mais de 255 caracteres.",
+	"The password is required.": "A senha é obrigatória.",
+	"The password must be a string.": "A senha deve ser uma string.",
+	"The password confirmation does not match.": "A confirmação da senha não corresponde.",
+	"The is_admin field must be true or false.": "O campo is_admin deve ser verdadeiro ou falso."
 }

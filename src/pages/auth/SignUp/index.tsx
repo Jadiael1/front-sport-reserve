@@ -136,8 +136,9 @@ const RegisterPage = () => {
 							Email
 						</label>
 						{error && error.includes('e-mail') && (
-							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {translations[error as keyof typeof translations] || error}
+							<div className='flex items-center text-red-500 text-sm mt-1'>
+								<CiWarning className='mr-1' />{' '}
+								<span className='ml-2'>{translations[error as keyof typeof translations] || error}</span>
 							</div>
 						)}
 					</div>
@@ -171,8 +172,9 @@ const RegisterPage = () => {
 							Confirme a Senha
 						</label>
 						{error && error.includes('senhas') && (
-							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {translations[error as keyof typeof translations] || error}
+							<div className='flex items-center text-red-500 text-sm mt-1'>
+								<CiWarning className='mr-1' />{' '}
+								<span className='ml-2'>{translations[error as keyof typeof translations] || error}</span>
 							</div>
 						)}
 					</div>
