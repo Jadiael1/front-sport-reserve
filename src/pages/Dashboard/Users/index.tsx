@@ -506,13 +506,34 @@ const Users = () => {
 									key={user?.id}
 									className='p-4 border rounded shadow-md'
 								>
-									<h3 className='text-lg font-semibold'>{user.name}</h3>
-									<p>{user.email}</p>
-									<p>{user.cpf}</p>
-									<p>{user.phone}</p>
-									<p>{user.is_admin.toString() === '1' ? 'Administrador' : 'Usuário'}</p>
-									<p>{user.active ? 'Ativo' : 'Inativo'}</p>
-									<p>{user.email_verified_at ? 'Confirmado' : 'Não Confirmado'}</p>
+									<p>
+										<strong>Nome: </strong>
+										{user.name}
+									</p>
+									<p>
+										<strong>Email: </strong>
+										{user.email}
+									</p>
+									<p>
+										<strong>CPF: </strong>
+										{user.cpf}
+									</p>
+									<p>
+										<strong>Telefone: </strong>
+										{user.phone}
+									</p>
+									<p>
+										<strong>Admin: </strong>
+										{user.is_admin.toString() === '1' ? 'Administrador' : 'Usuário'}
+									</p>
+									<p>
+										<strong>Status: </strong>
+										{user.active ? 'Ativo' : 'Inativo'}
+									</p>
+									<p>
+										<strong>Confirmado: </strong>
+										{user.email_verified_at ? 'Sim' : 'Não'}
+									</p>
 									<div className='flex justify-around mt-4'>
 										<button
 											className='text-red-500 hover:text-red-700'
