@@ -7,6 +7,7 @@ import formatDate from '../../utils/formateDate';
 import { IReservation } from '../../interfaces/IReservation';
 import { IApiReservationResponse } from '../../interfaces/IApiReservationResponse';
 import capitalize from '../../utils/capitalize';
+import Footer from '../../components/common/Footer';
 
 const ReservationList = () => {
 	const { user, token } = useAuth();
@@ -157,9 +158,9 @@ const ReservationList = () => {
 	};
 
 	return (
-		<>
+		<div className='flex flex-col min-h-screen bg-background'>
 			<Navbar />
-			<section className='mx-auto p-4 bg-background'>
+			<section className='flex-grow'>
 				{error && (
 					<Alert
 						message={error.message}
@@ -174,7 +175,7 @@ const ReservationList = () => {
 						type='success'
 					/>
 				)}
-				<div className='p-6 rounded-lg shadow-md bg-background border border-gray-150'>
+				<div className='p-6'>
 					<div className='flex justify-center items-center flex-wrap mb-8 '>
 						<h1 className='text-2xl font-bold text-center sm:text-2xl lg:text-3xl md:text-4xl'>Minhas Reservas</h1>
 					</div>
@@ -309,7 +310,8 @@ const ReservationList = () => {
 					}
 				</div>
 			</section>
-		</>
+			<Footer />
+		</div>
 	);
 };
 
