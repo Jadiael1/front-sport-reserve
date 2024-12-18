@@ -6,18 +6,23 @@ import { FaArrowLeft } from 'react-icons/fa';
 import goBack from '../../../utils/goBack.js';
 import { messageManager } from '../../../components/common/Message/messageInstance.js';
 import translations from '../../../utils/translations.json';
+import Alert from '../../../components/common/Alert/index.js';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
-		name: '',
-		email: '',
-		password: '',
-		password_confirmation: '',
-		cpf: '',
-		phone: '',
+		name: 'asdasd',
+		email: 'asd@asd.com',
+		password: 'asddsa',
+		password_confirmation: 'asddsa',
+		cpf: '51874896754',
+		phone: '81995748899',
 	});
 	const [error, setError] = useState<string | null>(null);
+	const [errors, setErrors] = useState<{
+		message: string;
+		errors?: string | { [key: string]: string[] } | null;
+	} | null>(null);
 	const { login, user, isLoading } = useAuth();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const [loading, setLoading] = useState(false);
@@ -76,6 +81,7 @@ const RegisterPage = () => {
 				navigate('/');
 			} else {
 				setError(data.message || 'Falha ao registrar');
+				setErrors({ message: data.message, errors: data.errors || data.message });
 			}
 		} catch (error) {
 			setError('Falha ao registrar');
@@ -199,9 +205,22 @@ const RegisterPage = () => {
 						</label>
 					</div>
 					{error && !error.includes('e-mail') && !error.includes('senhas') && (
-						<div className='text-red-500 text-sm mt-1'>
-							<CiWarning /> {translations[error as keyof typeof translations] || error}
-						</div>
+						<>
+							{/* <div className='flex items-center text-red-500 text-sm mt-1'>
+								<CiWarning className='mr-1' />{' '}
+								<span className='ml-2'>{translations[error as keyof typeof translations] || error}</span>
+							</div> */}
+							<div className='mt-2 mb-2'>
+								{errors && (
+									<Alert
+										message={errors.message}
+										errors={errors.errors}
+										onClose={() => setErrors(null)}
+										type='error'
+									/>
+								)}
+							</div>
+						</>
 					)}
 					<button
 						type='submit'

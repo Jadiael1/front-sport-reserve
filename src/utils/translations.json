@@ -94,5 +94,7 @@
 	"User active status updated successfully.": "Status ativo do usuário atualizado com sucesso.",
 	"Failed to update user active status.": "Falha ao atualizar o status ativo do usuário.",
 	"User confirmation status updated successfully.": "Status de confirmação do usuário atualizado com sucesso.",
-	"Failed to update user confirmation status.": "Falha ao atualizar o status de confirmação do usuário."
+	"Failed to update user confirmation status.": "Falha ao atualizar o status de confirmação do usuário.",
+	"The password must be at least 8 characters.": "A senha deve ter pelo menos 8 caracteres.",
+	"password" : "senha"
 }
