@@ -163,5 +163,7 @@
 	"The image IDs field is optional.": "O campo de IDs de imagem é opcional.",
 	"The image IDs must be an array.": "Os IDs de imagem devem ser uma matriz.",
 	"Each image ID must be an integer.": "Cada ID de imagem deve ser um inteiro.",
-	"Each image ID must exist in the field_images table.": "Cada ID de imagem deve existir na tabela field_images."
+	"Each image ID must exist in the field_images table.": "Cada ID de imagem deve existir na tabela field_images.",
+	"name": "nome",
+	"phone": "telefone"
 }
