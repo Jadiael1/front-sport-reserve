@@ -11,12 +11,12 @@ import Alert from '../../../components/common/Alert/index.js';
 const RegisterPage = () => {
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
-		name: 'asdasd',
-		email: 'asd@asd.com',
-		password: 'asddsa',
-		password_confirmation: 'asddsa',
-		cpf: '51874896754',
-		phone: '81995748899',
+		name: '',
+		email: '',
+		password: '',
+		password_confirmation: '',
+		cpf: '',
+		phone: '',
 	});
 	const [error, setError] = useState<string | null>(null);
 	const [errors, setErrors] = useState<{
