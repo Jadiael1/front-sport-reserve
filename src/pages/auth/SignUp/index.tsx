@@ -5,6 +5,7 @@ import { CiWarning } from 'react-icons/ci';
 import { FaArrowLeft } from 'react-icons/fa';
 import goBack from '../../../utils/goBack.js';
 import { messageManager } from '../../../components/common/Message/messageInstance.js';
+import translations from '../../../utils/translations.json';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -130,7 +131,7 @@ const RegisterPage = () => {
 						</label>
 						{error && error.includes('e-mail') && (
 							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {error}
+								<CiWarning /> {translations[error as keyof typeof translations] || error}
 							</div>
 						)}
 					</div>
@@ -165,7 +166,7 @@ const RegisterPage = () => {
 						</label>
 						{error && error.includes('senhas') && (
 							<div className='text-red-500 text-sm mt-1'>
-								<CiWarning /> {error}
+								<CiWarning /> {translations[error as keyof typeof translations] || error}
 							</div>
 						)}
 					</div>
@@ -199,7 +200,7 @@ const RegisterPage = () => {
 					</div>
 					{error && !error.includes('e-mail') && !error.includes('senhas') && (
 						<div className='text-red-500 text-sm mt-1'>
-							<CiWarning /> {error}
+							<CiWarning /> {translations[error as keyof typeof translations] || error}
 						</div>
 					)}
 					<button

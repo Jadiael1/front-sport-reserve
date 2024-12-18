@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import translations from '../../../utils/translations.json';
 
 const AccountActivationReminder = () => {
 	const [email, setEmail] = useState('');
@@ -102,7 +103,7 @@ const AccountActivationReminder = () => {
 				{error && (
 					<div className='mt-4 flex items-center justify-center text-red-500'>
 						<FaTimesCircle className='mr-2' />
-						{error}
+						{translations[error as keyof typeof translations] || error}
 					</div>
 				)}
 			</div>

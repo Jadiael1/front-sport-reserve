@@ -5,6 +5,7 @@ import backgroundImage from '../../../assets/img/campo.jpg';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import goBack from '../../../utils/goBack';
 import GoBackButton from '../../../components/common/GoBack';
+import translations from '../../../utils/translations.json';
 
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
@@ -99,7 +100,9 @@ const SignInPage = () => {
 						</button>
 					</div>
 
-					{error && <div className='text-red-500 text-sm'>{error}</div>}
+					{error && (
+						<div className='text-red-500 text-sm'>{translations[error as keyof typeof translations] || error}</div>
+					)}
 
 					<div className='flex items-center justify-center'>
 						<button

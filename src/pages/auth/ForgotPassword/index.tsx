@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import goBack from '../../../utils/goBack';
+import translations from '../../../utils/translations.json';
 
 const ForgotPasswordPage = () => {
 	const [email, setEmail] = useState('');
@@ -51,7 +52,7 @@ const ForgotPasswordPage = () => {
 				</button>
 				<h1 className='text-3xl font-bold mb-4 text-center text-blue-700'>Redefina sua senha</h1>
 				{message && <div className='text-green-500 mb-4 text-center'>{message}</div>}
-				{error && <div className='text-red-500 mb-4'>{error}</div>}
+				{error && <div className='text-red-500 mb-4'>{translations[error as keyof typeof translations] || error}</div>}
 				<form onSubmit={handleForgotPassword}>
 					<div className='relative mb-4 w-3/4 mx-auto'>
 						<input

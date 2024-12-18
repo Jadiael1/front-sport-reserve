@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import translations from '../../../utils/translations.json';
 
 const ResetPasswordPage = () => {
 	const [password, setPassword] = useState('');
@@ -70,7 +71,7 @@ const ResetPasswordPage = () => {
 				{error && (
 					<div className='flex items-center justify-center text-red-500 mb-4'>
 						<FaTimesCircle className='mr-2' />
-						{error}
+						{translations[error as keyof typeof translations] || error}
 					</div>
 				)}
 				<form

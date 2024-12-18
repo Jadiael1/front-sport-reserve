@@ -10,6 +10,7 @@ import AnimateSpin from '../../assets/svg/AnimateSpin';
 import goBack from '../../utils/goBack';
 import { IFieldAvailability } from '../../interfaces/IFieldAvailability';
 import translateDaysOfTheWeek from '../../utils/translateDaysOfTheWeek';
+import translations from '../../utils/translations.json';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -251,7 +252,7 @@ const FieldUpdateForm = () => {
 					Voltar
 				</button>
 				<h1 className='text-3xl font-bold mb-4 text-center'>Atualizar arena</h1>
-				{error && <div className='text-red-500 mb-4'>{error}</div>}
+				{error && <div className='text-red-500 mb-4'>{translations[error as keyof typeof translations] || error}</div>}
 
 				<div className='mb-4'>
 					<label

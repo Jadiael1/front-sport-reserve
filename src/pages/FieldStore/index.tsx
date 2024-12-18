@@ -15,6 +15,7 @@ import {
 	FaEdit,
 } from 'react-icons/fa';
 import Navbar from '../../components/common/NavBar/NavBar';
+import translations from '../../utils/translations.json';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -114,7 +115,9 @@ const FieldForm = () => {
 				<div className='max-w-3xl w-full bg-background border border-gray-200 p-8 rounded-lg shadow-lg my-2'>
 					<h1 className='text-3xl font-bold text-center mb-8'>Insira uma nova arena</h1>
 					{message && <div className='text-green-500 mb-4'>{message}</div>}
-					{error && <div className='text-red-500 mb-4'>{error}</div>}
+					{error && (
+						<div className='text-red-500 mb-4'>{translations[error as keyof typeof translations] || error}</div>
+					)}
 					<form
 						onSubmit={handleSubmit}
 						className='grid grid-cols-1 md:grid-cols-2 gap-6'

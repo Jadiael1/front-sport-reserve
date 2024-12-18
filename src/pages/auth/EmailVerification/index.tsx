@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
+import translations from '../../../utils/translations.json';
 
 const EmailVerification = () => {
 	const timeRedirect = 4;
@@ -82,7 +83,7 @@ const EmailVerification = () => {
 				{error && (
 					<div className='flex items-center justify-center space-x-2 text-red-500 mb-4'>
 						<FaTimesCircle size={24} />
-						<span>{error}</span>
+						<span>{translations[error as keyof typeof translations] || error}</span>
 					</div>
 				)}
 				{!message && !error && (
