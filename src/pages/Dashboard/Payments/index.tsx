@@ -207,7 +207,7 @@ const Payments = () => {
 						<FaChevronLeft className='mr-2' /> Anterior
 					</button>
 					<span>
-						Página {pagination.current_page} de {pagination.last_page}
+						{pagination.current_page} de {pagination.last_page}
 					</span>
 					<button
 						disabled={pagination.current_page === pagination.last_page}
@@ -338,7 +338,7 @@ const Payments = () => {
 						Anterior
 					</button>
 					<span>
-						Página {pagination.current_page} de {pagination.last_page}
+						{pagination.current_page} de {pagination.last_page}
 					</span>
 					<button
 						disabled={pagination.current_page === pagination.last_page}
