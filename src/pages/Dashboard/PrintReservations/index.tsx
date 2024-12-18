@@ -119,32 +119,74 @@ const ReservationFilterPage = () => {
 					<div className='text-center'>Carregando reservas...</div>
 				:	<>
 						{reservations && reservations.length > 0 ?
-							<div>
-								<table className='min-w-full table-auto border-collapse border border-gray-300'>
-									<thead>
-										<tr className='bg-gray-100'>
-											<th className='border px-4 py-2'>ID</th>
-											<th className='border px-4 py-2'>Usuário</th>
-											<th className='border px-4 py-2'>Campo</th>
-											<th className='border px-4 py-2'>Status</th>
-											<th className='border px-4 py-2'>Data de Início</th>
-											<th className='border px-4 py-2'>Data de Fim</th>
-										</tr>
-									</thead>
-									<tbody>
-										{reservations.map(reservation => (
-											<tr key={reservation.id}>
-												<td className='border px-4 py-2'>{reservation.id}</td>
-												<td className='border px-4 py-2'>{reservation.user.name}</td>
-												<td className='border px-4 py-2'>{reservation.field.name}</td>
-												<td className='border px-4 py-2'>{reservation.status}</td>
-												<td className='border px-4 py-2'>{new Date(reservation.start_time).toLocaleString()}</td>
-												<td className='border px-4 py-2'>{new Date(reservation.end_time).toLocaleString()}</td>
+							<>
+								<div className='overflow-x-auto hidden lg:block'>
+									<table className='min-w-full table-auto border-collapse border border-gray-300'>
+										<thead>
+											<tr className='bg-gray-100'>
+												<th className='border px-4 py-2'>ID</th>
+												<th className='border px-4 py-2'>Usuário</th>
+												<th className='border px-4 py-2'>Campo</th>
+												<th className='border px-4 py-2'>Status</th>
+												<th className='border px-4 py-2'>Data de Início</th>
+												<th className='border px-4 py-2'>Data de Fim</th>
 											</tr>
-										))}
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											{reservations.map((reservation, index) => (
+												<tr key={index + reservation.id + reservation.start_time + reservation.end_time}>
+													<td className='border px-4 py-2'>{reservation.id}</td>
+													<td className='border px-4 py-2'>{reservation.user.name}</td>
+													<td className='border px-4 py-2'>{reservation.field.name}</td>
+													<td className='border px-4 py-2'>{reservation.status}</td>
+													<td className='border px-4 py-2'>{new Date(reservation.start_time).toLocaleString()}</td>
+													<td className='border px-4 py-2'>{new Date(reservation.end_time).toLocaleString()}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
 
+									<div className='mt-6 text-center'>
+										<button
+											onClick={printReservations}
+											className='bg-blue-500 text-white px-6 py-2 rounded-md flex items-center justify-center space-x-2 hover:bg-blue-600'
+										>
+											<FaPrint />
+											<span>Imprimir</span>
+										</button>
+									</div>
+								</div>
+								<div className='lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4'>
+									{reservations.map((reservation, index) => (
+										<div
+											key={
+												index + reservation.id + reservation.start_time + reservation.end_time + reservation.field.id
+											}
+											className='p-4 border rounded shadow-md'
+										>
+											<div className=''>
+												<p>
+													<strong>ID:</strong> {reservation.id}
+												</p>
+												<p>
+													<strong>Usuário:</strong> {reservation.user.name}
+												</p>
+												<p>
+													<strong>Campo:</strong> {reservation.field.name}
+												</p>
+												<p>
+													<strong>Status:</strong> {reservation.status}
+												</p>
+												<p>
+													<strong>Data de Início:</strong> {new Date(reservation.start_time).toLocaleString()}
+												</p>
+												<p>
+													<strong>Data de Fim:</strong> {new Date(reservation.end_time).toLocaleString()}
+												</p>
+											</div>
+										</div>
+									))}
+								</div>
 								<div className='mt-6 text-center'>
 									<button
 										onClick={printReservations}
@@ -154,7 +196,7 @@ const ReservationFilterPage = () => {
 										<span>Imprimir</span>
 									</button>
 								</div>
-							</div>
+							</>
 						:	<div className='text-center'>Nenhuma reserva encontrada.</div>}
 					</>
 				}
