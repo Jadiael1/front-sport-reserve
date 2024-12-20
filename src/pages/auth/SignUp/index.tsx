@@ -189,7 +189,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='name'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							Nome
 						</label>
@@ -208,7 +208,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='email'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							Email
 						</label>
@@ -233,7 +233,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='password'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							Senha
 						</label>
@@ -252,7 +252,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='password_confirmation'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							Confirme a Senha
 						</label>
@@ -277,7 +277,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='cpf'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							CPF
 						</label>
@@ -297,7 +297,7 @@ const RegisterPage = () => {
 						/>
 						<label
 							htmlFor='phone'
-							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent hover:cursor-text'
 						>
 							Telefone
 						</label>
