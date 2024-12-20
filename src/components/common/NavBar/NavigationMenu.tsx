@@ -17,6 +17,7 @@ const NavigationMenu = ({ className, merge = false, defaultClassName = false }: 
 			{routesSite
 				.filter(route => route.visibleInDisplay)
 				.filter(route => !route.adminOnly || (route.adminOnly && user && user.is_admin))
+				.filter(route => !route.protected || (route.protected && user && user.email_verified_at))
 				.map(route => (
 					<NavItem
 						key={route.path}
