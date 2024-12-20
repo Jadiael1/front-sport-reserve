@@ -7,6 +7,15 @@ import goBack from '../../../utils/goBack';
 import GoBackButton from '../../../components/common/GoBack';
 import translations from '../../../utils/translations.json';
 
+declare global {
+	interface Window {
+		grecaptcha: {
+			ready: (callback: () => void) => void;
+			execute: (siteKey: string, options: { action: string }) => Promise<string>;
+		};
+	}
+}
+
 const SignInPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -15,6 +24,25 @@ const SignInPage = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 	const { login, user, isLoading } = useAuth();
+	const googleRecaptchaSiteKey = import.meta.env.VITE_GOOGLE_RECAPTCHA_V3_SITE_KEY;
+
+	useEffect(() => {
+		// Carrega o script do reCAPTCHA
+		const loadRecaptchaScript = () => {
+			const script = document.createElement('script');
+			script.src = `https://www.google.com/recaptcha/api.js?render=${googleRecaptchaSiteKey}`;
+			script.async = true;
+			document.body.appendChild(script);
+		};
+		loadRecaptchaScript();
+		// Limpa o script quando o componente é desmontado
+		return () => {
+			const script = document.querySelector('script[src*="recaptcha"]');
+			if (script && script.parentNode === document.body) {
+				document.body.removeChild(script);
+			}
+		};
+	}, [googleRecaptchaSiteKey]);
 
 	useEffect(() => {
 		if (user && !isLoading) {
@@ -22,12 +50,22 @@ const SignInPage = () => {
 		}
 	}, [user, isLoading, navigate]);
 
+	const executeRecaptcha = async () => {
+		try {
+			return await window.grecaptcha.execute(googleRecaptchaSiteKey, { action: 'signin' });
+		} catch (error) {
+			console.error('reCAPTCHA execution failed:', error);
+			throw error;
+		}
+	};
+
 	const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setError(null);
 		setLoading(true);
+		const recaptchaToken = await executeRecaptcha();
 		try {
-			await login(email, password);
+			await login(email, password, recaptchaToken);
 			goBack(navigate);
 		} catch (error) {
 			setError('Credenciais inválidas. Por favor, tente novamente.');

@@ -32,7 +32,7 @@ export type LoadUser = {
 type AuthContextType = {
 	user: UserType | null;
 	token: string | null;
-	login: (email: string, password: string) => Promise<void>;
+	login: (email: string, password: string, recaptchaToken?: string) => Promise<void>;
 	logout: () => void;
 	updateUser: (updatedUser: UserType) => void;
 	isLoading: boolean;
@@ -81,15 +81,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
-	const login = async (email: string, password: string) => {
+	const login = async (email: string, password: string, recaptchaToken?: string) => {
 		try {
+			const bodyData = { email, password, ...(recaptchaToken !== undefined && { recaptchaToken }) };
 			const request = await fetch(`${baseURL}/auth/signin`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
 				},
-				body: JSON.stringify({ email, password }),
+
+				body: JSON.stringify(bodyData),
 			});
 			const data: LoginResponse = await request.json();
 			if (request.ok && data.status === 'success') {
