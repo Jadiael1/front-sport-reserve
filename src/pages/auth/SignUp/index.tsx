@@ -26,6 +26,7 @@ const RegisterPage = () => {
 	} | null>(null);
 	const { login, user, isLoading } = useAuth();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
+	const googleRecaptchaSiteKey = import.meta.env.VITE_GOOGLE_RECAPTCHA_V2_SITE_KEY;
 	const [loading, setLoading] = useState(false);
 	const [isCPFValid, setIsCPFValid] = useState(false);
 	const [isPhoneValid, setIsPhoneValid] = useState(false);
@@ -322,10 +323,16 @@ const RegisterPage = () => {
 					)}
 					<div className='flex justify-center mb-4'>
 						<ReCAPTCHA
-							sitekey='6LfUYqEqAAAAACVb_XxpWC8M8F-AmnYLrOlA2CYg'
+							sitekey={googleRecaptchaSiteKey}
 							onChange={handleRecaptchaChange}
 						/>
 					</div>
+					{error && error.includes('reCAPTCHA') && (
+						<div className='flex items-center text-red-500 text-sm mt-1'>
+							<CiWarning className='mr-1' />{' '}
+							<span className='ml-2'>{translations[error as keyof typeof translations] || error}</span>
+						</div>
+					)}
 					<button
 						type='submit'
 						className='w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50'
