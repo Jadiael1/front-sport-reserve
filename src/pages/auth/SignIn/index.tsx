@@ -38,8 +38,12 @@ const SignInPage = () => {
 		// Limpa o script quando o componente é desmontado
 		return () => {
 			const script = document.querySelector('script[src*="recaptcha"]');
-			if (script && script.parentNode === document.body) {
-				document.body.removeChild(script);
+			if (script) {
+				document.querySelectorAll('script[src*="recaptcha"]').forEach(el => el.remove());
+			}
+			const grecaptchaBadge = document.querySelector('.grecaptcha-badge');
+			if (grecaptchaBadge) {
+				document.querySelectorAll('.grecaptcha-badge').forEach(el => el.remove());
 			}
 		};
 	}, [googleRecaptchaSiteKey]);
