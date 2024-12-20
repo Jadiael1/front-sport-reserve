@@ -169,5 +169,12 @@
 	"The cpf field is not a valid CPF.": "O campo cpf não é um CPF válido.",
 	"The phone field cannot start with 0 or 1.": "O campo de telefone não pode começar com 0 ou 1.",
 	"The phone field must have 11 digits.": "O campo de telefone deve ter 11 dígitos.",
-	"reCAPTCHA verification failed": "A verificação do reCAPTCHA falhou"
+	"reCAPTCHA verification failed": "A verificação do reCAPTCHA falhou",
+	"missing-input-response": "resposta de entrada ausente",
+	"Suspicious activity detected. Please try again.": "Atividade suspeita detectada. Tente novamente.",
+	"Failed to verify reCAPTCHA.": "Falha ao verificar o reCAPTCHA.",
+	"reCAPTCHA validation failed." : "Falha na validação do reCAPTCHA.",
+	"Unexpected reCAPTCHA action." : "Ação inesperada do reCAPTCHA.",
+	"Low reCAPTCHA score." : "Pontuação baixa no reCAPTCHA.",
+	"reCAPTCHA verification error." : "Erro de verificação do reCAPTCHA."
 }
