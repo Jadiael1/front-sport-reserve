@@ -168,5 +168,6 @@
 	"phone": "telefone",
 	"The cpf field is not a valid CPF.": "O campo cpf não é um CPF válido.",
 	"The phone field cannot start with 0 or 1.": "O campo de telefone não pode começar com 0 ou 1.",
-	"The phone field must have 11 digits.": "O campo de telefone deve ter 11 dígitos."
+	"The phone field must have 11 digits.": "O campo de telefone deve ter 11 dígitos.",
+	"reCAPTCHA verification failed": "A verificação do reCAPTCHA falhou"
 }
