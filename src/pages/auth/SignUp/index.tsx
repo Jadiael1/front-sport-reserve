@@ -7,6 +7,7 @@ import goBack from '../../../utils/goBack.js';
 import { messageManager } from '../../../components/common/Message/messageInstance.js';
 import translations from '../../../utils/translations.json';
 import Alert from '../../../components/common/Alert/index.js';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -26,6 +27,9 @@ const RegisterPage = () => {
 	const { login, user, isLoading } = useAuth();
 	const baseURL = import.meta.env.VITE_API_BASE_URL;
 	const [loading, setLoading] = useState(false);
+	const [isCPFValid, setIsCPFValid] = useState(false);
+	const [isPhoneValid, setIsPhoneValid] = useState(false);
+	const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (user && !isLoading) {
@@ -33,9 +37,60 @@ const RegisterPage = () => {
 		}
 	}, [user, isLoading, navigate]);
 
+	const handleRecaptchaChange = (token: string | null) => {
+		setRecaptchaToken(token);
+	};
+
+	const validateCPF = (cpf: string) => {
+		const numbers = cpf.replace(/\D/g, '');
+		return numbers.length === 11;
+	};
+
+	const formatCPF = (value: string) => {
+		const numbers = value.replace(/\D/g, '');
+		const isValid = validateCPF(numbers);
+		setIsCPFValid(isValid);
+
+		return numbers.replace(/^(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2}).*/, (_, g1, g2, g3, g4) => {
+			if (!g2) return g1;
+			if (!g3) return `${g1}.${g2}`;
+			if (!g4) return `${g1}.${g2}.${g3}`;
+			return `${g1}.${g2}.${g3}-${g4}`;
+		});
+	};
+
+	const validatePhone = (phone: string) => {
+		const numbers = phone.replace(/\D/g, '');
+		return numbers.length >= 10 && numbers.length <= 11;
+	};
+
+	const formatPhone = (value: string) => {
+		const numbers = value.replace(/\D/g, '');
+		const isValid = validatePhone(numbers);
+		setIsPhoneValid(isValid);
+
+		return numbers.replace(/^(\d{0,2})(\d{0,5})(\d{0,4}).*/, (_, g1, g2, g3) => {
+			if (!g2) return g1;
+			if (!g3) return `(${g1}) ${g2}`;
+			return `(${g1}) ${g2}-${g3}`;
+		});
+	};
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData({ ...formData, [name]: value });
+		if (name === 'cpf') {
+			setFormData({
+				...formData,
+				[name]: formatCPF(value),
+			});
+		} else if (name === 'phone') {
+			setFormData({
+				...formData,
+				[name]: formatPhone(value),
+			});
+		} else {
+			setFormData({ ...formData, [name]: value });
+		}
 	};
 
 	const isValidEmail = (email: string) => {
@@ -50,6 +105,19 @@ const RegisterPage = () => {
 		event.preventDefault();
 		setError(null);
 		setLoading(true);
+
+		if (!recaptchaToken) {
+			setError('Por favor, complete o reCAPTCHA');
+			setLoading(false);
+			return;
+		}
+
+		const formDataToSend = {
+			...formData,
+			cpf: formData.cpf.replace(/\D/g, ''),
+			phone: formData.phone.replace(/\D/g, ''),
+			recaptcha_token: recaptchaToken,
+		};
 
 		// Validate email and password
 		if (!isValidEmail(formData.email)) {
@@ -71,7 +139,7 @@ const RegisterPage = () => {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
 				},
-				body: JSON.stringify(formData),
+				body: JSON.stringify(formDataToSend),
 			});
 			const data = await response.json();
 			setLoading(false);
@@ -111,13 +179,17 @@ const RegisterPage = () => {
 						<input
 							type='text'
 							name='name'
+							id='name'
 							placeholder=' '
 							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 							required
 							value={formData.name}
 							onChange={handleChange}
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='name'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							Nome
 						</label>
 					</div>
@@ -125,6 +197,7 @@ const RegisterPage = () => {
 						<input
 							type='email'
 							name='email'
+							id='email'
 							placeholder=' '
 							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 							required
@@ -132,7 +205,10 @@ const RegisterPage = () => {
 							onChange={handleChange}
 							autoComplete='username'
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='email'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							Email
 						</label>
 						{error && error.includes('e-mail') && (
@@ -146,6 +222,7 @@ const RegisterPage = () => {
 						<input
 							type='password'
 							name='password'
+							id='password'
 							placeholder=' '
 							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 							required
@@ -153,7 +230,10 @@ const RegisterPage = () => {
 							onChange={handleChange}
 							autoComplete='new-password'
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='password'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[100] bg-white px-3 peer-focus:px-1 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							Senha
 						</label>
 					</div>
@@ -161,6 +241,7 @@ const RegisterPage = () => {
 						<input
 							type='password'
 							name='password_confirmation'
+							id='password_confirmation'
 							placeholder=' '
 							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
 							required
@@ -168,7 +249,10 @@ const RegisterPage = () => {
 							onChange={handleChange}
 							autoComplete='new-password'
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='password_confirmation'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							Confirme a Senha
 						</label>
 						{error && error.includes('senhas') && (
@@ -182,29 +266,41 @@ const RegisterPage = () => {
 						<input
 							type='text'
 							name='cpf'
+							id='cpf'
 							placeholder=' '
-							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+							maxLength={14}
+							className={`block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border ${formData.cpf && (isCPFValid ? '' : 'border-red-300')} appearance-none focus:outline-none focus:ring-0 ${isCPFValid ? 'focus:border-blue-600' : 'focus:border-blue-600'} peer`}
 							required
 							value={formData.cpf}
 							onChange={handleChange}
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='cpf'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							CPF
 						</label>
+						{/* {formData.cpf && !isCPFValid && <span className='text-xs text-red-500 mt-1'>Digite um CPF válido</span>} */}
 					</div>
 					<div className='relative mb-6'>
 						<input
 							type='text'
 							name='phone'
+							id='phone'
 							placeholder=' '
-							className='block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+							maxLength={15}
+							className={`block px-2.5 pb-2.5 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border  ${formData.phone && (isPhoneValid ? '' : 'border-red-300')} appearance-none focus:outline-none focus:ring-0 ${isPhoneValid ? 'focus:border-blue-600' : 'focus:border-blue-600'} peer`}
 							required
 							value={formData.phone}
 							onChange={handleChange}
 						/>
-						<label className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'>
+						<label
+							htmlFor='phone'
+							className='absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-3 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-100 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:bg-white peer-placeholder-shown:bg-transparent'
+						>
 							Telefone
 						</label>
+						{/* {formData.phone && !isPhoneValid && (<span className='text-xs text-red-500 mt-1'>Digite um telefone válido</span>)} */}
 					</div>
 					{error && !error.includes('e-mail') && !error.includes('senhas') && (
 						<>
@@ -224,6 +320,12 @@ const RegisterPage = () => {
 							</div>
 						</>
 					)}
+					<div className='flex justify-center mb-4'>
+						<ReCAPTCHA
+							sitekey='6LddNqEqAAAAAOeODEAggaHA2R06cV3ozewjQk1L'
+							onChange={handleRecaptchaChange}
+						/>
+					</div>
 					<button
 						type='submit'
 						className='w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50'
