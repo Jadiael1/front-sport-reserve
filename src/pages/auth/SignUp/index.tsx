@@ -322,7 +322,7 @@ const RegisterPage = () => {
 					)}
 					<div className='flex justify-center mb-4'>
 						<ReCAPTCHA
-							sitekey='6LddNqEqAAAAAOeODEAggaHA2R06cV3ozewjQk1L'
+							sitekey='6LfUYqEqAAAAACVb_XxpWC8M8F-AmnYLrOlA2CYg'
 							onChange={handleRecaptchaChange}
 						/>
 					</div>
