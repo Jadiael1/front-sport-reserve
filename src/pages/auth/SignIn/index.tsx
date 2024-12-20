@@ -43,7 +43,16 @@ const SignInPage = () => {
 			}
 			const grecaptchaBadge = document.querySelector('.grecaptcha-badge');
 			if (grecaptchaBadge) {
-				document.querySelectorAll('.grecaptcha-badge').forEach(el => el.remove());
+				document.querySelectorAll('.grecaptcha-badge').forEach(el => {
+					const parent = el.parentNode;
+					if (parent && parent instanceof Element) {
+						parent.remove();
+					}
+				});
+			}
+			const metag = document.querySelector("meta[http-equiv='origin-trial']");
+			if (metag) {
+				document.querySelectorAll("meta[http-equiv='origin-trial']").forEach(el => el.remove());
 			}
 		};
 	}, [googleRecaptchaSiteKey]);
@@ -188,13 +197,12 @@ const SignInPage = () => {
 					<div className='flex items-center justify-center mt-4'>
 						<p>
 							Não tem uma conta?{' '}
-							<a
-								href=''
+							<button
 								className='text-blue-600 font-bold underline'
 								onClick={() => navigate('/auth/signup')}
 							>
 								Registre-se
-							</a>
+							</button>
 						</p>
 					</div>
 				</form>
