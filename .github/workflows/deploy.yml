@@ -33,6 +33,10 @@ jobs:
       run: |
         rsync -avz --delete -e "ssh -p ${{ secrets.VPS_PORT }}" ./ ${{ secrets.VPS_HOST }}:${{ secrets.VPS_APP_DIR }}/
 
+    - name : Create .env file
+      run: |
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} "echo -e 'VITE_API_BASE_URL=${{ secrets.API_BASE_URL }}\nVITE_GOOGLE_RECAPTCHA_V2_SITE_KEY=${{ secrets.RECAPTCHA_V2_KEY }}\nVITE_GOOGLE_RECAPTCHA_V3_SITE_KEY=${{ secrets.RECAPTCHA_V3_KEY }}\n' > ${{ secrets.VPS_APP_DIR }}/.env"
+
     - name: Install npm dependencies
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} "export PATH=/opt/nvm/versions/node/v22.4.1/bin:$PATH; cd ${{ secrets.VPS_APP_DIR }} && /opt/nvm/versions/node/v22.4.1/bin/npm install"
