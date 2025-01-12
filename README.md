@@ -1,124 +1,251 @@
-# Sport Reserve Frontend
+# Front Sport Reserve
 
-Este é o frontend do sistema de reserva de esportes, desenvolvido em React e TypeScript. O projeto permite que usuários façam login, visualizem, reservem, editem e excluam reservas de campos esportivos.
+Este é o front-end do sistema Sport Reserve, uma aplicação para gerenciamento de reservas de quadras esportivas. O front-end é construído utilizando **React**, **TypeScript** e **Vite** e se comunica com a API do back-end Sport Reserve.
 
-# Sistema Online
-- [https://sport-reserve.juvhost.com](https://sport-reserve.juvhost.com)
+## Demo
 
-## Contato
+Você pode testar o sistema em:
+- URL da aplicação: [https://sport-reserve.juvhost.com](https://sport-reserve.juvhost.com)
 
-- Para mais informações, entre em contato através do email: jadiael@hotmail.com.br.
+## Tecnologias Utilizadas
 
-## Estrutura do Projeto
+- **React 18**: Framework principal para construção da interface.
+- **TypeScript 5.2.2**: Tipagem estática para melhor manutenção do código.
+- **Vite 5.3.1**: Ferramenta de build rápida e moderna.
+- **TailwindCSS 3.4.4**: Framework para estilização rápida e responsiva.
+- **React Router Dom 6.24.0**: Gerenciamento de rotas.
+- **React Icons**: Ícones integrados.
+- **Leaflet e React-Leaflet**: Integração com mapas.
+- **Chart.js e React-Chartjs-2**: Criação de gráficos.
+- **JSX e TSX**: Suporte para componentes.
 
-- `src/components`: Contém os componentes do projeto.
-- `src/routes`: Configurações de rotas do React Router.
-- `src/contexts`: Contém os contextos do React para gerenciar o estado global.
-- `src/assets`: Contém arquivos de estilo CSS.
+---
 
-## Pré-requisitos
+## Funcionalidades
 
-- Node.js (versão 14.x ou superior)
-- npm (versão 6.x ou superior) ou yarn (versão 1.x ou superior)
+- **Autenticação**
+  - Login, registro e recuperação de senha.
+  - Proteção de rotas com autenticação JWT.
+  - Integração com reCAPTCHA V2 e V3.
 
-## Instalação
+- **Gerenciamento de Reservas**
+  - Visualização de quadras disponíveis.
+  - Reservas com horários definidos.
+  - Impressão de relatórios detalhados de reservas.
 
-1. Clone o repositório:
+- **Painel Administrativo**
+  - Criação e atualização de campos esportivos.
+  - Gerenciamento de usuários e permissões.
+  - Visualização e exportação de relatórios.
 
-```bash
-git clone https://github.com/Jadiael1/front-sport-reserve.git
-cd front-sport-reserve
-```
+- **Gráficos e Relatórios**
+  - Gráficos detalhados de desempenho.
+  - Relatórios financeiros e de ocupação.
+  - Exportação de dados para PDF e Excel.
 
-2. Instale as dependências:
-
-```bash
-npm install
-# ou
-yarn install
-```
-
-## Executando o Projeto
-
-Para iniciar o servidor de desenvolvimento, execute:
-
-```bash
-npm run dev
-# ou
-yarn dev
-```
-
-Abra [http://localhost:5173](http://localhost:5173) para ver o aplicativo no navegador.
+---
 
 ## Estrutura de Diretórios
 
-```plaintext
-src/
-│
-├── components/
-│   ├── AccountActivationReminder/
-│   ├── Alert/
-│   ├── FieldDetails/
-│   ├── ForgotPassword/
-│   ├── Home/
-│   ├── ReservationList/
-│   ├── ResetPassword/
-│   ├── SignIn/
-│   ├── SignUp/
-│   └── ...
-│
-├── contexts/
-│   └── AuthContext.tsx
-│
-├── routes/
-│   ├── IRoutes.ts
-│   ├── routesAuth.ts
-│   └── routesSite.ts
-│
-├── assets/
-│   └── main.css
-│
-├── App.tsx
-├── main.tsx
-└── ...
+```txt
+Estrutura de diretórios:
+└── front-sport-reserve/
+    ├── README.md
+    ├── index.html
+    ├── package.json
+    ├── postcss.config.js
+    ├── tailwind.config.js
+    ├── tsconfig.app.json
+    ├── tsconfig.json
+    ├── tsconfig.node.json
+    ├── vite.config.ts
+    ├── .editorconfig
+    ├── .env.example
+    ├── .eslintignore
+    ├── .eslintrc.json
+    ├── .prettierignore
+    ├── .prettierrc
+    ├── public/
+    │   └── .htaccess
+    ├── src/
+    │   ├── App.tsx
+    │   ├── main.tsx
+    │   ├── vite-env.d.ts
+    │   ├── assets/
+    │   │   ├── main.css
+    │   │   ├── img/
+    │   │   └── svg/
+    │   │       └── AnimateSpin.tsx
+    │   ├── components/
+    │   │   └── common/
+    │   │       ├── Alert/
+    │   │       │   └── index.tsx
+    │   │       ├── Carousel/
+    │   │       │   ├── index.tsx
+    │   │       │   └── assets/
+    │   │       │       └── main.css
+    │   │       ├── ConfirmationModalProps/
+    │   │       │   └── index.tsx
+    │   │       ├── DatePicker/
+    │   │       │   └── index.tsx
+    │   │       ├── Footer/
+    │   │       │   └── index.tsx
+    │   │       ├── GoBack/
+    │   │       │   └── index.tsx
+    │   │       ├── LogoutButton/
+    │   │       │   └── index.tsx
+    │   │       ├── Message/
+    │   │       │   ├── MessageManager.tsx
+    │   │       │   ├── index.tsx
+    │   │       │   └── messageInstance.tsx
+    │   │       ├── Modal/
+    │   │       │   └── index.tsx
+    │   │       ├── NavBar/
+    │   │       │   ├── DropdownArrow.tsx
+    │   │       │   ├── IconButton.tsx
+    │   │       │   ├── LoginButton.tsx
+    │   │       │   ├── LoginButtonWithIcon.tsx
+    │   │       │   ├── Logo.tsx
+    │   │       │   ├── MobileControlButtons.tsx
+    │   │       │   ├── MobileUserDropdown.tsx
+    │   │       │   ├── NavBar.tsx
+    │   │       │   ├── NavItem.tsx
+    │   │       │   ├── NavigationMenu.tsx
+    │   │       │   ├── UserAvatar.tsx
+    │   │       │   ├── UserDropdown.tsx
+    │   │       │   └── UserDropdownSkeleton.tsx
+    │   │       └── Sidebar/
+    │   │           └── index.tsx
+    │   ├── contexts/
+    │   │   └── AuthContext.tsx
+    │   ├── hooks/
+    │   │   └── useAuth.ts
+    │   ├── interfaces/
+    │   │   ├── IApiFieldResponse.ts
+    │   │   ├── IApiReservationResponse.ts
+    │   │   ├── IApiResponse.ts
+    │   │   ├── IDaysOfTheWeek.ts
+    │   │   ├── IField.ts
+    │   │   ├── IFieldAvailability.ts
+    │   │   ├── IImage.ts
+    │   │   ├── IPaginatedData.ts
+    │   │   ├── IPaginationLink.ts
+    │   │   ├── IPayments.ts
+    │   │   ├── IReport.ts
+    │   │   ├── IReservation.ts
+    │   │   └── IUser.ts
+    │   ├── pages/
+    │   │   ├── Dashboard/
+    │   │   │   ├── FieldAvailabilities/
+    │   │   │   │   └── index.tsx
+    │   │   │   ├── Home/
+    │   │   │   │   └── index.tsx
+    │   │   │   ├── Payments/
+    │   │   │   │   └── index.tsx
+    │   │   │   ├── PrintReservations/
+    │   │   │   │   └── index.tsx
+    │   │   │   ├── Reports/
+    │   │   │   │   └── index.tsx
+    │   │   │   └── Users/
+    │   │   │       └── index.tsx
+    │   │   ├── FieldDetails/
+    │   │   │   └── index.tsx
+    │   │   ├── FieldStore/
+    │   │   │   └── index.tsx
+    │   │   ├── FieldUpdate/
+    │   │   │   └── index.tsx
+    │   │   ├── Home/
+    │   │   │   └── index.tsx
+    │   │   ├── Profile/
+    │   │   │   ├── EditInputField.tsx
+    │   │   │   ├── InfoItem.tsx
+    │   │   │   └── index.tsx
+    │   │   ├── ReservationList/
+    │   │   │   └── index.tsx
+    │   │   └── auth/
+    │   │       ├── AccountActivationReminder/
+    │   │       │   └── index.tsx
+    │   │       ├── EmailVerification/
+    │   │       │   └── index.tsx
+    │   │       ├── ForgotPassword/
+    │   │       │   └── index.tsx
+    │   │       ├── ResetPassword/
+    │   │       │   └── index.tsx
+    │   │       ├── SignIn/
+    │   │       │   └── index.tsx
+    │   │       └── SignUp/
+    │   │           └── index.tsx
+    │   ├── routes/
+    │   │   ├── IRoutes.ts
+    │   │   ├── ProtectedRoute.tsx
+    │   │   ├── index.tsx
+    │   │   ├── routes.ts
+    │   │   ├── routesAuth.ts
+    │   │   ├── routesDash.ts
+    │   │   └── routesSite.ts
+    │   └── utils/
+    │       ├── capitalize.ts
+    │       ├── errorHandler.ts
+    │       ├── formatCPF.ts
+    │       ├── formatPhone.ts
+    │       ├── formateDate.ts
+    │       ├── goBack.ts
+    │       ├── isEmptyObject.ts
+    │       ├── translate.ts
+    │       ├── translateDaysOfTheWeek.ts
+    │       └── translations.json
+    └── .github/
+        └── workflows/
+            └── deploy.yml
 ```
 
-## Componentes Principais
+---
 
-### SignInPage
+## Requisitos do Sistema
 
-Página de login que permite ao usuário autenticar-se no sistema.
+- **Node.js 18+**
+- **NPM ou Yarn**: Para gerenciar dependências.
+- **Vite**: Para rodar o ambiente de desenvolvimento.
 
-### ForgotPasswordPage
+---
 
-Página onde o usuário pode solicitar um e-mail para redefinir a senha.
+## Instalação e Configuração
 
-### ResetPasswordPage
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Jadiael1/front-sport-reserve.git
+   cd front-sport-reserve
+   ```
 
-Página onde o usuário pode redefinir sua senha usando o link recebido por e-mail.
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-### ReservationList
+3. Configure o ambiente:
+   ```bash
+   cp .env.example .env
+   ```
+   Atualize o `.env` com as variáveis de ambiente adequadas, como `VITE_API_BASE_URL`.
 
-Página que lista todas as reservas do usuário com opções para editar e excluir.
+4. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
 
-### FieldDetails
+---
 
-Página que mostra detalhes do campo e permite ao usuário fazer uma reserva.
+## Testes
 
-## Rotas
+O projeto utiliza `ESLint` e `Prettier` para garantir qualidade de código e consistência de estilo.
 
-### `routesAuth.ts`
+Execute o linting:
+```bash
+npm run lint
+```
 
-Define as rotas para autenticação, como login, registro, esqueci a senha e redefinição de senha.
-
-### `routesSite.ts`
-
-Define as rotas principais do site, como a página inicial e detalhes do campo.
-
-## Contribuindo
-
-Contribuições são bem-vindas! Por favor, abra uma issue ou envie um pull request.
+---
 
 ## Licença
 
-Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto é protegido por uma **Licença Proprietária**. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
